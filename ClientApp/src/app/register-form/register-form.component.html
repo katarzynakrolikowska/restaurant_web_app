@@ -1,0 +1,36 @@
+
+<form [formGroup]="form" (ngSubmit)="register()">
+  <h3>Rejestracja</h3>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Email" formControlName="email" type="email">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      <mat-hint *ngIf="email.pending">Sprawdzam...</mat-hint>
+      <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline" (click)="show()">
+      <mat-label>Hasło</mat-label>
+      <input matInput placeholder="Hasło" type="password" formControlName="password">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Potwierdź hasło</mat-label>
+      <input matInput placeholder="Potwierdź hasło" type="password" formControlName="confirmPassword">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      <mat-error *ngIf="confirmPassword.invalid">{{getPasswordConfirmErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </p>
+  <button mat-raised-button color="primary" type="submit" class="my-4">Zapisz</button>
+</form>
+
+
+
