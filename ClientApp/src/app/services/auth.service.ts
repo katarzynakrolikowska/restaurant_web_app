@@ -14,7 +14,7 @@ export class AuthService {
     constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
     login(model: any) {
-        return this.http.post(this.baseUrl + 'api/auth/login', JSON.stringify(model))
+        return this.http.post(this.baseUrl + 'api/auth/login', model)
             .pipe(map((response: any) => {
                 if (response) {
                     localStorage.setItem('token', response.token);

@@ -17,6 +17,8 @@ import { MatComponentsModule } from './mat-components/mat-component.module';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { AppErrorHandler } from './app.error-handler';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { LoginPanelComponent } from './login-panel/login-panel.component';
 
 
 export function tokenGetter() {
@@ -32,6 +34,7 @@ export function tokenGetter() {
     FetchDataComponent,
     RegisterFormComponent,
     LoginFormComponent,
+    LoginPanelComponent,
 
   ],
   imports: [
@@ -43,11 +46,11 @@ export function tokenGetter() {
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'register', component: RegisterFormComponent },
-      { path: 'login', component: LoginFormComponent },
+      { path: 'login', component: LoginPanelComponent },
     ]),
     BrowserAnimationsModule,
     MatComponentsModule,
+    BsDropdownModule.forRoot(),
     ToastrModule.forRoot(),
     JwtModule.forRoot({
       config: {

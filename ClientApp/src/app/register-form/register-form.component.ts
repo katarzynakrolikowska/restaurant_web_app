@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
@@ -18,7 +18,6 @@ export class RegisterFormComponent implements OnInit {
     user: User;
     form: FormGroup;
 
-
     constructor(
         private authService: AuthService,
         private toastr: ToastrService
@@ -26,7 +25,7 @@ export class RegisterFormComponent implements OnInit {
 
     
     ngOnInit() {
-        this.initForm()
+        this.initForm();
 
         this.confirmPassword.setValidators(
             [
@@ -41,19 +40,8 @@ export class RegisterFormComponent implements OnInit {
             this.user = Object.assign({}, this.form.value);
             this.authService.register(this.user).subscribe(() => {
                 this.toastr.success('Rejestracja zakończona sukcesem!');
-            }, (errorRespone: HttpErrorResponse) => {
-                if (errorRespone.status == 400) {
-                    console.log(errorRespone);
-                    this.toastr.error(errorRespone.error[0].description);
-                }
             });
         }
-        console.log(this.form);
-    }
-
-
-    //test
-    show() {
         console.log(this.form);
     }
 
@@ -109,6 +97,4 @@ export class RegisterFormComponent implements OnInit {
             confirmPassword: new FormControl(''),
         });
     }
-
-
 }
