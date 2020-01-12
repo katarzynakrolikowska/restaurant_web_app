@@ -4,7 +4,7 @@ import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -18,7 +18,8 @@ export class LoginFormComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private toastr: ToastrService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit() {
@@ -28,9 +29,11 @@ export class LoginFormComponent implements OnInit {
     login() {
         if (this.form.valid) {
             this.user = Object.assign({}, this.form.value);
+
             this.authService.login(this.user).subscribe(() => {
                 this.toastr.success('Zalogowano!');
-                this.router.navigate(['/']);
+                let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+                this.router.navigate([returnUrl || '/']);
             }, (errorRespone: HttpErrorResponse) => {
                     if (errorRespone.status == 401) {
                         console.log(errorRespone);//log

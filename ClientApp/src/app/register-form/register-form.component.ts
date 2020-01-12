@@ -1,10 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { passwordsMatch } from '../validators/password.validator';
 import { ToastrService } from 'ngx-toastr';
-import { HttpErrorResponse } from '@angular/common/http';
 import { EmailValidators } from '../validators/email.validaor';
 
 

@@ -32,11 +32,18 @@ export class NavMenuComponent {
     logout() {
         localStorage.removeItem('token');
         this.toastr.success("Zostałeś wylogowany");
-        this.router.navigate(['/']);
+        //this.router.navigate(['/']);
     }
 
     getUserEmail() {
         this.authService.decodeToken();
         return this.authService.decodedToken.email;
+    }
+
+    isAdmin() {
+        if (!this.loggedIn())
+            return false;
+
+        return this.authService.isAdmin();
     }
 }

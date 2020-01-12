@@ -13,12 +13,15 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
-import { MatComponentsModule } from './mat-components/mat-component.module';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { AppErrorHandler } from './app.error-handler';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { LoginPanelComponent } from './login-panel/login-panel.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AppRoutingModule } from './app-routing.module';
+import { AdminGuard } from './guards/admin.guard';
+import { MatComponentsModule } from './mat-component.module';
 
 
 export function tokenGetter() {
@@ -39,13 +42,26 @@ export function tokenGetter() {
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      {
+          path: '',
+          runGuardsAndResolvers: 'always',
+          canActivateChild: [AuthGuard],
+          children: [
+              {
+                  path: 'fetch-data',
+                  component: FetchDataComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+          ]
+      },
       { path: 'login', component: LoginPanelComponent },
     ]),
     BrowserAnimationsModule,
@@ -55,8 +71,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: ["localhost:44308"],    
-        blacklistedRoutes: ["localhost:44308/api/auth"]
+            whitelistedDomains: ["localhost:44363"],    
+            blacklistedRoutes: ["localhost:44363/api/auth"]
       }
     })
 

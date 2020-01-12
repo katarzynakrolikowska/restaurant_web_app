@@ -49,8 +49,6 @@ namespace JagWebApp.Controllers
 
             if (result.Succeeded)
             {
-
-                //Seed.SeedAdmin(_userManager, _roleManager);
                 return StatusCode(201);
             }
 
@@ -96,24 +94,12 @@ namespace JagWebApp.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            var roles = await _userManager.GetRolesAsync(user);
-
-            //if (await _userManager.IsInRoleAsync(user, "Admin"))
-            //    claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-
-
-            if (roles != null)
-            {
-                foreach (var role in roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role));
-                }
-            }
-
-
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8
                 .GetBytes(_configuration.GetSection("AppSettings:Token").Value));

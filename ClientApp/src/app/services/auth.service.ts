@@ -1,6 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { extend } from 'webdriver-js-extender';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs/operators';
 
@@ -39,25 +38,15 @@ export class AuthService {
         return !this.jwtHelper.isTokenExpired(token);
     }
 
-    roleMatch(allowedRoles): boolean {
-        let isMatch = false;
+    isAdmin() {
+        this.decodeToken();
+        let roles = this.decodedToken.role as Array<string>;
 
-        if (!this.loggedIn())
-            return false;
-
-        
-
-        const userRoles = this.decodedToken.role as Array<string>;
-        if (userRoles) {
-            allowedRoles.forEach(item => {
-                if (userRoles.includes(item)) {
-                    isMatch = true;
-                    return;
-                }
-            });
+        if (roles) {
+            return roles.includes('Admin');
         }
 
-        return isMatch;
+        return false;
     }
 
     decodeToken() {
