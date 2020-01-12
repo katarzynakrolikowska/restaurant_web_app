@@ -1,0 +1,18 @@
+
+<mat-accordion>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Logowanie</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-login-form></app-login-form>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Rejestracja</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-register-form></app-register-form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-accordion>

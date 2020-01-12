@@ -20,22 +20,36 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+          <li class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/counter']">Counter</a>
           </li>
+          <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
+          </li>
+          <!--<li *ngIf="!loggedIn()" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/register']">Rejestracja</a>
+          </li>-->
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
+            <a *ngIf="!loggedIn()" class="nav-link text-dark" [routerLink]="['/login']">Logowanie</a>
+            <div *ngIf="loggedIn()" class="btn-group" dropdown>
+              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                      aria-controls="dropdown-basic">
+                {{ getUserEmail() }} <span class="caret"></span>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                  role="menu" aria-labelledby="button-basic">
+                <li role="menuitem"><a class="dropdown-item" href="#">Twoje dane</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem">
+                  <a class="dropdown-item" href="#" (click)="logout()">Wyloguj się</a>
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>
