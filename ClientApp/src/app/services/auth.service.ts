@@ -49,6 +49,16 @@ export class AuthService {
         return false;
     }
 
+    getUserId() {
+        this.decodeToken();
+        return this.decodedToken.nameid;
+    }
+
+    getUserEmail() {
+        this.decodeToken();
+        return this.decodedToken.email;
+    }
+
     decodeToken() {
         let token = localStorage.getItem('token');
         this.decodedToken = this.jwtHelper.decodeToken(token);

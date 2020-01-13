@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RegisterFormComponent } from '../register-form/register-form.component';
 import { LoginFormComponent } from '../login-form/login-form.component';
-import { FormGroup, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-login-panel',
@@ -22,8 +21,6 @@ export class LoginPanelComponent implements OnInit {
     ngOnInit() {
     }
 
-    
-
     setStep(index: number) {
         this.step = index;
 
@@ -32,10 +29,7 @@ export class LoginPanelComponent implements OnInit {
 
         if (this.step === 1) {
             this.registerComponent.form.reset();
-
-            
         }
-        
     }
 
    

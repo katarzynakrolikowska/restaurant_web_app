@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Authorization;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -67,9 +68,10 @@ namespace JagWebApp.Controllers
 
             if (result.Succeeded)
             {
+                var tokenManager = new TokenManager(_configuration, _userManager);
                 return Ok(new
                 {
-                    token = GenerateToken(user).Result
+                    token = tokenManager.GenerateToken(user).Result
                 });
             }
 
@@ -89,35 +91,7 @@ namespace JagWebApp.Controllers
 
 
 
-        private async Task<string> GenerateToken(User user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
-
-            if (await _userManager.IsInRoleAsync(user, "Admin"))
-                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
+        
     }
 
 }

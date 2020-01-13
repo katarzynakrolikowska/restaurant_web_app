@@ -41,7 +41,7 @@ export class RegisterFormComponent implements OnInit {
                 this.toastr.success('Rejestracja zakończona sukcesem!');
             });
         }
-        console.log(this.form);
+        console.log(this.form); //log
     }
 
     getEmailErrorMessage() {

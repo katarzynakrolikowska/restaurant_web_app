@@ -1,0 +1,15 @@
+
+<form [formGroup]="form" class="mt-5" (ngSubmit)="saveEmail()">
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Email" formControlName="email" type="email">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      <mat-hint *ngIf="email.pending">Sprawdzam...</mat-hint>
+      <mat-error *ngIf="email.invalid">
+        {{getEmailErrorMessage()}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button color="primary" type="submit" class="my-3">Zapisz</button>
+</form>

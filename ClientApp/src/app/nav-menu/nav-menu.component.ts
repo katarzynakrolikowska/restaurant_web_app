@@ -35,11 +35,6 @@ export class NavMenuComponent {
         //this.router.navigate(['/']);
     }
 
-    getUserEmail() {
-        this.authService.decodeToken();
-        return this.authService.decodedToken.email;
-    }
-
     isAdmin() {
         if (!this.loggedIn())
             return false;

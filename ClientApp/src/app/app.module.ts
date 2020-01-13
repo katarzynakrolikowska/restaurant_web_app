@@ -22,6 +22,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { AdminGuard } from './guards/admin.guard';
 import { MatComponentsModule } from './mat-component.module';
+import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
+import { EditEmailFormComponent } from './edit-email-form/edit-email-form.component';
 
 
 export function tokenGetter() {
@@ -38,6 +40,8 @@ export function tokenGetter() {
     RegisterFormComponent,
     LoginFormComponent,
     LoginPanelComponent,
+    UserDataTabsComponent,
+    EditEmailFormComponent,
 
   ],
   imports: [
@@ -60,6 +64,10 @@ export function tokenGetter() {
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
+              {
+                  path: 'user/data',
+                  component: UserDataTabsComponent
+              }
           ]
       },
       { path: 'login', component: LoginPanelComponent },
