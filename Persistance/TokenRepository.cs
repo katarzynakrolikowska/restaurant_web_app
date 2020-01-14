@@ -1,26 +1,29 @@
-﻿using System;
+﻿using JagWebApp.Core;
+using JagWebApp.Core.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
-namespace JagWebApp.Core.Models.Authorization
+namespace JagWebApp.Persistance
 {
-    public class TokenManager
+    public class TokenRepository : ITokenRepository
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
 
-        public TokenManager(IConfiguration configuration, UserManager<User> userManager)
+        public TokenRepository(IConfiguration configuration, UserManager<User> userManager)
         {
             _configuration = configuration;
             _userManager = userManager;
         }
+
         public async Task<string> GenerateToken(User user)
         {
             var claims = new List<Claim>

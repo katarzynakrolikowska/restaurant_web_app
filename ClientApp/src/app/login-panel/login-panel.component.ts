@@ -24,11 +24,19 @@ export class LoginPanelComponent implements OnInit {
     setStep(index: number) {
         this.step = index;
 
-        if (this.step === 0 && this.loginComponent)
+        if (this.step === 0 && this.loginComponent) {
             this.loginComponent.form.reset();
+            this.loginComponent.email.setErrors(null);
+            this.loginComponent.password.setErrors(null);
+        }
+            
 
-        if (this.step === 1) {
+        if (this.step === 1 && this.registerComponent) {
             this.registerComponent.form.reset();
+            this.registerComponent.email.setErrors(null);
+            this.registerComponent.password.setErrors(null);
+            this.registerComponent.confirmPassword.setErrors(null);
+
         }
     }
 

@@ -5,6 +5,7 @@ import { EmailValidators } from '../validators/email.validaor';
 import { User } from '../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../services/user.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-edit-email-form',
@@ -21,23 +22,18 @@ export class EditEmailFormComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private toastr: ToastrService,
-        private userService: UserService
+        private userService: UserService,
+        private spinner: NgxSpinnerService
     ) { }
 
     ngOnInit() {
         this.form = new FormGroup({
-            email: new FormControl(this.user.email,
-                [
-                    Validators.required,
-                    Validators.email
-                ],
-                [
-                    EmailValidators.shouldBeUnique(this.authService)
-                ]
+            email: new FormControl(
+                this.user.email,
+                [Validators.required, Validators.email],
+                [EmailValidators.shouldBeUnique(this.authService)]
             ),
-            
         });
-
     }
 
     get email() {
@@ -53,8 +49,11 @@ export class EditEmailFormComponent implements OnInit {
 
     saveEmail() {
         if (this.form.valid) {
+            this.spinner.show();
+
             this.user.email = this.email.value;
             this.userService.saveEmail(this.user).subscribe(() => {
+                this.spinner.hide();
                 this.toastr.success('Dane zostały zmienione');
             });
         }

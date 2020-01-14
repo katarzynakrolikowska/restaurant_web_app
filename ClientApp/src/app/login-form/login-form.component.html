@@ -1,27 +1,31 @@
 
-<form [formGroup]="form" (ngSubmit)="login()">
-  <h3>Logowanie</h3>
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <h3>Logowanie</h3>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-error *ngIf="email.hasError('required')">To pole jest obowiązkowe</mat-error>
+      </mat-form-field>
+    </p>
 
-  <p>
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput placeholder="Email" formControlName="email">
-      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-      <mat-error *ngIf="email.hasError('required')">To pole jest obowiązkowe</mat-error>
-    </mat-form-field>
-  </p>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Hasło</mat-label>
+        <input matInput placeholder="Hasło" type="password" formControlName="password">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-error *ngIf="password.hasError('required')">To pole jest obowiązkowe</mat-error>
+      </mat-form-field>
+    </p>
 
-  <p>
-    <mat-form-field appearance="outline">
-      <mat-label>Hasło</mat-label>
-      <input matInput placeholder="Hasło" type="password" formControlName="password">
-      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-      <mat-error *ngIf="password.hasError('required')">To pole jest obowiązkowe</mat-error>
-    </mat-form-field>
-  </p>
+    <button mat-raised-button color="primary" type="submit" class="my-4">Zaloguj</button>
+  </form>
 
-  <button mat-raised-button color="primary" type="submit" class="my-4">Zaloguj</button>
-</form>
+<alert *ngIf="errorLogin" type="danger">
+  {{ errorMessage }}
+</alert>
+
 
 
 

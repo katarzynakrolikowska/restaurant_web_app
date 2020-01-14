@@ -31,7 +31,7 @@ export class NavMenuComponent {
 
     logout() {
         localStorage.removeItem('token');
-        this.toastr.success("Zostałeś wylogowany");
+        this.toastr.info("Zostałeś wylogowany");
         //this.router.navigate(['/']);
     }
 

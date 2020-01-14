@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
+import { ChangePasswordView } from '../models/changePasswordView';
 
 
 @Injectable({
@@ -18,7 +19,12 @@ export class UserService {
                 if (response) {
                     localStorage.setItem('token', response.token);
                 }
-                response;
+                return response;
             }));
+    }
+
+    savePassword(view: ChangePasswordView, id: number) {
+        return this.http.post(this.baseUrl + 'api/user/password/' + id, view)
+            .pipe(map((response: any) => response));
     }
 }

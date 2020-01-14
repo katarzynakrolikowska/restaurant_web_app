@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { EditEmailFormComponent } from '../edit-email-form/edit-email-form.component';
 
 @Component({
   selector: 'app-user-data-tabs',

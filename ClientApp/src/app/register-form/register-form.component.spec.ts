@@ -1,25 +1,155 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterFormComponent } from './register-form.component';
+import { ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { AuthService } from '../services/auth.service';
+import { of, empty } from 'rxjs';
+import { EmailValidators } from '../validators/email.validaor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 describe('RegisterFormComponent', () => {
-  let component: RegisterFormComponent;
-  let fixture: ComponentFixture<RegisterFormComponent>;
+    const emailAddress = 'email@abc.com';
+    const validPassword = 'aaaaaa';
+    const baseURL = '';
+    let component: RegisterFormComponent;
+    let fixture: ComponentFixture<RegisterFormComponent>;
+    let emailControl: AbstractControl;
+    let passwordControl: AbstractControl;
+    let confirmPasswordControl: AbstractControl;
+    let authService: AuthService;
+    let toast: ToastrService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ RegisterFormComponent ]
-    })
-    .compileComponents();
-  }));
+    
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, HttpClientModule, ToastrModule.forRoot(), BrowserAnimationsModule],
+            declarations: [RegisterFormComponent],
+            providers: [
+                { provide: 'BASE_URL', useValue: baseURL }
+            ],
+            schemas: [NO_ERRORS_SCHEMA]
+      })
+      .compileComponents();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(RegisterFormComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+
+        emailControl = component.email;
+        passwordControl = component.password;
+        confirmPasswordControl = component.confirmPassword;
+        authService = TestBed.get(AuthService);
+        toast = TestBed.get(ToastrService);
+
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should create form with three controls', () => {
+        expect(emailControl).toBeTruthy();
+        expect(passwordControl).toBeTruthy();
+        expect(confirmPasswordControl).toBeTruthy();
+    });
+
+    it('should make email control required', () => {
+        emailControl.setValue('');
+
+        expect(emailControl.invalid).toBeTruthy();
+    });
+
+    it('should make email control accepts only email type', () => {
+        emailControl.setValue('a');
+
+        expect(emailControl.invalid).toBeTruthy();
+    });
+
+    it('should make email control accepts only unique email', () => {
+        spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
+        spyOn(authService, 'loggedIn').and.returnValue(false);
+        
+        //spyOn(EmailValidators, 'shouldBeUnique').and.callFake(service => {
+        //    return control => {
+        //        return of({ shouldBeUnique: true })
+
+        //    };
+        //})
+        emailControl.setValue(emailAddress);
+
+        expect(emailControl.invalid).toBeTruthy();
+    });
+
+    it('should make password control required', () => {
+        passwordControl.setValue('');
+
+        expect(passwordControl.invalid).toBeTruthy();
+    });
+
+    it('should make password control invalid if it contains less than 6 chars', () => {
+        passwordControl.setValue('aaaaa');
+
+        expect(passwordControl.invalid).toBeTruthy();
+    });
+
+    it('should make password control invalid if it contains greater than 20 chars', () => {
+        passwordControl.setValue('aaaaaaaaaaaaaaaaaaaaa');
+
+        expect(passwordControl.invalid).toBeTruthy();
+    });
+
+    it('should make confirmPassword control required', () => {
+        confirmPasswordControl.setValue('');
+
+        expect(confirmPasswordControl.invalid).toBeTruthy();
+    });
+
+    it('should make confirmPassword control invalid if passwords not match', () => {
+        passwordControl.setValue('aaaaaa');
+        confirmPasswordControl.setValue('aaaaab');
+
+        expect(confirmPasswordControl.invalid).toBeTruthy();
+    });
+
+    it('should call the server to register new user after submit if form is valid', () => {
+        let spyRegister = spyOn(authService, 'register').and.returnValue(empty());
+
+        spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(false) : of(true));
+        spyOn(authService, 'loggedIn').and.returnValue(false);
+        setValidControls();
+
+        component.register();
+
+        expect(spyRegister).toHaveBeenCalled();
+    });
+
+
+    it('should raised newUserRegistered event after successful registration', () => {
+        let step = 1;
+        spyOn(authService, 'register').and.returnValue(of({}));
+        spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(false) : of(true));
+        spyOn(authService, 'loggedIn').and.returnValue(false);
+        setValidControls();
+        component.newUserRegistered.subscribe(s => step = s)
+
+        component.register();
+
+        expect(step).toBe(0);
+    });
+
+    function setValidControls() {
+        emailControl.setValue(emailAddress);
+        passwordControl.setValue(validPassword);
+        confirmPasswordControl.setValue(validPassword);
+    } 
+
+
 });
+

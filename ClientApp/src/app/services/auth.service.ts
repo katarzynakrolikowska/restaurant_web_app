@@ -19,7 +19,7 @@ export class AuthService {
                     localStorage.setItem('token', response.token);
                     this.decodedToken = this.jwtHelper.decodeToken(response.token);
                 }
-                response;
+                return response;
             }));
     }
 
@@ -50,11 +50,17 @@ export class AuthService {
     }
 
     getUserId() {
+        if (!this.loggedIn())
+            return;
+
         this.decodeToken();
         return this.decodedToken.nameid;
     }
 
     getUserEmail() {
+        if (!this.loggedIn())
+            return;
+
         this.decodeToken();
         return this.decodedToken.email;
     }

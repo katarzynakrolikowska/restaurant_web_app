@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using JagWebApp.Core;
 using JagWebApp.Core.Models;
-using JagWebApp.Core.Models.Authorization;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+
 
 namespace JagWebApp.Controllers
 {
@@ -22,20 +18,20 @@ namespace JagWebApp.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<Role> _roleManager;
+        private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(IConfiguration configuration, IMapper mapper,
-            UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        public AuthController(IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager, 
+            RoleManager<Role> roleManager, ITokenRepository tokenRepository)
         {
-            _configuration = configuration;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _tokenRepository = tokenRepository;
         }
 
 
@@ -68,10 +64,9 @@ namespace JagWebApp.Controllers
 
             if (result.Succeeded)
             {
-                var tokenManager = new TokenManager(_configuration, _userManager);
                 return Ok(new
                 {
-                    token = tokenManager.GenerateToken(user).Result
+                    token = _tokenRepository.GenerateToken(user).Result
                 });
             }
 
