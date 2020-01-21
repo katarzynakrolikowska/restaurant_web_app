@@ -22,7 +22,12 @@ import { AuthGuard } from './guards/auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { AdminGuard } from './guards/admin.guard';
 import { MatComponentsModule } from './mat-component.module';
-
+import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
+import { EditEmailFormComponent } from './edit-email-form/edit-email-form.component';
+import { EditPasswordFormComponent } from './edit-password-form/edit-password-form.component';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { SpinnerComponent } from './spinner/spinner.component';
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -38,6 +43,10 @@ export function tokenGetter() {
     RegisterFormComponent,
     LoginFormComponent,
     LoginPanelComponent,
+    UserDataTabsComponent,
+    EditEmailFormComponent,
+    EditPasswordFormComponent,
+    SpinnerComponent,
 
   ],
   imports: [
@@ -60,6 +69,10 @@ export function tokenGetter() {
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
+              {
+                  path: 'user/data',
+                  component: UserDataTabsComponent
+              }
           ]
       },
       { path: 'login', component: LoginPanelComponent },
@@ -67,6 +80,7 @@ export function tokenGetter() {
     BrowserAnimationsModule,
     MatComponentsModule,
     BsDropdownModule.forRoot(),
+    AlertModule.forRoot(),
     ToastrModule.forRoot(),
     JwtModule.forRoot({
       config: {
@@ -74,7 +88,8 @@ export function tokenGetter() {
             whitelistedDomains: ["localhost:44363"],    
             blacklistedRoutes: ["localhost:44363/api/auth"]
       }
-    })
+    }),
+    NgxSpinnerModule
 
   ],
   providers: [

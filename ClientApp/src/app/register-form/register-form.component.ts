@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { passwordsMatch } from '../validators/password.validator';
 import { ToastrService } from 'ngx-toastr';
 import { EmailValidators } from '../validators/email.validaor';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -16,10 +17,12 @@ export class RegisterFormComponent implements OnInit {
 
     user: User;
     form: FormGroup;
+    @Output() newUserRegistered = new EventEmitter();
 
     constructor(
         private authService: AuthService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private spinner: NgxSpinnerService
     ) { }
 
     
@@ -36,12 +39,14 @@ export class RegisterFormComponent implements OnInit {
 
     register() {
         if (this.form.valid) {
+            this.spinner.show();
             this.user = Object.assign({}, this.form.value);
             this.authService.register(this.user).subscribe(() => {
+                this.spinner.hide();
                 this.toastr.success('Rejestracja zakończona sukcesem!');
+                this.newUserRegistered.emit(0);
             });
         }
-        console.log(this.form);
     }
 
     getEmailErrorMessage() {

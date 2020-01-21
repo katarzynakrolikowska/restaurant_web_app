@@ -1,6 +1,8 @@
 using AutoMapper;
+using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Persistance;
+using JagWebApp.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +32,7 @@ namespace JagWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ITokenRepository, TokenRepository>();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {

@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login-form',
@@ -14,32 +15,40 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class LoginFormComponent implements OnInit {
     form: FormGroup;
     user: User;
+    errorLogin = false;
+    errorMessage: string;
 
     constructor(
         private authService: AuthService,
         private toastr: ToastrService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private spinner: NgxSpinnerService
     ) { }
 
     ngOnInit() {
+
         this.initForm();
     }
 
     login() {
         if (this.form.valid) {
+            this.spinner.show();
             this.user = Object.assign({}, this.form.value);
 
             this.authService.login(this.user).subscribe(() => {
+                this.spinner.hide();
+                this.errorLogin = false;
                 this.toastr.success('Zalogowano!');
                 let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
                 this.router.navigate([returnUrl || '/']);
             }, (errorRespone: HttpErrorResponse) => {
+                    this.spinner.hide();
+                    this.errorLogin = true;
                     if (errorRespone.status == 401) {
-                        console.log(errorRespone);//log
-                        this.toastr.error('Nieprawidłowy login lub hasło');
+                        this.errorMessage = 'Nieprawidłowy email lub hasło.';
                     } else {
-                        this.toastr.error('Wystapił nieoczekiwany błąd');
+                        this.errorMessage = 'Coś poszło nie tak.';
                     }
             });
         }
