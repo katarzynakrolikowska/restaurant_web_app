@@ -21,16 +21,14 @@ namespace JagWebApp.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<Role> _roleManager;
         private readonly ITokenRepository _tokenRepository;
 
         public AuthController(IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager, 
-            RoleManager<Role> roleManager, ITokenRepository tokenRepository)
+            ITokenRepository tokenRepository)
         {
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _tokenRepository = tokenRepository;
         }
 
@@ -43,10 +41,9 @@ namespace JagWebApp.Controllers
 
             var result = await _userManager.CreateAsync(userToRegister, userForRegisterResource.Password);
 
-
             if (result.Succeeded)
             {
-                return StatusCode(201);
+                return Ok();
             }
 
             return BadRequest(result.Errors);

@@ -2,6 +2,7 @@ using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Persistance;
+using JagWebApp.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

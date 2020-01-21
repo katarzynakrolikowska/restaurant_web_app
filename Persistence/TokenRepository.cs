@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JagWebApp.Persistance
+namespace JagWebApp.Persistence
 {
     public class TokenRepository : ITokenRepository
     {
@@ -33,8 +33,8 @@ namespace JagWebApp.Persistance
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            if (await _userManager.IsInRoleAsync(user, "Admin"))
-                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            if (await _userManager.IsInRoleAsync(user, Role.Admin))
+                claims.Add(new Claim(ClaimTypes.Role, Role.Admin));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8
                 .GetBytes(_configuration.GetSection("AppSettings:Token").Value));

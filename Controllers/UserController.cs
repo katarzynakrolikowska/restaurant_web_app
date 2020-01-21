@@ -73,7 +73,7 @@ namespace JagWebApp.Controllers
             return BadRequest(result.Errors);
         }
 
-        private int GetLoggedInUserId()
+        public int GetLoggedInUserId()
         {
             var id = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
             return int.Parse(id);

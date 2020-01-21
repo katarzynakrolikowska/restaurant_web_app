@@ -43,6 +43,7 @@ export class LoginFormComponent implements OnInit {
                 let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
                 this.router.navigate([returnUrl || '/']);
             }, (errorRespone: HttpErrorResponse) => {
+                    this.spinner.hide();
                     this.errorLogin = true;
                     if (errorRespone.status == 401) {
                         this.errorMessage = 'Nieprawidłowy email lub hasło.';
