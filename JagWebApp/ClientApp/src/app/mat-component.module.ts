@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -16,6 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatButtonModule,
         MatExpansionModule,
         MatTabsModule,
+        MatSelectModule,
     ]
 })
 

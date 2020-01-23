@@ -49,7 +49,6 @@ describe('EditEmailFormComponent', () => {
     xit('should init form input with proper email', () => {
         let emailAddress = 'email@abc.com';
         spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
-        
 
         fixture.detectChanges();
 
@@ -60,9 +59,8 @@ describe('EditEmailFormComponent', () => {
         let emailAddress = 'email@abc.com';
         spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
         let spy = spyOn(userService, 'saveEmail').and.returnValue(empty());
-
-
         component.email.setValue(emailAddress);
+
         component.saveEmail();
 
         expect(spy).toHaveBeenCalled();

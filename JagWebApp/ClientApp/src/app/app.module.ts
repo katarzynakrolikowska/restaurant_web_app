@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RegisterFormComponent } from './register-form/register-form.component';
@@ -28,6 +27,9 @@ import { EditPasswordFormComponent } from './edit-password-form/edit-password-fo
 import { NgxSpinnerModule } from "ngx-spinner";
 import { SpinnerComponent } from './spinner/spinner.component';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { DishesComponent } from './admin/dishes/dishes.component';
+import { DishFormComponent } from './admin/dish-form/dish-form.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -39,7 +41,6 @@ export function tokenGetter() {
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
     RegisterFormComponent,
     LoginFormComponent,
     LoginPanelComponent,
@@ -47,6 +48,9 @@ export function tokenGetter() {
     EditEmailFormComponent,
     EditPasswordFormComponent,
     SpinnerComponent,
+    NotFoundComponent,
+    DishesComponent,
+    DishFormComponent,
 
   ],
   imports: [
@@ -64,8 +68,14 @@ export function tokenGetter() {
           canActivateChild: [AuthGuard],
           children: [
               {
-                  path: 'fetch-data',
-                  component: FetchDataComponent,
+                  path: 'admin/dishes',
+                  component: DishesComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
+                  path: 'admin/dishes/new',
+                  component: DishFormComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
@@ -75,7 +85,8 @@ export function tokenGetter() {
               }
           ]
       },
-      { path: 'login', component: LoginPanelComponent },
+        { path: 'login', component: LoginPanelComponent },
+        { path: '**', component: NotFoundComponent }
     ]),
     BrowserAnimationsModule,
     MatComponentsModule,

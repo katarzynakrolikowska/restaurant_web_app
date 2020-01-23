@@ -29,11 +29,8 @@
             <a class="nav-link text-dark" [routerLink]="['/counter']">Counter</a>
           </li>
           <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
+            <a class="nav-link text-dark" [routerLink]="['/admin/dishes']">Dania</a>
           </li>
-          <!--<li *ngIf="!loggedIn()" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/register']">Rejestracja</a>
-          </li>-->
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a *ngIf="!loggedIn()" class="nav-link text-dark" [routerLink]="['/login']">Logowanie</a>
             <div *ngIf="loggedIn()" class="btn-group" dropdown>

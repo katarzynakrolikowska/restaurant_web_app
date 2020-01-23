@@ -67,8 +67,8 @@ describe('LoginFormComponent', () => {
 
     it('should call the server to login user after submit if form is valid', () => {
         let spy = spyOn(authService, 'login').and.returnValue(empty());
-
         setControls();
+
         component.login();
 
         expect(spy).toHaveBeenCalled();
@@ -78,6 +78,7 @@ describe('LoginFormComponent', () => {
         component.errorLogin = true;
         spyOn(authService, 'login').and.returnValue(of({}));
         setControls();
+
         component.login();
 
         expect(component.errorLogin).toBeFalsy();
@@ -86,9 +87,9 @@ describe('LoginFormComponent', () => {
     it('should redirect user to home page after successful login', () => {
         let router = TestBed.get(Router);
         let spy = spyOn(router, 'navigate');
-
         spyOn(authService, 'login').and.returnValue(of({}));
         setControls();
+
         component.login();
 
         expect(spy).toHaveBeenCalledWith(['/']);
@@ -107,22 +108,22 @@ describe('LoginFormComponent', () => {
     //    expect(spy).toHaveBeenCalledWith(['a']);
     //});
 
-    it('should set error notification when server return error', () => {
+    it('should set error notification when server returns error', () => {
         let errorRespone = new HttpErrorResponse({});
-
         spyOn(authService, 'login').and.returnValue(throwError(errorRespone));
         setControls();
+
         component.login();
 
         expect(component.errorLogin).toBeTruthy();
         expect(component.errorMessage).not.toBe('');
     });
 
-    it('should set specific errorMessage when server return error with status 401', () => {
+    it('should set specific errorMessage when server returns error with status 401', () => {
         let errorRespone = new HttpErrorResponse({ status: 401 });
-
         spyOn(authService, 'login').and.returnValue(throwError(errorRespone));
         setControls();
+
         component.login();
 
         expect(component.errorMessage).toContain('email');

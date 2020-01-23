@@ -24,7 +24,7 @@ namespace JagWebApp.Tests.Controllers
         private readonly IMapper _mapper;
         private readonly Mock<UserManager<User>> _userManager;
         private readonly Mock<SignInManager<User>> _signInManager;
-        private readonly Mock<ITokenRepository> _tokenRepository;
+        private readonly Mock<ITokenRepository> _tokenRepo;
         private readonly AuthController _controller;
         public AuthControllerTests()
         {
@@ -39,10 +39,9 @@ namespace JagWebApp.Tests.Controllers
             _signInManager = new Mock<SignInManager<User>>(_userManager.Object,
                _contextAccessor.Object, _userPrincipalFactory.Object, null, null, null, null);
 
-            _tokenRepository = new Mock<ITokenRepository>();
+            _tokenRepo = new Mock<ITokenRepository>();
 
-            _controller = new AuthController(_mapper, _userManager.Object, _signInManager.Object, 
-                _tokenRepository.Object);
+            _controller = new AuthController(_mapper, _userManager.Object, _signInManager.Object, _tokenRepo.Object);
         }
 
         [Fact]
@@ -118,7 +117,7 @@ namespace JagWebApp.Tests.Controllers
             var token = new { token = "a" };
             _userManager.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>());
-            _tokenRepository.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
+            _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
                 .ReturnsAsync("a");
             _signInManager.Setup(sm => sm.CheckPasswordSignInAsync(It.IsAny<User>(), It.IsAny<string>(), false))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
