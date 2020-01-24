@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class DishesController : ControllerBase
@@ -32,9 +33,29 @@ namespace JagWebApp.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Dishes
+        [HttpGet]
+        public async Task<IActionResult> GetDishes()
+        {
+            var dishes = await _dishRepository.GetDishes();
+
+            return Ok(_mapper.Map<IEnumerable<Dish>, IEnumerable<DishResource>>(dishes));
+        }
+
+        //GET: api/Dishes/1
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDish(int id)
+        {
+            var dish = await _dishRepository.GetDish(id);
+
+            if (dish == null)
+                return NotFound("Invalid dish id");
+
+            return Ok(_mapper.Map<Dish, SaveDishResource>(dish));
+        }
+
         // POST: api/Dishes
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateDish(SaveDishResource saveDishResource)
         {
             if (!ModelState.IsValid || !await _categoryRepository.CategoryExists(saveDishResource.CategoryId))
@@ -43,6 +64,21 @@ namespace JagWebApp.Controllers
             var dish = _mapper.Map<SaveDishResource, Dish>(saveDishResource);
 
             _dishRepository.Add(dish);
+            await _unitOfWork.CompleteAsync();
+
+            return Ok();
+        }
+
+        //DELETE: api/Dishes/1
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveDish(int id)
+        {
+            var dish = await _dishRepository.GetDish(id);
+
+            if (dish == null)
+                return NotFound("Invalid dish id");
+
+            _dishRepository.Remove(dish);
             await _unitOfWork.CompleteAsync();
 
             return Ok();

@@ -25,10 +25,21 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync(d => d.Id == id);
         }
 
+        public async Task<IEnumerable<Dish>> GetDishes()
+        {
+            return await _context.Dishes
+                .Include(d => d.Category)
+                .ToListAsync();
+        }
 
         public void Add(Dish dish)
         {
             _context.Dishes.Add(dish);
+        }
+
+        public void Remove(Dish dish)
+        {
+            _context.Remove(dish);
         }
 
         

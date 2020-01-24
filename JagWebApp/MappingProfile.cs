@@ -21,6 +21,7 @@ namespace JagWebApp
 
 
             CreateMap<Dish, DishResource>();
+            CreateMap<Dish, SaveDishResource>();
             CreateMap<Category, CategoryResource>();
 
         }

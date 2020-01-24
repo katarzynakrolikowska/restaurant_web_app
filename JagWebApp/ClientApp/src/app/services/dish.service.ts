@@ -14,4 +14,19 @@ export class DishService {
         return this.http.post(this.baseUrl + 'api/dishes', dish)
             .pipe(map(result => result));
     }
+
+    getDishes() {
+        return this.http.get(this.baseUrl + 'api/dishes')
+            .pipe(map((result: Array<Dish>) => result));
+    }
+
+    getDish(id: number) {
+        return this.http.get(this.baseUrl + 'api/dishes/' + id)
+            .pipe(map((result: Dish) => result));
+    }
+
+    deleteDish(id: number) {
+        return this.http.delete(this.baseUrl + 'api/dishes/' + id)
+            .pipe(map(result => result));
+    }
 }

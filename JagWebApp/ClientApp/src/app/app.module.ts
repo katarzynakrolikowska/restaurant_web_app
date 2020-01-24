@@ -30,6 +30,7 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DishesComponent } from './admin/dishes/dishes.component';
 import { DishFormComponent } from './admin/dish-form/dish-form.component';
+import { DialogCofirmComponent } from './dialog-cofirm/dialog-cofirm.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -51,6 +52,7 @@ export function tokenGetter() {
     NotFoundComponent,
     DishesComponent,
     DishFormComponent,
+    DialogCofirmComponent,
 
   ],
   imports: [
@@ -80,6 +82,12 @@ export function tokenGetter() {
                   canActivate: [AdminGuard]
               },
               {
+                  path: 'admin/dishes/edit/:id',
+                  component: DishFormComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
                   path: 'user/data',
                   component: UserDataTabsComponent
               }
@@ -102,7 +110,8 @@ export function tokenGetter() {
     }),
     NgxSpinnerModule
 
-  ],
+    ],
+  entryComponents: [DialogCofirmComponent],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
 
