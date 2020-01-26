@@ -1,0 +1,41 @@
+
+
+  <form [formGroup]="form" (ngSubmit)="onSave()">
+    <h4>Nowe danie</h4>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Nazwa</mat-label>
+        <textarea matInput formControlName="name" placeholder="Nazwa"></textarea>
+        <mat-error *ngIf="name.invalid">{{getNameErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Kategoria</mat-label>
+        <mat-select formControlName="categoryId">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="category.invalid">{{getCategoryErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Cena</mat-label>
+        <input matInput formControlName="price" placeholder="Cena" type="number" step="0.01">
+        <mat-error *ngIf="price.invalid">{{getPriceErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Ilość sztuk w porcji</mat-label>
+        <input matInput formControlName="amount" placeholder="Ilość sztuk w porcji" type="number">
+        <mat-error *ngIf="amount.invalid">{{getAmountErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </p>
+
+    <button mat-raised-button color="primary" type="submit" class="my-4">Zapisz</button>
+  </form>
+
+

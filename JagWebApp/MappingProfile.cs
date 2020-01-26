@@ -15,6 +15,14 @@ namespace JagWebApp
             CreateMap<UserForRegisterResource, User>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(ur => ur.Email));
 
+            CreateMap<DishResource, Dish>();
+            CreateMap<SaveDishResource, Dish>();
+            CreateMap<CategoryResource, Category>();
+
+
+            CreateMap<Dish, DishResource>();
+            CreateMap<Dish, SaveDishResource>();
+            CreateMap<Category, CategoryResource>();
 
         }
     }

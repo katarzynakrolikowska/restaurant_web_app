@@ -6,6 +6,15 @@ import { passwordsMatch } from '../validators/password.validator';
 import { ToastrService } from 'ngx-toastr';
 import { EmailValidators } from '../validators/email.validaor';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {
+    ERROR_REQUIRED_MESSAGE,
+    ERROR_EMAIL_MESSAGE,
+    ERROR_UNIQUE_EMAIL_MESSAGE,
+    ERROR_MISMATCH_PASSWORDS_MESSAGE,
+    ERROR_CONFIRM_PASSWORD_MESSAGE,
+    ERROR_MIN_LENGTH_PASSWORD_MESSAGE,
+    ERROR_MAX_LENGTH_PASSWORD_MESSAGE
+} from '../user-messages/messages';
 
 
 @Component({
@@ -50,22 +59,22 @@ export class RegisterFormComponent implements OnInit {
     }
 
     getEmailErrorMessage() {
-        return this.email.hasError('required') ? 'To pole jest obowiązkowe' :
-            this.email.hasError('email') ? 'Wpisany adres email jest nie poprawny' :
-            this.email.hasError('shouldBeUnique') ? 'Istnieje konto przypisane do podanego adresu email' :
+        return this.email.hasError('required') ? ERROR_REQUIRED_MESSAGE :
+            this.email.hasError('email') ? ERROR_EMAIL_MESSAGE :
+                this.email.hasError('shouldBeUnique') ? ERROR_UNIQUE_EMAIL_MESSAGE :
                 '';
     }
 
     getPasswordErrorMessage() {
-        return this.password.hasError('required') ? 'To pole jest obowiązkowe' :
-            this.password.hasError('minlength') ? 'Hasło jest za krótkie' :
-                this.password.hasError('maxlength') ? 'Hasło jest za długie' :
+        return this.password.hasError('required') ? ERROR_REQUIRED_MESSAGE :
+            this.password.hasError('minlength') ? ERROR_MIN_LENGTH_PASSWORD_MESSAGE :
+                this.password.hasError('maxlength') ? ERROR_MAX_LENGTH_PASSWORD_MESSAGE :
                     '';
     }
 
     getPasswordConfirmErrorMessage() {
-        return this.confirmPassword.hasError('required') ? 'Potwierdź hasło' :
-            this.confirmPassword.hasError('mismatch') ? 'Wpisane hasła nie są identyczne' :
+        return this.confirmPassword.hasError('required') ? ERROR_CONFIRM_PASSWORD_MESSAGE :
+            this.confirmPassword.hasError('mismatch') ? ERROR_MISMATCH_PASSWORDS_MESSAGE :
             '';
     }
 

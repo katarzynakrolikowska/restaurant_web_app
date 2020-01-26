@@ -20,7 +20,7 @@ namespace JagWebApp.Tests.Controllers
     {
         private User _user;
         private readonly Mock<UserManager<User>> _userManager;
-        private readonly Mock<ITokenRepository> _tokenRepository;
+        private readonly Mock<ITokenRepository> _tokenRepo;
         private readonly UserController _controller;
 
         public UserControllerTests()
@@ -29,8 +29,8 @@ namespace JagWebApp.Tests.Controllers
 
             var mockUserStore = new Mock<IUserStore<User>>();
             _userManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
-            _tokenRepository = new Mock<ITokenRepository>();
-            _controller = new UserController(_userManager.Object, _tokenRepository.Object);
+            _tokenRepo = new Mock<ITokenRepository>();
+            _controller = new UserController(_userManager.Object, _tokenRepo.Object);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace JagWebApp.Tests.Controllers
         {
             var tokenObject = new { token = "a" };
             SetInitialMockingToReturnSuccessWhenEmailIsModifying(id: 1);
-            _tokenRepository.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
+            _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
                 .ReturnsAsync("a");
 
             var result = await _controller
@@ -243,6 +243,5 @@ namespace JagWebApp.Tests.Controllers
 
             _controller.ControllerContext = context;
         }
-
     }
 }

@@ -33,6 +33,9 @@ namespace JagWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ITokenRepository, TokenRepository>();
+            services.AddScoped<IDishRepository, DishRepository>();
+            services.AddScoped<IDishCategoryRepository, DishCategoryRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {

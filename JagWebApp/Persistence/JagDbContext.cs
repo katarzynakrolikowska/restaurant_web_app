@@ -1,4 +1,5 @@
 ﻿using JagWebApp.Core.Models;
+using JagWebApp.Persistence.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,10 @@ namespace JagWebApp.Persistance
             : base(options)
         {
         }
+
+        public DbSet<Dish> Dishes { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,7 +41,11 @@ namespace JagWebApp.Persistance
                    .IsRequired();
             });
 
-           
+            modelBuilder.Entity<Dish>()
+                .Property(d => d.Amount)
+                .HasDefaultValue(1);
+
+            modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
 
 
         }

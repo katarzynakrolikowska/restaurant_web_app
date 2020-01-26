@@ -41,13 +41,23 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200112175924_SeedAdmin.cs" />
     <Compile Remove="Migrations\20200112175924_SeedAdmin.Designer.cs" />
+    <Compile Remove="Migrations\20200121205622_AddDishes.cs" />
+    <Compile Remove="Migrations\20200121205622_AddDishes.Designer.cs" />
+    <Compile Remove="Migrations\20200121212700_AddDishes.cs" />
+    <Compile Remove="Migrations\20200121212700_AddDishes.Designer.cs" />
+    <Compile Remove="Migrations\20200121213536_AddDishes.cs" />
+    <Compile Remove="Migrations\20200121213536_AddDishes.Designer.cs" />
+    <Compile Remove="Migrations\20200122075016_SeedDishCategories.cs" />
+    <Compile Remove="Migrations\20200122075016_SeedDishCategories.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\app-routing.module.ts" />
     <None Remove="ClientApp\src\app\app.error-handler.ts" />
     <None Remove="ClientApp\src\app\models\changePasswordView.ts" />
+    <None Remove="ClientApp\src\app\models\dish.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
+    <None Remove="ClientApp\src\app\user-messages\messages.ts" />
     <None Remove="ClientApp\src\app\validators\email.validaor.ts" />
     <None Remove="ClientApp\src\app\validators\password.validator.ts" />
   </ItemGroup>
@@ -57,7 +67,9 @@
     <TypeScriptCompile Include="ClientApp\src\app\app.error-handler.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\mat-component.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\changePasswordView.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\dish.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\email.validaor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\password.validator.ts" />
   </ItemGroup>

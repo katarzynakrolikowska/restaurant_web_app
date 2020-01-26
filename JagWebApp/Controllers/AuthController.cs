@@ -16,6 +16,7 @@ namespace JagWebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -34,7 +35,6 @@ namespace JagWebApp.Controllers
 
 
         [HttpPost("register")]
-        [AllowAnonymous]
         public async Task<IActionResult> Register(UserForRegisterResource userForRegisterResource)
         {
             var userToRegister = _mapper.Map<User>(userForRegisterResource);
@@ -51,7 +51,6 @@ namespace JagWebApp.Controllers
 
 
         [HttpPost("login")]
-        [AllowAnonymous]
 
         public async Task<IActionResult> Login(UserForLoginResource userForLoginResource)
         {
@@ -71,7 +70,6 @@ namespace JagWebApp.Controllers
         }
 
         [HttpGet("{email}")]
-        [AllowAnonymous]
         public async Task<IActionResult> UserExists(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -80,10 +78,5 @@ namespace JagWebApp.Controllers
 
             return Ok(result);
         }
-
-
-
-        
     }
-
 }

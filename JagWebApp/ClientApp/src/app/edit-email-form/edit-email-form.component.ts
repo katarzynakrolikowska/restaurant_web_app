@@ -6,6 +6,12 @@ import { User } from '../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../services/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {
+    ERROR_REQUIRED_MESSAGE,
+    ERROR_EMAIL_MESSAGE,
+    ERROR_UNIQUE_EMAIL_MESSAGE,
+    SUCCESS_SAVE_DATA_MESSAGE
+} from '../user-messages/messages';
 
 @Component({
   selector: 'app-edit-email-form',
@@ -41,9 +47,9 @@ export class EditEmailFormComponent implements OnInit {
     }
 
     getEmailErrorMessage() {
-        return this.email.hasError('required') ? 'To pole jest obowiązkowe' :
-            this.email.hasError('email') ? 'Wpisany adres email jest nie poprawny' :
-                this.email.hasError('shouldBeUnique') ? 'Istnieje konto przypisane do podanego adresu email' :
+        return this.email.hasError('required') ? ERROR_REQUIRED_MESSAGE :
+            this.email.hasError('email') ? ERROR_EMAIL_MESSAGE :
+                this.email.hasError('shouldBeUnique') ? ERROR_UNIQUE_EMAIL_MESSAGE :
                     '';
     }
 
@@ -54,7 +60,7 @@ export class EditEmailFormComponent implements OnInit {
             this.user.email = this.email.value;
             this.userService.saveEmail(this.user).subscribe(() => {
                 this.spinner.hide();
-                this.toastr.success('Dane zostały zmienione');
+                this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
             });
         }
     }
