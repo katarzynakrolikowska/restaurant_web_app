@@ -68,7 +68,7 @@ namespace JagWebApp.Tests.Controllers
             await _controller.CreateDish(new SaveDishResource());
 
             _dishRepo.Verify(dr => dr.Add(It.IsAny<Dish>()));
-            _unitOfWork.Verify(uow => uow.CompleteAsync());
+            _unitOfWork.Verify(u => u.CompleteAsync());
         }
 
         [Fact]
@@ -184,12 +184,12 @@ namespace JagWebApp.Tests.Controllers
             var dish = new Dish();
             _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
                 .ReturnsAsync(dish);
-            _unitOfWork.Setup(uow => uow.CompleteAsync());
+            _unitOfWork.Setup(u => u.CompleteAsync());
 
             await _controller.RemoveDish(It.IsAny<int>());
 
             _dishRepo.Verify(dr => dr.Remove(dish));
-            _unitOfWork.Verify(uow => uow.CompleteAsync());
+            _unitOfWork.Verify(u => u.CompleteAsync());
         }
 
         [Fact]
@@ -197,7 +197,7 @@ namespace JagWebApp.Tests.Controllers
         {
             _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
                 .ReturnsAsync(new Dish());
-            _unitOfWork.Setup(uow => uow.CompleteAsync());
+            _unitOfWork.Setup(u => u.CompleteAsync());
 
             var result = await _controller.RemoveDish(It.IsAny<int>()) as OkResult;
 
@@ -214,6 +214,62 @@ namespace JagWebApp.Tests.Controllers
             var result = await _controller.RemoveDish(It.IsAny<int>()) as NotFoundObjectResult;
 
             Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public void UpdateDish_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.UpdateDish(It.IsAny<int>(), It.IsAny<SaveDishResource>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void UpdateDish_WhenIdAndSaveDishIdAreNotEqual_ReturnsBadRequestResult()
+        {
+            var saveDish = new SaveDishResource() { Id = 2 };
+
+            var result = await _controller.UpdateDish(1, saveDish) as BadRequestObjectResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void UpdateDish_WhenDishDoesNotExist_ReturnsNotFoundResult()
+        {
+            Dish dish = null;
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(dish);
+            _unitOfWork.Setup(u => u.CompleteAsync());
+
+            var result = await _controller.UpdateDish(It.IsAny<int>(), new SaveDishResource()) as NotFoundResult;
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void UpdateDish_WhenDishExists_DishIsUpdated()
+        {
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(new Dish());
+            _unitOfWork.Setup(u => u.CompleteAsync());
+
+            await _controller.UpdateDish(It.IsAny<int>(), new SaveDishResource());
+
+            _dishRepo.Verify(dr => dr.GetDish(It.IsAny<int>()));
+            _unitOfWork.Verify(u => u.CompleteAsync());
+        }
+
+        [Fact]
+        public async void UpdateDish_WhenDishExists_ReturnsOkResult()
+        {
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(new Dish());
+            _unitOfWork.Setup(u => u.CompleteAsync());
+
+            var result = await _controller.UpdateDish(It.IsAny<int>(), new SaveDishResource()) as OkResult;
+
+            Assert.Equal(200, result.StatusCode);
         }
     }
 }

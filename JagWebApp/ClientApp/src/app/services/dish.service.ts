@@ -29,4 +29,9 @@ export class DishService {
         return this.http.delete(this.baseUrl + 'api/dishes/' + id)
             .pipe(map(result => result));
     }
+
+    updateDish(dish: Dish) {
+        return this.http.put(this.baseUrl + 'api/dishes/' + dish.id, dish)
+            .pipe(map(result => result));
+    }
 }

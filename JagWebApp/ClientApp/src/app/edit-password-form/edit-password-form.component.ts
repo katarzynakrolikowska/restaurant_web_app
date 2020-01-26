@@ -7,6 +7,15 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {
+    SUCCESS_SAVE_DATA_MESSAGE,
+    ERROR_SERVER_MESSAGE,
+    ERROR_REQUIRED_MESSAGE,
+    ERROR_MISMATCH_PASSWORDS_MESSAGE,
+    ERROR_CONFIRM_PASSWORD_MESSAGE,
+    ERROR_MIN_LENGTH_PASSWORD_MESSAGE,
+    ERROR_MAX_LENGTH_PASSWORD_MESSAGE
+} from '../user-messages/messages';
 
 
 @Component({
@@ -48,7 +57,7 @@ export class EditPasswordFormComponent implements OnInit {
                 .subscribe(() => {
                     this.invalid = false;
                     this.spinner.hide();
-                    this.toastr.success('Dane zostały zmienione');
+                    this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
                 }, (error: HttpErrorResponse) => {
                     this.invalid = true;
                     this.spinner.hide();
@@ -56,7 +65,7 @@ export class EditPasswordFormComponent implements OnInit {
                     if (error.status === 400)
                         this.errorMessage = 'To nie jest Twoje stare hasło';
                     else
-                        this.errorMessage = 'Coś poszło nie tak';
+                        this.errorMessage = ERROR_SERVER_MESSAGE;
                 });
 
             this.form.reset();
@@ -68,21 +77,20 @@ export class EditPasswordFormComponent implements OnInit {
     }
 
     getCurrentPasswordErrorMessage() {
-        
         return this.currentPassword.hasError('required') ? 'Wpisz obecne hasło' :
             '';
     }
 
     getNewPasswordErrorMessage() {
-        return this.newPassword.hasError('required') ? 'To pole jest obowiązkowe' :
-            this.newPassword.hasError('minlength') ? 'Hasło jest za krótkie' :
-                this.newPassword.hasError('maxlength') ? 'Hasło jest za długie' :
+        return this.newPassword.hasError('required') ? ERROR_REQUIRED_MESSAGE :
+            this.newPassword.hasError('minlength') ? ERROR_MIN_LENGTH_PASSWORD_MESSAGE :
+                this.newPassword.hasError('maxlength') ? ERROR_MAX_LENGTH_PASSWORD_MESSAGE :
                     '';
     }
 
     getPasswordConfirmErrorMessage() {
-        return this.confirmPassword.hasError('required') ? 'Potwierdź hasło' :
-            this.confirmPassword.hasError('mismatch') ? 'Wpisane hasła nie są identyczne' :
+        return this.confirmPassword.hasError('required') ? ERROR_CONFIRM_PASSWORD_MESSAGE :
+            this.confirmPassword.hasError('mismatch') ? ERROR_MISMATCH_PASSWORDS_MESSAGE :
                 '';
     }
 

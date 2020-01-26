@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ERROR_SERVER_MESSAGE } from '../user-messages/messages';
 
 @Component({
   selector: 'app-login-form',
@@ -48,7 +49,7 @@ export class LoginFormComponent implements OnInit {
                     if (errorRespone.status == 401) {
                         this.errorMessage = 'Nieprawidłowy email lub hasło.';
                     } else {
-                        this.errorMessage = 'Coś poszło nie tak.';
+                        this.errorMessage = ERROR_SERVER_MESSAGE;
                     }
             });
         }

@@ -54,7 +54,7 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Dish, SaveDishResource>(dish));
         }
 
-        // POST: api/Dishes
+        //POST: api/Dishes
         [HttpPost]
         public async Task<IActionResult> CreateDish(SaveDishResource saveDishResource)
         {
@@ -64,6 +64,24 @@ namespace JagWebApp.Controllers
             var dish = _mapper.Map<SaveDishResource, Dish>(saveDishResource);
 
             _dishRepository.Add(dish);
+            await _unitOfWork.CompleteAsync();
+
+            return Ok();
+        }
+
+        //PUT: api/Dishes/1
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateDish(int id, SaveDishResource saveDishResource)
+        {
+            if (!ModelState.IsValid || id != saveDishResource.Id)
+                return BadRequest("invalid");
+
+            var dish = await _dishRepository.GetDish(id);
+
+            if (dish == null)
+                return NotFound();
+
+            _mapper.Map(saveDishResource, dish);
             await _unitOfWork.CompleteAsync();
 
             return Ok();
