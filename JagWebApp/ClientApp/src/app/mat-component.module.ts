@@ -10,7 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -28,6 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatPaginatorModule,
         MatSortModule,
         MatDialogModule,
+        MatTooltipModule
     ]
 })
 

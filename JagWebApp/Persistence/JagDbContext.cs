@@ -22,6 +22,8 @@ namespace JagWebApp.Persistance
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Photo> Photos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -44,6 +46,10 @@ namespace JagWebApp.Persistance
             modelBuilder.Entity<Dish>()
                 .Property(d => d.Amount)
                 .HasDefaultValue(1);
+
+            modelBuilder.Entity<Photo>()
+               .Property(p => p.IsMain)
+               .HasDefaultValue(false);
 
             modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
 

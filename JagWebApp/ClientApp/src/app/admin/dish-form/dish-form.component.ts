@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CategoryService } from '../../services/category.service';
 import { DishService } from '../../services/dish.service';
@@ -22,6 +22,7 @@ import {
 })
 export class DishFormComponent implements OnInit {
 
+    @Input() title: string = 'Nowe danie';
     form: FormGroup;
     categories: any;
     dish: Dish;
@@ -44,6 +45,7 @@ export class DishFormComponent implements OnInit {
 
     ngOnInit() {
         this.id = +this.route.snapshot.params['id'];
+
         let sources = [this.categoryService.getCategories()];
 
         if (this.id)

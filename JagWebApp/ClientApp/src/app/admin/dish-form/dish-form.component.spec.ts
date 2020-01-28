@@ -12,26 +12,21 @@ import { DishService } from '../../services/dish.service';
 import { ActivatedRoute } from '@angular/router';
 import { Dish } from '../../models/dish';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { activatedRouteStub } from '../../test-stub/activated-route.stub';
 
-
-const activatedRouteStub = {
-    snapshot: {
-        params: {
-            id: '1'
-        },
-    },
-};
 
 describe('DishFormComponent', () => {
     const baseURL = '';
-    let component: DishFormComponent;
-    let fixture: ComponentFixture<DishFormComponent>;
     let nameControl: AbstractControl;
     let categoryControl: AbstractControl;
     let priceControl: AbstractControl;
     let amountControl: AbstractControl;
+
+    let component: DishFormComponent;
+    let fixture: ComponentFixture<DishFormComponent>;
     let categoryService: CategoryService;
     let dishService: DishService;
+
     let dish: Dish;
     let spyUpdateDish;
 
@@ -58,10 +53,12 @@ describe('DishFormComponent', () => {
         component = fixture.componentInstance;
         categoryService = TestBed.get(CategoryService);
         dishService = TestBed.get(DishService);
-        spyOn(categoryService, 'getCategories').and.returnValue(of([{ id: 1, name: 'z' }]));
         dish = { name: 'a', price: 1, amount: 1, categoryId: 1, id: 1 };
+
+        spyOn(categoryService, 'getCategories').and.returnValue(of([{ id: 1, name: 'z' }]));
         spyOn(dishService, 'getDish').and.returnValue(of(dish));
         spyUpdateDish = spyOn(dishService, 'updateDish').and.returnValue(empty());
+
         fixture.detectChanges();
 
         nameControl = component.name;
@@ -118,7 +115,7 @@ describe('DishFormComponent', () => {
         expect(amountControl.invalid).toBeTruthy();
     });
 
-    xit('should call the server to save dish after submit if form is valid', fakeAsync(() => {
+    xit('should call the server to save dish after submit if form is valid', () => {
         //activatedRouteStub.snapshot.params.id = 'new';
         let spy = spyOn(dishService, 'createDish').and.returnValue(empty());
         setControls();
@@ -127,7 +124,7 @@ describe('DishFormComponent', () => {
 
         //expect(component.id).toBe(2);
         expect(spy).toHaveBeenCalled();
-    }));
+    });
 
     it('should NOT call the server to save dish after submit if form is invalid', () => {
         let spy = spyOn(dishService, 'createDish').and.returnValue(empty());
@@ -137,14 +134,14 @@ describe('DishFormComponent', () => {
         expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should call the server to update dish if id is valid number', fakeAsync(() => {
+    it('should call the server to update dish if id is valid number', () => {
         //activatedRouteStub.snapshot.params.id = '1';
 
         component.onSave();
 
         //expect(component.id).toBe(1);
         expect(spyUpdateDish).toHaveBeenCalled();
-    }));
+    });
 
     function setControls() {
         nameControl.setValue('a');

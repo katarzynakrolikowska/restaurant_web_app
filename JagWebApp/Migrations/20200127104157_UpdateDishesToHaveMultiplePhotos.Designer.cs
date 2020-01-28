@@ -4,14 +4,16 @@ using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JagWebApp.Migrations
 {
     [DbContext(typeof(JagDbContext))]
-    partial class JagDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200127104157_UpdateDishesToHaveMultiplePhotos")]
+    partial class UpdateDishesToHaveMultiplePhotos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,11 +94,6 @@ namespace JagWebApp.Migrations
 
                     b.Property<int>("DishId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsMain")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .IsRequired()

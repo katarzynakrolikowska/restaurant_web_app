@@ -25,6 +25,7 @@ namespace JagWebApp.Controllers
             _tokenRepository = tokenRepository;
         }
 
+        //POST: api/user/email/1
         [HttpPost("email/{id}")]
         public async Task<IActionResult> ChangeEmail(int id, UserForLoginResource userForLoginResource)
         {
@@ -53,7 +54,7 @@ namespace JagWebApp.Controllers
             return BadRequest(result.Errors);
         }
 
-
+        //POST: api/user/password/1
         [HttpPost("password/{id}")]
         public async Task<IActionResult> ChangePassword(int id, ChangePasswordViewModelResource viewModel)
         {

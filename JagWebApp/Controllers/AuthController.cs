@@ -33,7 +33,7 @@ namespace JagWebApp.Controllers
             _tokenRepository = tokenRepository;
         }
 
-
+        //POST: api/register
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterResource userForRegisterResource)
         {
@@ -49,7 +49,7 @@ namespace JagWebApp.Controllers
             return BadRequest(result.Errors);
         }
 
-
+        //POST: api/login
         [HttpPost("login")]
 
         public async Task<IActionResult> Login(UserForLoginResource userForLoginResource)
@@ -69,6 +69,7 @@ namespace JagWebApp.Controllers
             return Unauthorized();
         }
 
+        //GET: api/auth/a@abc.com
         [HttpGet("{email}")]
         public async Task<IActionResult> UserExists(string email)
         {

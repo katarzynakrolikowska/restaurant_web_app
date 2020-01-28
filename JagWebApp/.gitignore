@@ -3,6 +3,7 @@
 
 appsettings.json
 appsettings.Development.json
+wwwroot/uploads/
 
 # User-specific files
 *.suo

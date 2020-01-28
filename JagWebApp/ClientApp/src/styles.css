@@ -30,15 +30,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin: auto;
 }
 
-  .container-img img {
-    max-width: 100%;
-    max-height: 100%;
-  }
+.container-img img {
+  max-width: 100%;
+  max-height: 100%;
+}
 
-  .container-main {
-    width: 100%;
-    height: 100%;
-    padding-top: 5%;
-  }
+.container-main {
+  width: 100%;
+  height: 100%;
+  padding-top: 5%;
+}
+
+.mat-tooltip {
+  font-size: 12px !important;
+  margin-top: 15px !important;
+}
+
+.position-block {
+  display: block;
+}
+
+.position-inline {
+  display: inline-block;
+}
 
 
