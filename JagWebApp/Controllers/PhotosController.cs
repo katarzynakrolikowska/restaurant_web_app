@@ -39,7 +39,7 @@ namespace JagWebApp.Controllers
             _photoSettings = option.Value;
         }
 
-        //GET: api/Photos
+        //GET: api/dishes/1/photos
         [HttpGet]
         public async Task<IActionResult> GetPhotos(int dishId)
         {
@@ -52,7 +52,7 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos));
         }
 
-        //POST: api/Photos
+        //POST: api/dishes/1/photos
         [HttpPost]
         public async Task<IActionResult> Upload(int dishId, IFormFile file)
         {
@@ -70,14 +70,45 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
 
+        //PATCH: api/dishes/1/photos/1
+        [HttpPatch("{photoId}")]
+        public async Task<IActionResult> UpdateMainPhoto(int dishId, int photoId)
+        {
+            var lastMainPhotoId = 0;
+            var photo = await _photoRepository.GetPhoto(photoId);
+            if (photo == null)
+                return NotFound();
 
-        //DELETE: api/Photos/1
+            if (dishId != photo.DishId)
+                return BadRequest();
+
+            if (!photo.IsMain)
+            {
+                var lastMainPhoto = await _photoRepository.GetLastMainPhoto(dishId);
+                if (lastMainPhoto != null)
+                {
+                    lastMainPhoto.IsMain = false;
+                    lastMainPhotoId = lastMainPhoto.Id;
+                }
+            }
+
+            photo.IsMain = !photo.IsMain;
+            await _unitOfWork.CompleteAsync();
+
+            return Ok(lastMainPhotoId);
+        }
+
+
+        //DELETE: api/dishes/1/photos/1
         [HttpDelete("{photoId}")]
         public async Task<IActionResult> Remove(int dishId, int photoId)
         {
             var photo = await _photoRepository.GetPhoto(photoId);
             if (photo == null)
                 return NotFound();
+
+            if (dishId != photo.DishId)
+                return BadRequest();
 
             _photoRepository.Remove(photo);
             await _unitOfWork.CompleteAsync();

@@ -59,6 +59,7 @@
     <None Remove="ClientApp\src\app\models\dish.ts" />
     <None Remove="ClientApp\src\app\models\photo.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
+    <None Remove="ClientApp\src\app\test-stub\activated-route.stub.ts" />
     <None Remove="ClientApp\src\app\user-messages\messages.ts" />
     <None Remove="ClientApp\src\app\validators\email.validaor.ts" />
     <None Remove="ClientApp\src\app\validators\password.validator.ts" />
@@ -72,6 +73,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\dish.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\photo.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\test-stub\activated-route.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\email.validaor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\password.validator.ts" />

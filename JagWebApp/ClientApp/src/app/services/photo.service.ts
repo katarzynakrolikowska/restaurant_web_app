@@ -22,6 +22,12 @@ export class PhotoService {
             .pipe(map((response: Photo) => response));
     }
 
+    updateMainPhoto(dishId, photoId) {
+        var url = this.baseUrl + 'api/dishes/' + dishId + '/photos/' + photoId;
+        return this.http.patch(url, null)
+            .pipe(map((response: number) => response));
+    }
+
     delete(photoId, dishId) {
         return this.http.delete(this.baseUrl + 'api/dishes/' + dishId + '/photos/' + photoId)
             .pipe(map(response => response));

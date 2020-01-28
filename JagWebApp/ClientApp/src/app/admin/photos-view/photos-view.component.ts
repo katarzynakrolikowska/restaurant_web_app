@@ -27,7 +27,7 @@ export class PhotosViewComponent implements OnInit {
         this.photoService.getPhotos(this.id)
             .subscribe(p => this.photos = p);
     }
-
+    
     uploadPhoto() {
         var file = this.fileInput.value.files[0];
         this.fileInput.clear();
@@ -45,8 +45,19 @@ export class PhotosViewComponent implements OnInit {
     deletePhoto(photoId) {
         this.photoService.delete(photoId, this.id)
             .subscribe(() => {
-                let index = this.photos.findIndex(p => p.id === photoId);
+                let index = this.photos.findIndex(p => p.id == photoId);
                 this.photos.splice(index, 1);
+            });
+    }
+
+    toggleMainPhoto(photoId) {
+        this.photoService.updateMainPhoto(this.id, photoId)
+            .subscribe(lastMainPhotoId => {
+                this.photos = this.photos.map(photo => {
+                    if (photo.id === photoId || photo.id === lastMainPhotoId)
+                        photo.isMain = !photo.isMain;
+                    return photo;
+                });
             });
     }
 

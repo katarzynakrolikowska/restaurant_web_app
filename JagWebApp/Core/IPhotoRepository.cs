@@ -11,6 +11,8 @@ namespace JagWebApp.Core
 
         Task<Photo> GetPhoto(int photoId);
 
+        Task<Photo> GetLastMainPhoto(int dishId);
+
         Task<Photo> SavePhoto(Dish dish, IFormFile file);
 
         void Remove(Photo photo);

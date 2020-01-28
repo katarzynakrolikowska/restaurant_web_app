@@ -19,5 +19,7 @@ namespace JagWebApp.Core.Models
         public string ThumbnailName { get; set; }
 
         public int DishId { get; set; }
+
+        public bool IsMain { get; set; }
     }
 }

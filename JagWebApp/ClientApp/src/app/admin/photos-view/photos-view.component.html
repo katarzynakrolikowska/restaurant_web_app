@@ -15,8 +15,10 @@
     <img src="/uploads/{{p.thumbnailName}}" class="img-thumbnail m-1" />
     <div class="m-1 position-block" >
       <button mat-raised-button
-              matTooltip="Ustaw jako główne zdjęcie"
-              class="button-icon-width mr-4">
+              [matTooltip]="p.isMain ? 'Główne zdjęcie' : 'Ustaw jako główne zdjęcie'"
+              [class.photo-main]="p.isMain"
+              class="button-icon-width mr-4"
+              (click)="toggleMainPhoto(p.id)">
         <mat-icon>check_circle_outline</mat-icon>
       </button>
       <button mat-raised-button

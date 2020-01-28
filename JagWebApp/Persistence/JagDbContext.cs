@@ -47,6 +47,10 @@ namespace JagWebApp.Persistance
                 .Property(d => d.Amount)
                 .HasDefaultValue(1);
 
+            modelBuilder.Entity<Photo>()
+               .Property(p => p.IsMain)
+               .HasDefaultValue(false);
+
             modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
 
 

@@ -33,7 +33,7 @@ namespace JagWebApp.Controllers
             _mapper = mapper;
         }
 
-        //GET: api/Dishes
+        //GET: api/dishes
         [HttpGet]
         public async Task<IActionResult> GetDishes()
         {
@@ -42,7 +42,7 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<IEnumerable<Dish>, IEnumerable<DishResource>>(dishes));
         }
 
-        //GET: api/Dishes/1
+        //GET: api/dishes/1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDish(int id)
         {
@@ -54,7 +54,7 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Dish, SaveDishResource>(dish));
         }
 
-        //POST: api/Dishes
+        //POST: api/dishes
         [HttpPost]
         public async Task<IActionResult> CreateDish(SaveDishResource saveDishResource)
         {
@@ -69,7 +69,7 @@ namespace JagWebApp.Controllers
             return Ok();
         }
 
-        //PUT: api/Dishes/1
+        //PUT: api/dishes/1
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDish(int id, SaveDishResource saveDishResource)
         {
@@ -87,7 +87,7 @@ namespace JagWebApp.Controllers
             return Ok();
         }
 
-        //DELETE: api/Dishes/1
+        //DELETE: api/dishes/1
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveDish(int id)
         {
@@ -101,6 +101,5 @@ namespace JagWebApp.Controllers
 
             return Ok();
         }
-
     }
 }
