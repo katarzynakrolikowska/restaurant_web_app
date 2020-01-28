@@ -31,6 +31,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { DishesComponent } from './admin/dishes/dishes.component';
 import { DishFormComponent } from './admin/dish-form/dish-form.component';
 import { DialogCofirmComponent } from './dialog-cofirm/dialog-cofirm.component';
+import { DishTabsComponent } from './admin/dish-tabs/dish-tabs.component';
+import { PhotosViewComponent } from './admin/photos-view/photos-view.component';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -53,6 +56,8 @@ export function tokenGetter() {
     DishesComponent,
     DishFormComponent,
     DialogCofirmComponent,
+    DishTabsComponent,
+    PhotosViewComponent,
 
   ],
   imports: [
@@ -83,7 +88,7 @@ export function tokenGetter() {
               },
               {
                   path: 'admin/dishes/edit/:id',
-                  component: DishFormComponent,
+                  component: DishTabsComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
@@ -98,6 +103,7 @@ export function tokenGetter() {
     ]),
     BrowserAnimationsModule,
     MatComponentsModule,
+    MaterialFileInputModule,
     BsDropdownModule.forRoot(),
     AlertModule.forRoot(),
     ToastrModule.forRoot(),

@@ -29,6 +29,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0-preview1.19506.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0-preview1-19509-03" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +57,7 @@
     <None Remove="ClientApp\src\app\app.error-handler.ts" />
     <None Remove="ClientApp\src\app\models\changePasswordView.ts" />
     <None Remove="ClientApp\src\app\models\dish.ts" />
+    <None Remove="ClientApp\src\app\models\photo.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
     <None Remove="ClientApp\src\app\user-messages\messages.ts" />
     <None Remove="ClientApp\src\app\validators\email.validaor.ts" />
@@ -68,6 +70,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\mat-component.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\changePasswordView.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\dish.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\photo.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\email.validaor.ts" />

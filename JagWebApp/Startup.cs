@@ -32,10 +32,14 @@ namespace JagWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+
             services.AddTransient<ITokenRepository, TokenRepository>();
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IDishCategoryRepository, DishCategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {

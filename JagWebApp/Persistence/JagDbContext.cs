@@ -22,6 +22,8 @@ namespace JagWebApp.Persistance
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Photo> Photos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
