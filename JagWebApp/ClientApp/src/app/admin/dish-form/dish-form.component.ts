@@ -76,13 +76,13 @@ export class DishFormComponent implements OnInit {
 
     createDish() {
         this.dishService.createDish(this.dish)
-            .subscribe(() => this.makeActionWhenServerReturnsSuccess());
+            .subscribe(() => this.takeActionWhenServerReturnsSuccess());
     }
 
     updateDish() {
         this.dish.id = this.id;
         this.dishService.updateDish(this.dish)
-            .subscribe(() => this.makeActionWhenServerReturnsSuccess());
+            .subscribe(() => this.takeActionWhenServerReturnsSuccess());
     }
 
     getNameErrorMessage() {
@@ -140,9 +140,8 @@ export class DishFormComponent implements OnInit {
         this.form.setValue(Object.assign({}, dish));
     }
 
-    private makeActionWhenServerReturnsSuccess() {
+    private takeActionWhenServerReturnsSuccess() {
         this.toastr.success(SUCCESS_SAVE_DISH_MESSAGE);
         this.router.navigate(['/admin/dishes'])
     }
-
 }

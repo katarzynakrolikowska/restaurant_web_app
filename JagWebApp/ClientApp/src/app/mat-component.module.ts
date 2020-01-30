@@ -11,6 +11,7 @@ import { MatPaginatorModule } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 
@@ -28,7 +29,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatPaginatorModule,
         MatSortModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatAutocompleteModule
     ]
 })
 

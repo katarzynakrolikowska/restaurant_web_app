@@ -34,6 +34,10 @@ import { DialogCofirmComponent } from './dialog-cofirm/dialog-cofirm.component';
 import { DishTabsComponent } from './admin/dish-tabs/dish-tabs.component';
 import { PhotosViewComponent } from './admin/photos-view/photos-view.component';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { CustomMatPaginatorIntl } from './helpers/custom-mat-paginator-intl';
+import { MatPaginatorIntl } from '@angular/material';
+import { AdminDishesMenuComponent } from './admin/admin-dishes-menu/admin-dishes-menu.component';
+import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -58,6 +62,8 @@ export function tokenGetter() {
     DialogCofirmComponent,
     DishTabsComponent,
     PhotosViewComponent,
+    AdminDishesMenuComponent,
+    AdminMenuFormComponent,
 
   ],
   imports: [
@@ -74,12 +80,7 @@ export function tokenGetter() {
           runGuardsAndResolvers: 'always',
           canActivateChild: [AuthGuard],
           children: [
-              {
-                  path: 'admin/dishes',
-                  component: DishesComponent,
-                  data: { roles: ['Admin'] },
-                  canActivate: [AdminGuard]
-              },
+              
               {
                   path: 'admin/dishes/new',
                   component: DishFormComponent,
@@ -89,6 +90,18 @@ export function tokenGetter() {
               {
                   path: 'admin/dishes/edit/:id',
                   component: DishTabsComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
+                  path: 'admin/dishes',
+                  component: DishesComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
+                  path: 'admin/menu',
+                  component: AdminDishesMenuComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
@@ -119,7 +132,10 @@ export function tokenGetter() {
     ],
   entryComponents: [DialogCofirmComponent],
   providers: [
-    { provide: ErrorHandler, useClass: AppErrorHandler },
+      { provide: ErrorHandler, useClass: AppErrorHandler },
+      {
+          provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl
+      }
 
   ],
   bootstrap: [AppComponent]

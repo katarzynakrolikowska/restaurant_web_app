@@ -18,6 +18,8 @@ namespace JagWebApp
             CreateMap<DishResource, Dish>();
             CreateMap<SaveDishResource, Dish>();
             CreateMap<CategoryResource, Category>();
+            CreateMap<SaveMenuItemResource, MenuItem>()
+                .ForMember(i => i.Available, opt => opt.MapFrom(ir => ir.Limit));
 
 
             CreateMap<Dish, DishResource>();

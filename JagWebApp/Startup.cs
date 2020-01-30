@@ -40,6 +40,7 @@ namespace JagWebApp
             services.AddScoped<IDishCategoryRepository, DishCategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {

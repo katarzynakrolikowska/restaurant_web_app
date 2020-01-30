@@ -10,6 +10,7 @@ exports.ERROR_CONFIRM_PASSWORD_MESSAGE = 'Potwierdź hasło';
 exports.ERROR_MIN_LENGTH_PASSWORD_MESSAGE = 'Hasło jest za krótkie';
 exports.ERROR_MAX_LENGTH_PASSWORD_MESSAGE = 'Hasło jest za długie';
 exports.ERROR_SERVER_MESSAGE = 'Coś poszło nie tak';
+exports.ERROR_MISMATCH_MENU_ITEMS_MESSAGE = 'Wybierz pozycję z listy';
 exports.SUCCESS_SAVE_DISH_MESSAGE = 'Danie zostało zapisane!';
 exports.SUCCESS_SAVE_DATA_MESSAGE = 'Dane zostały zapisane';
 //# sourceMappingURL=messages.js.map

@@ -58,7 +58,7 @@ namespace JagWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDish(SaveDishResource saveDishResource)
         {
-            if (!ModelState.IsValid || !await _categoryRepository.CategoryExists(saveDishResource.CategoryId))
+            if (!await _categoryRepository.CategoryExists(saveDishResource.CategoryId))
                 return BadRequest("Niepoprawne dane");
 
             var dish = _mapper.Map<SaveDishResource, Dish>(saveDishResource);
@@ -73,7 +73,7 @@ namespace JagWebApp.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDish(int id, SaveDishResource saveDishResource)
         {
-            if (!ModelState.IsValid || id != saveDishResource.Id)
+            if (id != saveDishResource.Id)
                 return BadRequest("invalid");
 
             var dish = await _dishRepository.GetDish(id);
