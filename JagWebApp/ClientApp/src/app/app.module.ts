@@ -38,6 +38,8 @@ import { CustomMatPaginatorIntl } from './helpers/custom-mat-paginator-intl';
 import { MatPaginatorIntl } from '@angular/material';
 import { AdminDishesMenuComponent } from './admin/admin-dishes-menu/admin-dishes-menu.component';
 import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
+import { AdminDishCardComponent } from './admin/admin-dish-card/admin-dish-card.component';
+import { DialogEditLimitComponent } from './admin/dialog-edit-limit/dialog-edit-limit.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -64,6 +66,8 @@ export function tokenGetter() {
     PhotosViewComponent,
     AdminDishesMenuComponent,
     AdminMenuFormComponent,
+    AdminDishCardComponent,
+    DialogEditLimitComponent,
 
   ],
   imports: [
@@ -130,7 +134,7 @@ export function tokenGetter() {
     NgxSpinnerModule
 
     ],
-  entryComponents: [DialogCofirmComponent],
+    entryComponents: [DialogCofirmComponent, DialogEditLimitComponent],
   providers: [
       { provide: ErrorHandler, useClass: AppErrorHandler },
       {

@@ -39,7 +39,4 @@ export class LoginPanelComponent implements OnInit {
 
         }
     }
-
-   
-
 }

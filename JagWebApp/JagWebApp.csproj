@@ -17,6 +17,7 @@
     <PackageReference Include="DataAnnotationsExtensions" Version="5.0.1.27" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
@@ -68,6 +69,7 @@
     <None Remove="ClientApp\src\app\models\dish.ts" />
     <None Remove="ClientApp\src\app\models\menuItem.ts" />
     <None Remove="ClientApp\src\app\models\photo.ts" />
+    <None Remove="ClientApp\src\app\models\saveMenuItem.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
     <None Remove="ClientApp\src\app\test-stub\activated-route.stub.ts" />
     <None Remove="ClientApp\src\app\user-messages\messages.ts" />
@@ -86,6 +88,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\dataForAutocomplete.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\menuItem.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\photo.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\saveMenuItem.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\test-stub\activated-route.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />

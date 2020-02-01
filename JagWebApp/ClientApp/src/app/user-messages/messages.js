@@ -13,4 +13,5 @@ exports.ERROR_SERVER_MESSAGE = 'Coś poszło nie tak';
 exports.ERROR_MISMATCH_MENU_ITEMS_MESSAGE = 'Wybierz pozycję z listy';
 exports.SUCCESS_SAVE_DISH_MESSAGE = 'Danie zostało zapisane!';
 exports.SUCCESS_SAVE_DATA_MESSAGE = 'Dane zostały zapisane';
+exports.SUCCESS_UPDATE_MENU_MESSAGE = 'Menu zostało zaktualizowane';
 //# sourceMappingURL=messages.js.map

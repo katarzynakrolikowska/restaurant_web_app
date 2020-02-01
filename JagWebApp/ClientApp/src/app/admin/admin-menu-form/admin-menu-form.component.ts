@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DishService } from '../../services/dish.service';
 import { DataForAutocomplete } from '../../models/dataForAutocomplete';
@@ -6,11 +6,14 @@ import { Dish } from '../../models/dish';
 import {
     ERROR_REQUIRED_MESSAGE,
     ERROR_MISMATCH_MENU_ITEMS_MESSAGE,
-    ERROR_PATTERN_MESSAGE
+    ERROR_PATTERN_MESSAGE,
+    SUCCESS_UPDATE_MENU_MESSAGE
 } from '../../user-messages/messages';
 import { menuItemMatch } from '../../validators/menu-item.validator';
 import { MenuService } from '../../services/menu.service';
-import { MenuItem } from '../../models/menuItem';
+import { SaveMenuItem } from '../../models/saveMenuItem';
+import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -22,12 +25,17 @@ export class AdminMenuFormComponent implements OnInit {
     form: FormGroup;
     dishesGroup: Array<DataForAutocomplete> = [];
     filteredDishesGroup: Array<DataForAutocomplete> = [];
+    @Output() onCreateMenuItem = new EventEmitter();
 
-    constructor(private dishService: DishService, private menuService: MenuService) { }
+    constructor(
+        private dishService: DishService,
+        private menuService: MenuService,
+        private toastr: ToastrService,
+        private spinner: NgxSpinnerService
+    ) { }
 
     ngOnInit() {
         this.initForm();
-
         this.dishService.getDishes()
             .subscribe(result => {
                 let group = {};
@@ -88,20 +96,27 @@ export class AdminMenuFormComponent implements OnInit {
         if (this.form.invalid)
             return;
 
-        let menuItem: MenuItem = {
+        this.spinner.show();
+        let menuItem: SaveMenuItem = {
             dishId: this.dish.value.id,
             limit: this.limit.value
         };
 
-        return this.menuService.create(menuItem)
-            .subscribe(result => console.log('ok', result));
+        this.menuService.create(menuItem)
+            .subscribe(result => {
+                this.spinner.hide();
+                this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
+                this.onCreateMenuItem.emit(result);
+            });
+
+        this.form.reset();
+        this.dish.setErrors(null);
+        this.limit.setErrors(null);
     }
 
     getSelectedDishName(dish: Dish) {
-        return dish ? dish.name : dish;
+        return dish ? `${dish.name} - ${dish.amount} szt.` : '';
     }
-
-   
 
     private filterGroup(value: string): DataForAutocomplete[] {
         if (value) {
@@ -119,7 +134,7 @@ export class AdminMenuFormComponent implements OnInit {
 
     private initForm() {
         this.form = new FormGroup({
-            dishId: new FormControl(''),
+            dishId: new FormControl('', Validators.required),
             limit: new FormControl('', [Validators.required, Validators.min(0)])
         });
     }

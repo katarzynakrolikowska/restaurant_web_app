@@ -44,7 +44,7 @@ namespace JagWebApp.Persistence
                 {
                     using (var img = Image.FromStream(file.OpenReadStream()))
                     {
-                        Image image = GetResizedImage(img, dimensions.Height, dimensions.Width);
+                        Image image = GetResizedImage(img, dimensions.Width, dimensions.Height);
                         image.Save(filePath);
                     }
                 }

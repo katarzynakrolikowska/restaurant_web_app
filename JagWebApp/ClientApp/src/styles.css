@@ -47,7 +47,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .position-block {
-  display: block;
+  display: block !important;
 }
 
 .position-inline {
@@ -60,4 +60,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   color: rgba(0,0,0,.12);
+}
+
+button:focus {
+  outline: none;
+}
+
+.element-center {
+  display: table;
+  margin: auto;
 }

@@ -31,6 +31,38 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
+        public void GetMenu_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.GetMenu();
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void GetMenu_WhenCalled_GetMenuItemsFromRepoIsCalled()
+        {
+            _menuRepo.Setup(mr => mr.GetMenuItems());
+
+            await _controller.GetMenu();
+
+            _menuRepo.Verify(mr => mr.GetMenuItems());
+        }
+
+        [Fact]
+        public async void GetMenu_WhenCalled_ReturnsOkObjectResultWithMenuItems()
+        {
+            var menuItems = new List<MenuItem>() { new MenuItem(), new MenuItem() };
+            _menuRepo.Setup(mr => mr.GetMenuItems())
+                .ReturnsAsync(menuItems);
+
+            var result = await _controller.GetMenu() as OkObjectResult;
+            var values = result.Value as List<MenuItemResource>;
+
+            Assert.Equal(200, result.StatusCode);
+            Assert.Equal(2, values.Count);
+        }
+
+        [Fact]
         public void Create_WhenCalled_ReturnsIActionResult()
         {
             var result = _controller.Create(It.IsAny<SaveMenuItemResource>());

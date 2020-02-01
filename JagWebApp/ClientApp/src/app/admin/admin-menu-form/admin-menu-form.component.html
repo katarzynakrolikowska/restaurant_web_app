@@ -2,7 +2,7 @@
 <form [formGroup]="form" (ngSubmit)="onSave()">
   <h4 class="mb-2">Dodaj pozycję Menu</h4>
   <div class="mb-2">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="position-block">
       <mat-label>Danie</mat-label>
       <input type="text"
              matInput placeholder="Danie"
@@ -13,18 +13,18 @@
       <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="getSelectedDishName">
         <mat-optgroup *ngFor="let group of filteredDishesGroup" [label]="group.categoryName">
           <mat-option *ngFor="let dish of group.dishes" [value]="dish">
-            {{dish.name}}
+            {{dish.name }} - {{ dish.amount }} szt.
           </mat-option>
         </mat-optgroup>
       </mat-autocomplete>
     </mat-form-field>
   </div>
   <div>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="position-block">
       <mat-label>Ilość dostępnych porcji</mat-label>
       <input matInput formControlName="limit" placeholder="Ilość dostępnych porcji" type="number">
       <mat-error *ngIf="limit.invalid">{{getLimitErrorMessage()}}</mat-error>
     </mat-form-field>
   </div>
-  <button mat-raised-button color="primary" type="submit" class="my-4">Dodaj</button>
+  <button mat-raised-button color="primary" type="submit" class="mt-2 mb-4">Dodaj</button>
 </form>

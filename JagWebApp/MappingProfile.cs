@@ -22,10 +22,12 @@ namespace JagWebApp
                 .ForMember(i => i.Available, opt => opt.MapFrom(ir => ir.Limit));
 
 
-            CreateMap<Dish, DishResource>();
+            CreateMap<Dish, DishResource>()
+                .ForMember(dr => dr.MainPhoto, opt => opt.MapFrom(d => d.Photos.SingleOrDefault(p => p.IsMain == true)));
             CreateMap<Dish, SaveDishResource>();
             CreateMap<Category, CategoryResource>();
             CreateMap<Photo, PhotoResource>();
+            CreateMap<MenuItem, MenuItemResource>();
 
         }
     }

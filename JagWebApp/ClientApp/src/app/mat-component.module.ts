@@ -12,6 +12,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -30,7 +31,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         MatSortModule,
         MatDialogModule,
         MatTooltipModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatCardModule
     ]
 })
 

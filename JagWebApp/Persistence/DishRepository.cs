@@ -41,7 +41,5 @@ namespace JagWebApp.Persistence
         {
             _context.Remove(dish);
         }
-
-        
     }
 }

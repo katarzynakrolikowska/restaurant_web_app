@@ -74,7 +74,7 @@ namespace JagWebApp.Controllers
         public async Task<IActionResult> UpdateDish(int id, SaveDishResource saveDishResource)
         {
             if (id != saveDishResource.Id)
-                return BadRequest("invalid");
+                return BadRequest();
 
             var dish = await _dishRepository.GetDish(id);
 
@@ -94,7 +94,7 @@ namespace JagWebApp.Controllers
             var dish = await _dishRepository.GetDish(id);
 
             if (dish == null)
-                return NotFound("Invalid dish id");
+                return NotFound();
 
             _dishRepository.Remove(dish);
             await _unitOfWork.CompleteAsync();

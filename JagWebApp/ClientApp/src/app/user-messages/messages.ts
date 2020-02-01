@@ -14,3 +14,4 @@ export const ERROR_MISMATCH_MENU_ITEMS_MESSAGE = 'Wybierz pozycję z listy';
 
 export const SUCCESS_SAVE_DISH_MESSAGE = 'Danie zostało zapisane!';
 export const SUCCESS_SAVE_DATA_MESSAGE = 'Dane zostały zapisane';
+export const SUCCESS_UPDATE_MENU_MESSAGE = 'Menu zostało zaktualizowane';
