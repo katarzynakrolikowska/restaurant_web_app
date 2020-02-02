@@ -93,7 +93,85 @@ namespace JagWebApp.Tests.Controllers
         {
             SetValidInputForCreateMethod();
 
-            var result = await _controller.Create(new SaveMenuItemResource()) as OkResult;
+            var result = await _controller.Create(new SaveMenuItemResource()) as OkObjectResult;
+
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public void UpdateLimit_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.UpdateLimit(It.IsAny<int>(), It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void UpdateLimit_WhenMenuItemDoesNotExist_ReturnsNotFoundResult()
+        {
+            var result = await _controller.UpdateLimit(It.IsAny<int>(), It.IsAny<int>()) as NotFoundResult;
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void UpdateLimit_WhenMenuItemExists_ItemIsUpdated()
+        {
+            var item = new MenuItem() { Limit = 1, Available = 1 };
+            MockRepoToReturnMenuItem(item);
+
+            await _controller.UpdateLimit(It.IsAny<int>(), 2);
+
+            _unitOfWork.Verify(u => u.CompleteAsync());
+            Assert.Equal(2, item.Available);
+            Assert.Equal(2, item.Limit);
+        }
+
+        [Fact]
+        public async void UpdateLimit_WhenMenuItemExists_ReturnsOkResult()
+        {
+            MockRepoToReturnMenuItem(new MenuItem());
+
+            var result = await _controller.UpdateLimit(It.IsAny<int>(), It.IsAny<int>()) as OkResult;
+
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public void Remove_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.Remove(It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void Remove_WhenMenuItemDoesNotExist_ReturnsNotFoundResult()
+        {
+            var result = await _controller.Remove(It.IsAny<int>()) as NotFoundResult;
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenMenuItemExists_ItemIsRemoved()
+        {
+            var item = new MenuItem();
+            MockRepoToReturnMenuItem(item);
+            _menuRepo.Setup(mr => mr.Remove(It.IsAny<MenuItem>()));
+
+            await _controller.Remove(It.IsAny<int>());
+
+            _menuRepo.Verify(mr => mr.Remove(item));
+            _unitOfWork.Verify(u => u.CompleteAsync());
+        }
+
+        [Fact]
+        public async void Remove_WhenMenuItemExists_ReturnsOkResult()
+        {
+            MockRepoToReturnMenuItem(new MenuItem());
+
+            var result = await _controller.Remove(It.IsAny<int>()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }
@@ -103,6 +181,12 @@ namespace JagWebApp.Tests.Controllers
             _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
                 .ReturnsAsync(new Dish());
             _menuRepo.Setup(mr => mr.Add(It.IsAny<MenuItem>()));
+        }
+
+        private void MockRepoToReturnMenuItem(MenuItem item)
+        {
+            _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
+                .ReturnsAsync(item);
         }
     }
 }

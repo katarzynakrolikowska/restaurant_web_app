@@ -9,6 +9,8 @@ import { DishService } from '../../services/dish.service';
 import { of } from 'rxjs';
 import { Dish } from '../../models/dish';
 import { MenuService } from '../../services/menu.service';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AdminMenuFormComponent', () => {
     const baseURL = '';
@@ -40,7 +42,9 @@ describe('AdminMenuFormComponent', () => {
             declarations: [AdminMenuFormComponent],
             imports: [
                 HttpClientModule,
-                MatAutocompleteModule
+                MatAutocompleteModule,
+                ToastrModule.forRoot(),
+                BrowserAnimationsModule
                 ],
             providers: [
                 { provide: 'BASE_URL', useValue: baseURL },
