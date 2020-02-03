@@ -60,7 +60,7 @@ export class DishFormComponent implements OnInit {
             if (this.id) 
                 this.initFormValues(data[1] as Dish);
         },
-            error => {
+            () => {
                 this.toastr.error(ERROR_SERVER_MESSAGE);
                 this.router.navigate(['/admin/dishes']);
             }

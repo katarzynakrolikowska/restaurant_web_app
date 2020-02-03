@@ -14,6 +14,8 @@ import { MenuService } from '../../services/menu.service';
 import { SaveMenuItem } from '../../models/saveMenuItem';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CustomErrorStateMatcher } from '../../helpers/custom-error-state-matcher';
+
 
 
 @Component({
@@ -26,6 +28,7 @@ export class AdminMenuFormComponent implements OnInit {
     dishesGroup: Array<DataForAutocomplete> = [];
     filteredDishesGroup: Array<DataForAutocomplete> = [];
     @Output() onCreateMenuItem = new EventEmitter();
+    matcher = new CustomErrorStateMatcher();
 
     constructor(
         private dishService: DishService,
@@ -97,9 +100,6 @@ export class AdminMenuFormComponent implements OnInit {
     }
 
     onSave() {
-        if (this.form.invalid)
-            return;
-
         this.spinner.show();
         let menuItem: SaveMenuItem = {
             dishId: this.dish.value.id,
@@ -114,8 +114,7 @@ export class AdminMenuFormComponent implements OnInit {
             });
 
         this.form.reset();
-        this.dish.setErrors(null);
-        this.limit.setErrors(null);
+        this.filteredDishesGroup = this.dishesGroup;
     }
 
     getSelectedDishName(dish: Dish) {

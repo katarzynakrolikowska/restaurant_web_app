@@ -16,6 +16,7 @@ import {
     ERROR_MIN_LENGTH_PASSWORD_MESSAGE,
     ERROR_MAX_LENGTH_PASSWORD_MESSAGE
 } from '../user-messages/messages';
+import { CustomErrorStateMatcher } from '../helpers/custom-error-state-matcher';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class EditPasswordFormComponent implements OnInit {
     view: ChangePasswordView;
     errorMessage: string;
     invalid: boolean = false;
+    matcher = new CustomErrorStateMatcher();
 
     constructor(
         private userService: UserService,
@@ -69,10 +71,6 @@ export class EditPasswordFormComponent implements OnInit {
                 });
 
             this.form.reset();
-            this.currentPassword.setErrors(null);
-            this.newPassword.setErrors(null);
-            this.confirmPassword.setErrors(null);
-
         }
     }
 
@@ -121,5 +119,4 @@ export class EditPasswordFormComponent implements OnInit {
             confirmPassword: new FormControl(''),
         });
     }
-
 }

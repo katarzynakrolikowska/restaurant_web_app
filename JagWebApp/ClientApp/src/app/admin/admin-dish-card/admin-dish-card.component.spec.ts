@@ -50,9 +50,9 @@ describe('AdminDishCardComponent', () => {
     it('should call deleteItem from service when deleteItem is called', () => {
         let spyMenuService = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
 
-        component.deleteItem(1);
+        component.deleteItem(menuItemStub);
 
-        expect(spyMenuService).toHaveBeenCalledWith(1);
+        expect(spyMenuService).toHaveBeenCalledWith(menuItemStub.id);
     });
 
     it('should show success toastr and emit event when deleteItem from service returns success', () => {

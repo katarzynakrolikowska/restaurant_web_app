@@ -23,11 +23,11 @@ export class AdminDishCardComponent implements OnInit {
         this.defualtImg = 'default.png';
     }
 
-    deleteItem(id) {
-        this.menuService.deleteItem(id)
+    deleteItem(item) {
+        this.menuService.deleteItem(item.id)
             .subscribe(() => {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.onDeleteMenuItem.emit(id);
+                this.onDeleteMenuItem.emit(item);
             });
     }
 

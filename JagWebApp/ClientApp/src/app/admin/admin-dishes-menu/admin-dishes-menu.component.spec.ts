@@ -48,7 +48,7 @@ describe('AdminDishesMenuComponent', () => {
     });
 
     it('should remove menu item when removeItemFromMenu is called', () => {
-        component.removeItemFromMenu(1)
+        component.removeItemFromMenu(menuItemStub)
 
         expect(component.menuItems.length).toBe(0);
         expect(component.filteredMenuItems.length).toBe(0);

@@ -102,15 +102,6 @@ describe('AdminMenuFormComponent', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('should NOT create menu item when onSave is called and form is invalid', () => {
-        let menuService = TestBed.get(MenuService);
-        let spy = spyOn(menuService, 'create').and.returnValue(of(Object));
-
-        component.onSave();
-
-        expect(spy).not.toHaveBeenCalled();
-    });
-
     function setFormsControl() {
         dishControl.setValue(dish1);
         limitControl.setValue(1);

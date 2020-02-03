@@ -63,6 +63,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\app-routing.module.ts" />
     <None Remove="ClientApp\src\app\app.error-handler.ts" />
+    <None Remove="ClientApp\src\app\helpers\custom-error-state-matcher.ts" />
     <None Remove="ClientApp\src\app\helpers\custom-mat-paginator-intl.ts" />
     <None Remove="ClientApp\src\app\models\category.ts" />
     <None Remove="ClientApp\src\app\models\changePasswordView.ts" />
@@ -84,6 +85,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\app-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.error-handler.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\helpers\custom-error-state-matcher.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\helpers\custom-mat-paginator-intl.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\mat-component.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\category.ts" />

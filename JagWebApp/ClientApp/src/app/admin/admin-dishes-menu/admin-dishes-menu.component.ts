@@ -40,9 +40,11 @@ export class AdminDishesMenuComponent implements OnInit {
         }
     }
 
-    removeItemFromMenu(itemId) {
-        this.removeItem(this.menuItems, itemId);
-        this.removeItem(this.filteredMenuItems, itemId);
+    removeItemFromMenu(item: MenuItem) {
+        this.removeItem(this.menuItems, item.id);
+        if (item.dish.category.id === this.currentSelectedCategoryId) {
+            this.removeItem(this.filteredMenuItems, item.id);
+        }
     }
 
     updateItemLimit(data) {
