@@ -1,0 +1,9 @@
+
+  <mat-button-toggle-group #group="matButtonToggleGroup" vertical class="width-max">
+    <mat-button-toggle *ngFor="let category of categories"
+                       [checked]="category.id === 0"
+                       [value]="category.id"
+                       (change)="toggle($event.value)">
+      {{ category.name }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>

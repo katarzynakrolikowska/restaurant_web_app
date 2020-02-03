@@ -19,7 +19,7 @@ describe('AdminDishesMenuComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AdminDishesMenuComponent],
             imports: [
-                HttpClientModule,
+                HttpClientModule
                 ],
             providers: [
                 { provide: 'BASE_URL', useValue: baseURL },
@@ -51,6 +51,7 @@ describe('AdminDishesMenuComponent', () => {
         component.removeItemFromMenu(1)
 
         expect(component.menuItems.length).toBe(0);
+        expect(component.filteredMenuItems.length).toBe(0);
     });
 
     it('should update menu item when updateItemLimit is called', () => {
@@ -59,5 +60,17 @@ describe('AdminDishesMenuComponent', () => {
         component.updateItemLimit(data);
         let item = component.menuItems.filter(i => i.id === data.id)[0];
         expect(item.available).toBe(2);
+    });
+
+    it('should filter menu items to all items when toggle is called with 0', () => {
+        component.toggle(0);
+
+        expect(component.filteredMenuItems.length).toBe(1);
+    });
+
+    it('should filter menu items when toggle is called with category id', () => {
+        component.toggle(2);
+
+        expect(component.filteredMenuItems.length).toBe(0);
     });
 });

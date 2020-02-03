@@ -54,15 +54,19 @@ export class AdminMenuFormComponent implements OnInit {
                 });
 
                 for (let [key, value] of Object.entries(group)) {
+                    let dishes = value as Array<Dish>;
+                    dishes.sort((a, b) => a.name.localeCompare(b.name));
+
                     let data: DataForAutocomplete = {
                         categoryName: key,
-                        dishes: value as Array<Dish>
+                        dishes: dishes
                     };
 
                     this.dishesGroup.push(data);
                 }
 
-                this.filteredDishesGroup = this.dishesGroup;
+                this.filteredDishesGroup = this.dishesGroup = this.dishesGroup.sort((a, b) =>
+                    a.categoryName.localeCompare(b.categoryName));
             });
     }
 
@@ -129,7 +133,7 @@ export class AdminMenuFormComponent implements OnInit {
     private filter = (opt: Dish[], value: string): Dish[] => {
         const filterValue = value.toLowerCase();
 
-        return opt.filter(item => item.name.toLowerCase().indexOf(filterValue) === 0);
+        return opt.filter(item => item.name.toLowerCase().includes(filterValue));
     };
 
     private initForm() {

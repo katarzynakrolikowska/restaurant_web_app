@@ -11,25 +11,59 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class AdminDishesMenuComponent implements OnInit {
     menuItems: Array<MenuItem> = [];
+    filteredMenuItems: Array<MenuItem> = [];
+    currentSelectedCategoryId = 0;
 
-    constructor(private menuService: MenuService, private spinner: NgxSpinnerService) { }
+    constructor(
+        private menuService: MenuService,
+        private spinner: NgxSpinnerService) { }
 
     ngOnInit() {
         this.spinner.show();
+        
         this.menuService.getMenuItems()
             .subscribe((result: Array<MenuItem>) => {
                 this.menuItems = result;
+                this.sortArrayByDishName(this.menuItems);
+                this.filteredMenuItems = this.menuItems;
                 this.spinner.hide();
             });
     }
 
+    addMenuItem(item: MenuItem) {
+        this.menuItems.push(item);
+        this.sortArrayByDishName(this.menuItems);
+
+        if (item.dish.category.id === this.currentSelectedCategoryId) {
+            this.filteredMenuItems.push(item);
+            this.sortArrayByDishName(this.filteredMenuItems);
+        }
+    }
+
     removeItemFromMenu(itemId) {
-        let index = this.menuItems.findIndex(i => i.id === itemId);
-        this.menuItems.splice(index, 1);
+        this.removeItem(this.menuItems, itemId);
+        this.removeItem(this.filteredMenuItems, itemId);
     }
 
     updateItemLimit(data) {
         let index = this.menuItems.findIndex(i => i.id === data.id);
         this.menuItems[index].available = data.limit;
+    }
+
+    toggle(value) {
+        this.currentSelectedCategoryId = value;
+        if (value === 0)
+            this.filteredMenuItems = this.menuItems;
+        else
+            this.filteredMenuItems = this.menuItems.filter(item => item.dish.category.id === value);
+    }
+
+    private sortArrayByDishName(array) {
+        array.sort((a, b) => a.dish.name.localeCompare(b.dish.name));
+    }
+
+    private removeItem(array: Array<any>, itemId) {
+        let index = array.findIndex(i => i.id === itemId);
+        array.splice(index, 1);
     }
 }

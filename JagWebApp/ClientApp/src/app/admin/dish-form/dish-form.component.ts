@@ -13,6 +13,7 @@ import {
     ERROR_SERVER_MESSAGE,
     SUCCESS_SAVE_DISH_MESSAGE
 } from '../../user-messages/messages';
+import { Category } from '../../models/category';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class DishFormComponent implements OnInit {
 
     @Input() title: string = 'Nowe danie';
     form: FormGroup;
-    categories: any;
+    categories: Array<Category>;
     dish: Dish;
     id: number;
 

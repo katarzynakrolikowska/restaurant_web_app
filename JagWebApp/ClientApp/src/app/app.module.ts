@@ -40,6 +40,7 @@ import { AdminDishesMenuComponent } from './admin/admin-dishes-menu/admin-dishes
 import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
 import { AdminDishCardComponent } from './admin/admin-dish-card/admin-dish-card.component';
 import { DialogEditLimitComponent } from './admin/dialog-edit-limit/dialog-edit-limit.component';
+import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group/categories-button-toggle-group.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -68,6 +69,7 @@ export function tokenGetter() {
     AdminMenuFormComponent,
     AdminDishCardComponent,
     DialogEditLimitComponent,
+    CategoriesButtonToggleGroupComponent,
 
   ],
   imports: [

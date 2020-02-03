@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminDishCardComponent } from './admin-dish-card.component';
-import { MatCardModule, MatDialogModule, MatDialog, MatDialogRef } from '@angular/material';
+import { MatCardModule, MatDialogModule, MatDialog } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -94,7 +94,7 @@ describe('AdminDishCardComponent', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('should NOT call updateLimit when ', () => {
+    it('should NOT call updateLimit when afterClosed returns undefined', () => {
         spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(undefined) })
         let spy = spyOn(menuService, 'updateLimit');
 

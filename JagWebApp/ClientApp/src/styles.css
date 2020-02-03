@@ -70,3 +70,11 @@ button:focus {
   display: table;
   margin: auto;
 }
+
+/*.cursor-pointer {
+  cursor: pointer !important;
+}*/
+
+.width-max {
+  width: 100%;
+}
