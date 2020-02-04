@@ -1,5 +1,7 @@
 ﻿using JagWebApp.Core.Models;
+using JagWebApp.Persistence;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JagWebApp.Core

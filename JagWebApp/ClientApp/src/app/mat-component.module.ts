@@ -11,6 +11,10 @@ import { MatPaginatorModule } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 
@@ -28,7 +32,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatPaginatorModule,
         MatSortModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatAutocompleteModule,
+        MatCardModule,
+        MatChipsModule,
+        MatButtonToggleModule
     ]
 })
 

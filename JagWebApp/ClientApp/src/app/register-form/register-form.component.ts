@@ -26,7 +26,7 @@ export class RegisterFormComponent implements OnInit {
 
     user: User;
     form: FormGroup;
-    @Output() newUserRegistered = new EventEmitter();
+    @Output() onNewUserRegistered = new EventEmitter();
 
     constructor(
         private authService: AuthService,
@@ -53,7 +53,7 @@ export class RegisterFormComponent implements OnInit {
             this.authService.register(this.user).subscribe(() => {
                 this.spinner.hide();
                 this.toastr.success('Rejestracja zakończona sukcesem!');
-                this.newUserRegistered.emit(0);
+                this.onNewUserRegistered.emit(0);
             });
         }
     }

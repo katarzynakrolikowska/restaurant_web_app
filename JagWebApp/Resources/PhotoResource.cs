@@ -14,6 +14,8 @@ namespace JagWebApp.Resources
         public string ThumbnailName { get; set; }
 
         public bool IsMain { get; set; }
+
+        public int DishId { get; set; }
     }
 
 }

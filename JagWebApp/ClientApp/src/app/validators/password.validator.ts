@@ -6,5 +6,4 @@ export function passwordsMatch(password: AbstractControl): ValidatorFn {
         if (password)
             return password.value === control.value ? null : { 'mismatch': true };
     }
-
 }

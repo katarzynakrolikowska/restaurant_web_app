@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace JagWebApp
 {
@@ -40,6 +41,7 @@ namespace JagWebApp
             services.AddScoped<IDishCategoryRepository, DishCategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {
@@ -80,7 +82,8 @@ namespace JagWebApp
                     .Build();
 
                 opt.Filters.Add(new AuthorizeFilter(policy));
-            });
+            })
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 
             // In production, the Angular files will be served from this directory

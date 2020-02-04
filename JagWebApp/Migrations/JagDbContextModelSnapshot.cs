@@ -83,6 +83,29 @@ namespace JagWebApp.Migrations
                     b.ToTable("Dishes");
                 });
 
+            modelBuilder.Entity("JagWebApp.Core.Models.MenuItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Available")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Limit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("MenuItems");
+                });
+
             modelBuilder.Entity("JagWebApp.Core.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -317,6 +340,15 @@ namespace JagWebApp.Migrations
                     b.HasOne("JagWebApp.Core.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("JagWebApp.Core.Models.MenuItem", b =>
+                {
+                    b.HasOne("JagWebApp.Core.Models.Dish", "Dish")
+                        .WithMany()
+                        .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

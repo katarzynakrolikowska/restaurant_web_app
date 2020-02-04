@@ -9,7 +9,9 @@ export const ERROR_CONFIRM_PASSWORD_MESSAGE = 'Potwierdź hasło';
 export const ERROR_MIN_LENGTH_PASSWORD_MESSAGE = 'Hasło jest za krótkie';
 export const ERROR_MAX_LENGTH_PASSWORD_MESSAGE = 'Hasło jest za długie';
 export const ERROR_SERVER_MESSAGE = 'Coś poszło nie tak';
+export const ERROR_MISMATCH_MENU_ITEMS_MESSAGE = 'Wybierz pozycję z listy';
 
 
 export const SUCCESS_SAVE_DISH_MESSAGE = 'Danie zostało zapisane!';
 export const SUCCESS_SAVE_DATA_MESSAGE = 'Dane zostały zapisane';
+export const SUCCESS_UPDATE_MENU_MESSAGE = 'Menu zostało zaktualizowane';

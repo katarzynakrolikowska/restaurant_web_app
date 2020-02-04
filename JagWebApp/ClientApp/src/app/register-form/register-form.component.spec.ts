@@ -137,7 +137,7 @@ describe('RegisterFormComponent', () => {
         spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(false) : of(true));
         spyOn(authService, 'loggedIn').and.returnValue(false);
         setValidControls();
-        component.newUserRegistered.subscribe(s => step = s)
+        component.onNewUserRegistered.subscribe(s => step = s)
 
         component.register();
 

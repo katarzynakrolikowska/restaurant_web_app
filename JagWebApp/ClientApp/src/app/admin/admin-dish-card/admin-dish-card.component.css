@@ -1,0 +1,19 @@
+
+.img-default-dimensions {
+  max-height: 157.5px !important;
+  width: 150px !important;
+}
+
+.mat-card-title,
+.mat-card-header {
+  font-size: 16px !important;
+}
+
+:host /deep/ .mat-card-header-text {
+  margin: 0;
+}
+
+.card-product-price {
+  font-size: 20px;
+}
+

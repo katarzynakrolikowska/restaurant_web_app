@@ -45,7 +45,7 @@ namespace JagWebApp.Persistence
 
         public async Task<Photo> SavePhoto(Dish dish, IFormFile file)
         {
-            var dimensions = new ImageDimensions() { Height = 125, Width = 125 };
+            var dimensions = new ImageDimensions() { Height = 150, Width = 200 };
             var fileName = await _fileService.SaveFile(file, ROOT_NAME); 
             var thumbnailName = await _fileService.SaveFile(file, ROOT_NAME, dimensions); 
 

@@ -79,7 +79,5 @@ namespace JagWebApp.Controllers
             var id = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
             return int.Parse(id);
         }
-
-
     }
 }
