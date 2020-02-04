@@ -19,16 +19,19 @@ namespace JagWebApp.Controllers
     {
         private readonly IDishRepository _dishRepository;
         private readonly IDishCategoryRepository _categoryRepository;
+        private readonly IPhotoRepository _photoRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public DishesController(IDishRepository dishRepository, 
             IDishCategoryRepository categoryRepository, 
+            IPhotoRepository photoRepository,
             IUnitOfWork unitOfWork, 
             IMapper mapper)
         {
             _dishRepository = dishRepository;
             _categoryRepository = categoryRepository;
+            _photoRepository = photoRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -49,7 +52,7 @@ namespace JagWebApp.Controllers
             var dish = await _dishRepository.GetDish(id);
 
             if (dish == null)
-                return NotFound("Invalid dish id");
+                return NotFound();
 
             return Ok(_mapper.Map<Dish, SaveDishResource>(dish));
         }
@@ -96,7 +99,11 @@ namespace JagWebApp.Controllers
             if (dish == null)
                 return NotFound();
 
+            var photos = dish.Photos;
+
+            _photoRepository.Remove(photos);
             _dishRepository.Remove(dish);
+
             await _unitOfWork.CompleteAsync();
 
             return Ok();

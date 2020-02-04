@@ -16,6 +16,8 @@ namespace JagWebApp.Core.Models
 
         public int DishId { get; set; }
 
+        public decimal Price { get; set; }
+
         [Min(0)]
         public int Limit { get; set; }
 

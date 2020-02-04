@@ -13,6 +13,8 @@ namespace JagWebApp.Resources
 
         public DishResource Dish { get; set; }
 
+        public decimal Price { get; set; }
+
         public int Limit { get; set; }
 
         public int Available { get; set; }

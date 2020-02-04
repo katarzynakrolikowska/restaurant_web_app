@@ -22,6 +22,7 @@ namespace JagWebApp.Persistence
         {
             return await _context.Dishes
                 .Include(d => d.Category)
+                .Include(d => d.Photos)
                 .SingleOrDefaultAsync(d => d.Id == id);
         }
 

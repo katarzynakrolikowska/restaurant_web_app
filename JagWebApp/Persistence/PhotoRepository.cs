@@ -61,5 +61,15 @@ namespace JagWebApp.Persistence
             _fileService.RemoveFile(photo.Name, ROOT_NAME);
             _fileService.RemoveFile(photo.ThumbnailName, ROOT_NAME);
         }
+
+        public void Remove(IEnumerable<Photo> photos)
+        {
+            photos.ToList().ForEach(p =>
+            {
+                _fileService.RemoveFile(p.Name, ROOT_NAME);
+                _fileService.RemoveFile(p.ThumbnailName, ROOT_NAME);
+            });
+            
+        }
     }
 }

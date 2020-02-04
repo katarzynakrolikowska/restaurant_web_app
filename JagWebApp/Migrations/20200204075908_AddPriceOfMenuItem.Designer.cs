@@ -4,14 +4,16 @@ using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JagWebApp.Migrations
 {
     [DbContext(typeof(JagDbContext))]
-    partial class JagDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204075908_AddPriceOfMenuItem")]
+    partial class AddPriceOfMenuItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

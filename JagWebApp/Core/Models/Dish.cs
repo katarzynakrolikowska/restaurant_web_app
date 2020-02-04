@@ -16,8 +16,6 @@ namespace JagWebApp.Core.Models
         [MaxLength(255)]
         public string Name { get; set; }
 
-        public decimal Price { get; set; }
-
         public int Amount { get; set; }
 
         public int CategoryId { get; set; }

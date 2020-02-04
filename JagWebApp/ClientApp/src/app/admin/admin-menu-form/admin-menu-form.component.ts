@@ -7,7 +7,8 @@ import {
     ERROR_REQUIRED_MESSAGE,
     ERROR_MISMATCH_MENU_ITEMS_MESSAGE,
     ERROR_PATTERN_MESSAGE,
-    SUCCESS_UPDATE_MENU_MESSAGE
+    SUCCESS_UPDATE_MENU_MESSAGE,
+    ERROR_MIN_MESSAGE
 } from '../../user-messages/messages';
 import { menuItemMatch } from '../../validators/menu-item.validator';
 import { MenuService } from '../../services/menu.service';
@@ -53,7 +54,7 @@ export class AdminMenuFormComponent implements OnInit {
                 result.forEach(function (dish) {
                     group[dish.category.name] = group[dish.category.name] || [];
                     group[dish.category.name]
-                        .push({ id: dish.id, name: dish.name, price: dish.price, amount: dish.amount });
+                        .push({ id: dish.id, name: dish.name, amount: dish.amount });
                 });
 
                 for (let [key, value] of Object.entries(group)) {
@@ -83,6 +84,10 @@ export class AdminMenuFormComponent implements OnInit {
         return this.form.get('dishId');
     }
 
+    get price() {
+        return this.form.get('price');
+    }
+
     get limit() {
         return this.form.get('limit');
     }
@@ -91,6 +96,12 @@ export class AdminMenuFormComponent implements OnInit {
         return this.dish.hasError('required') ? ERROR_REQUIRED_MESSAGE :
             this.dish.hasError('mismatch') ? ERROR_MISMATCH_MENU_ITEMS_MESSAGE :
             '';
+    }
+
+    getPriceErrorMessage() {
+        return this.price.hasError('required') ? ERROR_REQUIRED_MESSAGE :
+            this.price.hasError('min') ? ERROR_MIN_MESSAGE + '0' :
+                '';
     }
 
     getLimitErrorMessage() {
@@ -103,6 +114,7 @@ export class AdminMenuFormComponent implements OnInit {
         this.spinner.show();
         let menuItem: SaveMenuItem = {
             dishId: this.dish.value.id,
+            price: this.price.value,
             limit: this.limit.value
         };
 
@@ -138,6 +150,7 @@ export class AdminMenuFormComponent implements OnInit {
     private initForm() {
         this.form = new FormGroup({
             dishId: new FormControl('', Validators.required),
+            price: new FormControl('', [Validators.required, Validators.min(0.01)]),
             limit: new FormControl('', [Validators.required, Validators.min(0)])
         });
     }

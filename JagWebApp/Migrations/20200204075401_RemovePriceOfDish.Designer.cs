@@ -4,14 +4,16 @@ using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JagWebApp.Migrations
 {
     [DbContext(typeof(JagDbContext))]
-    partial class JagDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204075401_RemovePriceOfDish")]
+    partial class RemovePriceOfDish
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +97,6 @@ namespace JagWebApp.Migrations
 
                     b.Property<int>("Limit")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

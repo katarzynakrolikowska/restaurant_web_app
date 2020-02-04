@@ -8,9 +8,9 @@ exports.menuItemStub = {
             id: 1,
             name: 'b'
         },
-        price: 1,
         amount: 1
     },
+    price: 1,
     limit: 1,
     available: 1
 };

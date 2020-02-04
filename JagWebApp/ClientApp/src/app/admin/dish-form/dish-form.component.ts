@@ -96,12 +96,6 @@ export class DishFormComponent implements OnInit {
             '';
     }
 
-    getPriceErrorMessage() {
-        return this.price.hasError('required') ? ERROR_REQUIRED_MESSAGE :
-            this.price.hasError('min') ? ERROR_MIN_MESSAGE + '0' :
-            '';
-    }
-
     getAmountErrorMessage() {
         return this.amount.hasError('required') ? ERROR_REQUIRED_MESSAGE :
             this.amount.hasError('min') ? ERROR_MIN_MESSAGE + '0' :
@@ -117,10 +111,6 @@ export class DishFormComponent implements OnInit {
         return this.form.get('categoryId');
     }
 
-    get price() {
-        return this.form.get('price');
-    }
-
     get amount() {
         return this.form.get('amount');
     }
@@ -129,7 +119,6 @@ export class DishFormComponent implements OnInit {
       this.form = new FormGroup({
           name: new FormControl('', Validators.required),
           categoryId: new FormControl('', Validators.required),
-          price: new FormControl('', [Validators.required, Validators.min(0.01)]),
           amount: new FormControl(1, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*')])
       });
     }
