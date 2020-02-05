@@ -25,7 +25,6 @@ describe('DishesComponent', () => {
             id: 1,
             name: 'b'
         },
-        price: 1,
         amount: 1
     };
     let dishes: Array<Dish> = [dish];

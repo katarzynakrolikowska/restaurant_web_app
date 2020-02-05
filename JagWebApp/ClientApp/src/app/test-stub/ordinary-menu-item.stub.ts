@@ -1,8 +1,10 @@
-import { MenuItem } from "../models/menuItem";
+import { OrdinaryMenuItem } from "../models/ordinary-menu-item";
 
-export const menuItemStub: MenuItem = {
+
+export const ordinaryMenuItemStub: OrdinaryMenuItem = {
     id: 1,
-    dish: {
+    dish:
+    {
         name: 'a',
         category: {
             id: 1,

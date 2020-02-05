@@ -1,6 +1,7 @@
 ﻿using DataAnnotationsExtensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +12,7 @@ namespace JagWebApp.Core.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public Dish Dish { get; set; }
-
-        public int DishId { get; set; }
+        public ICollection<MenuItemDish> Dishes { get; set; }
 
         public decimal Price { get; set; }
 
@@ -23,5 +21,12 @@ namespace JagWebApp.Core.Models
 
         [Min(0)]
         public int Available { get; set; }
+
+        public bool IsMain { get; set; }
+
+        public MenuItem()
+        {
+            Dishes = new Collection<MenuItemDish>();
+        }
     }
 }

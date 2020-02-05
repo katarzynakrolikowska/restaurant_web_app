@@ -1,6 +1,6 @@
 
 <mat-tab-group class="mb-3">
-  <mat-tab label="Dodaj danie do Menu">
+  <mat-tab label="Dodaj danie">
     <app-admin-menu-form (onCreateMenuItem)="addMenuItem($event)"></app-admin-menu-form>
   </mat-tab>
   <mat-tab label="Dodaj zestaw dnia"> Content 2 </mat-tab>
@@ -8,7 +8,7 @@
 <h4 class="my-3 element-center">Aktualne Menu</h4>
 <div class="row justify-content-center mt-4">
   <div class="col-12 col-sm-5 col-md-4 col-lg-3 mb-5">
-    <app-categories-button-toggle-group (onToggleCategory)="toggle($event)"></app-categories-button-toggle-group>
+    <app-categories-button-toggle-group (onToggleCategory)="toggleCategory($event)"></app-categories-button-toggle-group>
   </div>
   <div class="col-8 col-sm-6 col-md-8 col-lg-9">
     <div class="row">
@@ -19,7 +19,7 @@
         <div *ngFor="let item of filteredMenuItems" class="col-md-6 col-lg-4">
           <app-admin-dish-card [menuItem]="item"
                                (onDeleteMenuItem)="removeItemFromMenu($event)"
-                               (onUpdateMenuItem)="updateItemLimit($event)">
+                               (onUpdateMenuItem)="updateItem($event)">
           </app-admin-dish-card>
         </div>
       </ng-template>

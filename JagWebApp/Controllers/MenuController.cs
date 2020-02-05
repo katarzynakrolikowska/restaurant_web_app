@@ -46,7 +46,10 @@ namespace JagWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SaveMenuItemResource saveMenuItemResource)
         {
-            if (await _dishRepository.GetDish(saveMenuItemResource.DishId) == null)
+            if (saveMenuItemResource.Dishes.Count > 1 && await _menuRepository.GetMainMenuItem() != null)
+                return BadRequest("Zestaw dnia już istnieje");
+
+            if (!await _dishRepository.DishesExist(saveMenuItemResource.Dishes))
                 return BadRequest("Niepoprawne dane");
 
             var menuItem = _mapper.Map<SaveMenuItemResource, MenuItem>(saveMenuItemResource);
@@ -59,17 +62,18 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<MenuItemResource>(menuItemFromRepo));
         }
 
-        //PATCH: api/menu/1
+        //POST: api/menu/1
         [Authorize(Roles = "Admin")]
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateLimit(int id, [FromBody] int available)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> UpdateMenuItem(int id, UpdateMenuItemResource updateMenuItemResource)
         {
             var item = await _menuRepository.GetMenuItem(id);
             if (item == null)
                 return NotFound();
 
-            item.Limit = available - item.Available + item.Limit;
-            item.Available = available;
+            item.Price = updateMenuItemResource.Price;
+            item.Limit = updateMenuItemResource.Available - item.Available + item.Limit;
+            item.Available = updateMenuItemResource.Available;
            
             await _unitOfWork.CompleteAsync();
 

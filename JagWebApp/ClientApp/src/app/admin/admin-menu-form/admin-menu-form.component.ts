@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DishService } from '../../services/dish.service';
-import { DataForAutocomplete } from '../../models/dataForAutocomplete';
 import { Dish } from '../../models/dish';
 import {
     ERROR_REQUIRED_MESSAGE,
@@ -12,10 +11,11 @@ import {
 } from '../../user-messages/messages';
 import { menuItemMatch } from '../../validators/menu-item.validator';
 import { MenuService } from '../../services/menu.service';
-import { SaveMenuItem } from '../../models/saveMenuItem';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CustomErrorStateMatcher } from '../../helpers/custom-error-state-matcher';
+import { InputAutocompleteData } from '../../models/input-autocomplete-data';
+import { SaveMenuItem } from '../../models/save-menu-item';
 
 
 
@@ -26,10 +26,12 @@ import { CustomErrorStateMatcher } from '../../helpers/custom-error-state-matche
 })
 export class AdminMenuFormComponent implements OnInit {
     form: FormGroup;
-    dishesGroup: Array<DataForAutocomplete> = [];
-    filteredDishesGroup: Array<DataForAutocomplete> = [];
-    @Output() onCreateMenuItem = new EventEmitter();
+    dishesGroup: Array<InputAutocompleteData> = [];
+    filteredDishesGroup: Array<InputAutocompleteData> = [];
     matcher = new CustomErrorStateMatcher();
+
+    @Output() onCreateMenuItem = new EventEmitter();
+
 
     constructor(
         private dishService: DishService,
@@ -40,6 +42,7 @@ export class AdminMenuFormComponent implements OnInit {
 
     ngOnInit() {
         this.initForm();
+
         this.dishService.getDishes()
             .subscribe(result => {
                 let group = {};
@@ -61,7 +64,7 @@ export class AdminMenuFormComponent implements OnInit {
                     let dishes = value as Array<Dish>;
                     dishes.sort((a, b) => a.name.localeCompare(b.name));
 
-                    let data: DataForAutocomplete = {
+                    let data: InputAutocompleteData = {
                         categoryName: key,
                         dishes: dishes
                     };
@@ -113,7 +116,7 @@ export class AdminMenuFormComponent implements OnInit {
     onSave() {
         this.spinner.show();
         let menuItem: SaveMenuItem = {
-            dishId: this.dish.value.id,
+            dishes: [this.dish.value.id],
             price: this.price.value,
             limit: this.limit.value
         };
@@ -124,7 +127,6 @@ export class AdminMenuFormComponent implements OnInit {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
                 this.onCreateMenuItem.emit(result);
             });
-
         this.form.reset();
         this.filteredDishesGroup = this.dishesGroup;
     }
@@ -133,7 +135,7 @@ export class AdminMenuFormComponent implements OnInit {
         return dish ? `${dish.name} - ${dish.amount} szt.` : '';
     }
 
-    private filterGroup(value: string): DataForAutocomplete[] {
+    private filterGroup(value: string): InputAutocompleteData[] {
         if (value) {
             return this.filteredDishesGroup
                 .map(group => ({ categoryName: group.categoryName, dishes: this.filter(group.dishes, value) }))

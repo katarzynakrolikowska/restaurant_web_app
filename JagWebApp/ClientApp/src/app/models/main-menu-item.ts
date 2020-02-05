@@ -1,11 +1,9 @@
 import { Dish } from "./dish";
-import { Photo } from "./photo";
 
-export interface MenuItem {
+export interface MainMenuItem {
     id?: number;
-    dish: Dish,
+    dishes: Array<Dish>,
     price: number;
     limit: number;
     available: number;
-    mainPhoto?: Photo;
 }

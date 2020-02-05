@@ -19,7 +19,6 @@ describe('DishFormComponent', () => {
     const baseURL = '';
     let nameControl: AbstractControl;
     let categoryControl: AbstractControl;
-    let priceControl: AbstractControl;
     let amountControl: AbstractControl;
 
     let component: DishFormComponent;
@@ -53,7 +52,7 @@ describe('DishFormComponent', () => {
         component = fixture.componentInstance;
         categoryService = TestBed.get(CategoryService);
         dishService = TestBed.get(DishService);
-        dish = { name: 'a', price: 1, amount: 1, categoryId: 1, id: 1 };
+        dish = { name: 'a', amount: 1, categoryId: 1, id: 1 };
 
         spyOn(categoryService, 'getCategories').and.returnValue(of([{ id: 1, name: 'z' }]));
         spyOn(dishService, 'getDish').and.returnValue(of(dish));
@@ -63,7 +62,6 @@ describe('DishFormComponent', () => {
 
         nameControl = component.name;
         categoryControl = component.category;
-        priceControl = component.price;
         amountControl = component.amount;
         
     });
@@ -72,10 +70,9 @@ describe('DishFormComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should create form with four controls', () => {
+    it('should create form with three controls', () => {
         expect(nameControl).toBeTruthy();
         expect(categoryControl).toBeTruthy();
-        expect(priceControl).toBeTruthy();
         expect(amountControl).toBeTruthy();
     });
 
@@ -89,18 +86,6 @@ describe('DishFormComponent', () => {
         categoryControl.setValue('');
 
         expect(categoryControl.invalid).toBeTruthy();
-    });
-
-    it('should make price control required', () => {
-        priceControl.setValue('');
-
-        expect(priceControl.invalid).toBeTruthy();
-    });
-
-    it('should make price accepts values greater than 0', () => {
-        priceControl.setValue(0);
-
-        expect(priceControl.invalid).toBeTruthy();
     });
 
     it('should make amount control required', () => {
@@ -146,6 +131,5 @@ describe('DishFormComponent', () => {
     function setControls() {
         nameControl.setValue('a');
         categoryControl.setValue(1);
-        priceControl.setValue(1);
     }
 });

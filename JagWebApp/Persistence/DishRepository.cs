@@ -42,5 +42,23 @@ namespace JagWebApp.Persistence
         {
             _context.Remove(dish);
         }
+
+        public async Task<bool> DishesExist(IEnumerable<int> ids)
+        {
+            var dishesExist = true;
+
+            foreach (var id in ids)
+            {
+                var dish = await GetDish(id);
+                if (dish == null)
+                {
+                    dishesExist = false;
+                    break;
+                }
+            }
+
+            return dishesExist;
+        }
+
     }
 }

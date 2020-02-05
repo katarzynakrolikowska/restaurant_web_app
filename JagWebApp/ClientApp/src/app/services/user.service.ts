@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
-import { ChangePasswordView } from '../models/changePasswordView';
+import { ChangePasswordView } from '../models/change-password-view';
 
 
 @Injectable({

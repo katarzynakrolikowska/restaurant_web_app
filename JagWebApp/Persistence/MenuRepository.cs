@@ -21,21 +21,37 @@ namespace JagWebApp.Persistence
         public async Task<IEnumerable<MenuItem>> GetMenuItems()
         {
             return await _context.MenuItems
-                .Include(m => m.Dish)
-                    .ThenInclude(d => d.Category)
-                .Include(d => d.Dish)
-                    .ThenInclude(d => d.Photos)
+                .Include(m => m.Dishes)
+                    .ThenInclude(md => md.Dish)
+                        .ThenInclude(d => d.Photos)
+                .Include(m => m.Dishes)
+                    .ThenInclude(md => md.Dish)
+                        .ThenInclude(d => d.Category)
                 .ToListAsync();
         }
 
         public async Task<MenuItem> GetMenuItem(int id)
         {
             return await _context.MenuItems
-                .Include(m => m.Dish)
-                    .ThenInclude(d => d.Category)
-                .Include(d => d.Dish)
-                    .ThenInclude(d => d.Photos)
+                .Include(m => m.Dishes)
+                    .ThenInclude(md => md.Dish)
+                        .ThenInclude(d => d.Photos)
+                .Include(m => m.Dishes)
+                    .ThenInclude(md => md.Dish)
+                        .ThenInclude(d => d.Category)
                 .SingleOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<MenuItem> GetMainMenuItem()
+        {
+            return await _context.MenuItems
+                .Include(m => m.Dishes)
+                    .ThenInclude(md => md.Dish)
+                        .ThenInclude(d => d.Photos)
+                .Include(m => m.Dishes)
+                    .ThenInclude(md => md.Dish)
+                        .ThenInclude(d => d.Category)
+                .SingleOrDefaultAsync(m => m.IsMain == true);
         }
 
         public void Add(MenuItem menuItem)
@@ -47,5 +63,7 @@ namespace JagWebApp.Persistence
         {
             _context.MenuItems.Remove(menuItem);
         }
+
+        
     }
 }

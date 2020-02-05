@@ -4,14 +4,16 @@ using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JagWebApp.Migrations
 {
     [DbContext(typeof(JagDbContext))]
-    partial class JagDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204105220_AddDishesToMenuItem")]
+    partial class AddDishesToMenuItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,11 +91,6 @@ namespace JagWebApp.Migrations
 
                     b.Property<int>("Available")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsMain")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<int>("Limit")
                         .HasColumnType("int");
@@ -368,7 +365,7 @@ namespace JagWebApp.Migrations
                         .IsRequired();
 
                     b.HasOne("JagWebApp.Core.Models.MenuItem", "MenuItem")
-                        .WithMany("Dishes")
+                        .WithMany("MenuItemDishes")
                         .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

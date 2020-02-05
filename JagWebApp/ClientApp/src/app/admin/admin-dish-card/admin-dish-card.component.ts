@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { MenuItem } from '../../models/menuItem';
 import { MenuService } from '../../services/menu.service';
 import { ToastrService } from 'ngx-toastr';
 import { SUCCESS_UPDATE_MENU_MESSAGE } from '../../user-messages/messages';
 import { MatDialog } from '@angular/material';
-import { DialogEditLimitComponent } from '../dialog-edit-limit/dialog-edit-limit.component';
+import { OrdinaryMenuItem } from '../../models/ordinary-menu-item';
+import { DialogEditMenuItemComponent } from '../dialog-edit-menu-item/dialog-edit-menu-item.component';
+import { UpdateMenuItem } from '../../models/update-menu-item';
 
 @Component({
   selector: 'app-admin-dish-card',
@@ -13,7 +14,7 @@ import { DialogEditLimitComponent } from '../dialog-edit-limit/dialog-edit-limit
 })
 export class AdminDishCardComponent implements OnInit {
     defualtImg: string;
-    @Input() menuItem: MenuItem;
+    @Input() menuItem: OrdinaryMenuItem;
     @Output() onDeleteMenuItem = new EventEmitter();
     @Output() onUpdateMenuItem = new EventEmitter();
 
@@ -31,21 +32,26 @@ export class AdminDishCardComponent implements OnInit {
             });
     }
 
-    showModal(menuItem: MenuItem) {
-        const dialogRef = this.dialog.open(DialogEditLimitComponent, { data: menuItem.limit });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result)
-                this.updateLimit(menuItem.id, result);
+    showModal(menuItem: OrdinaryMenuItem) {
+        const dialogRef = this.dialog.open(DialogEditMenuItemComponent, {
+            data: { price: menuItem.price, available: menuItem.available }
         });
 
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result)
+                this.updateItem(menuItem.id, result);
+        });
     }
 
-    updateLimit(itemId, newLimit) {
-        this.menuService.updateLimit(itemId, newLimit)
+    updateItem(itemId, data) {
+        let item: UpdateMenuItem = {
+            id: itemId,
+            data: data
+        }
+        this.menuService.updateItem(item)
             .subscribe(() => {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.onUpdateMenuItem.emit({ id: itemId, limit: newLimit });
+                this.onUpdateMenuItem.emit(item);
             });
     }
 }

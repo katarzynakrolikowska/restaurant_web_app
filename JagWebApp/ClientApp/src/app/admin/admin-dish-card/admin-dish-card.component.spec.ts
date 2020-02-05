@@ -7,7 +7,8 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuService } from '../../services/menu.service';
 import { of } from 'rxjs';
-import { menuItemStub } from '../../test-stub/menu-item.stub';
+import { updateMenuItemStub } from '../../test-stub/update-menu-item.stub';
+import { ordinaryMenuItemStub } from '../../test-stub/ordinary-menu-item.stub';
 
 describe('AdminDishCardComponent', () => {
     const baseURL = '';
@@ -36,7 +37,7 @@ describe('AdminDishCardComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(AdminDishCardComponent);
         component = fixture.componentInstance;
-        component.menuItem = menuItemStub;
+        component.menuItem = ordinaryMenuItemStub;
         menuService = TestBed.get(MenuService);
         toastr = TestBed.get(ToastrService);
         dialog = TestBed.get(MatDialog);
@@ -50,9 +51,9 @@ describe('AdminDishCardComponent', () => {
     it('should call deleteItem from service when deleteItem is called', () => {
         let spyMenuService = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
 
-        component.deleteItem(menuItemStub);
+        component.deleteItem(ordinaryMenuItemStub);
 
-        expect(spyMenuService).toHaveBeenCalledWith(menuItemStub.id);
+        expect(spyMenuService).toHaveBeenCalledWith(ordinaryMenuItemStub.id);
     });
 
     it('should show success toastr and emit event when deleteItem from service returns success', () => {
@@ -60,45 +61,45 @@ describe('AdminDishCardComponent', () => {
         let spyToastr = spyOn(toastr, 'success');
         let spyEventEmitter = spyOn(component.onDeleteMenuItem, 'emit');
 
-        component.deleteItem(1);
+        component.deleteItem(ordinaryMenuItemStub);
 
         expect(spyToastr).toHaveBeenCalled();
-        expect(spyEventEmitter).toHaveBeenCalledWith(1);
+        expect(spyEventEmitter).toHaveBeenCalledWith(ordinaryMenuItemStub);
     });
 
-    it('should call updateLimit from service when updateLimit is called', () => {
-        let spyMenuService = spyOn(menuService, 'updateLimit').and.returnValue(of(Object));
+    it('should call updateItem from service when updateItem is called', () => {
+        let spyMenuService = spyOn(menuService, 'updateItem').and.returnValue(of(Object));
 
-        component.updateLimit(1, 2);
+        component.updateItem(updateMenuItemStub.id, updateMenuItemStub.data);
 
-        expect(spyMenuService).toHaveBeenCalledWith(1, 2);
+        expect(spyMenuService).toHaveBeenCalledWith(updateMenuItemStub);
     });
 
-    it('should show success toastr and emit event when updateLimit from service returns success', () => {
-        spyOn(menuService, 'updateLimit').and.returnValue(of(Object));
+    it('should show success toastr and emit event when updateItem from service returns success', () => {
+        spyOn(menuService, 'updateItem').and.returnValue(of(Object));
         let spyToastr = spyOn(toastr, 'success');
         let spyEventEmitter = spyOn(component.onUpdateMenuItem, 'emit');
 
-        component.updateLimit(1, 2);
+        component.updateItem(updateMenuItemStub.id, updateMenuItemStub.data);
 
         expect(spyToastr).toHaveBeenCalled();
-        expect(spyEventEmitter).toHaveBeenCalledWith({id: 1, limit: 2});
+        expect(spyEventEmitter).toHaveBeenCalledWith(updateMenuItemStub);
     });
 
     it('should open dialog when showModal is called', () => {
         let spy = spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(3) })
-        spyOn(menuService, 'updateLimit').and.returnValue(of(Object));
+        spyOn(menuService, 'updateItem').and.returnValue(of(Object));
 
-        component.showModal(menuItemStub);
+        component.showModal(ordinaryMenuItemStub);
 
         expect(spy).toHaveBeenCalled();
     });
 
     it('should NOT call updateLimit when afterClosed returns undefined', () => {
         spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(undefined) })
-        let spy = spyOn(menuService, 'updateLimit');
+        let spy = spyOn(menuService, 'updateItem');
 
-        component.showModal(menuItemStub);
+        component.showModal(ordinaryMenuItemStub);
 
         expect(spy).not.toHaveBeenCalled();
     });
