@@ -17,7 +17,7 @@ import { DialogCofirmComponent } from '../../dialog-cofirm/dialog-cofirm.compone
 })
 export class DishesComponent implements OnInit {
     dishes: Array<Dish>;
-    displayedColumns: string[] = ['no', 'name', 'category', 'price', 'amount', 'editing', 'deleting'];
+    displayedColumns: string[] = ['no', 'name', 'category', 'amount', 'editing', 'deleting'];
     dataSource;
     removingConfirmed: boolean;
 

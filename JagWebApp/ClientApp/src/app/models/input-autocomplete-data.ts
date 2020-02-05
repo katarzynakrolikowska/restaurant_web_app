@@ -1,6 +1,6 @@
 import { Dish } from "./dish";
 
-export interface DataForAutocomplete {
+export interface InputAutocompleteData {
     categoryName: string;
     dishes: Array<Dish>;
 }

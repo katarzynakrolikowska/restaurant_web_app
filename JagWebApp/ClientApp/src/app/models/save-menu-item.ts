@@ -1,5 +1,6 @@
 
 export interface SaveMenuItem {
-    dishId: number;
+    dishes: Array<number>;
+    price: number;
     limit: number;
 }

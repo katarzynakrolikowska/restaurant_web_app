@@ -55,7 +55,12 @@ namespace JagWebApp.Persistance
 
             modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
 
+            modelBuilder.Entity<MenuItemDish>().HasKey(md =>
+                new { md.MenuItemId, md.DishId });
 
+            modelBuilder.Entity<MenuItem>()
+                .Property(mi => mi.IsMain)
+                .HasDefaultValue(false);
         }
     }
 }

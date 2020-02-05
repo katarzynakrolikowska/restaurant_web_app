@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { passwordsMatch } from '../validators/password.validator';
-import { ChangePasswordView } from '../models/changePasswordView';
 import { UserService } from '../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -17,6 +16,7 @@ import {
     ERROR_MAX_LENGTH_PASSWORD_MESSAGE
 } from '../user-messages/messages';
 import { CustomErrorStateMatcher } from '../helpers/custom-error-state-matcher';
+import { ChangePasswordView } from '../models/change-password-view';
 
 
 @Component({

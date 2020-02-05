@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { UpdateMenuItem } from '../models/update-menu-item';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class MenuService {
             .pipe(map(response => response));
     }
 
-    updateLimit(itemId, available) {
-        return this.http.patch(this.baseUrl + 'api/menu/' + itemId, available)
+    updateItem(updateMenuItem: UpdateMenuItem) {
+        return this.http.post(this.baseUrl + 'api/menu/' + updateMenuItem.id, updateMenuItem.data)
             .pipe(map(response => response));
     }
 

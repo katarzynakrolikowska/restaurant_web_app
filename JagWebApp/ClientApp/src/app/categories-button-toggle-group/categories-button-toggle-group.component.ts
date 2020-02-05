@@ -26,8 +26,8 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
             });
     }
 
-    toggle(value) {
-        this.onToggleCategory.emit(value);
+    toggle(categoryId) {
+        this.onToggleCategory.emit(categoryId);
     }
 
 }

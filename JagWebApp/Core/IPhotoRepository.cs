@@ -16,5 +16,7 @@ namespace JagWebApp.Core
         Task<Photo> SavePhoto(Dish dish, IFormFile file);
 
         void Remove(Photo photo);
+
+        void Remove(IEnumerable<Photo> photos);
     }
 }

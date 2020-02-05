@@ -17,7 +17,7 @@
     <mat-card-subtitle>{{ menuItem.dish.category.name }}</mat-card-subtitle>
     <mat-card-content>
       <div class="text-center font-weight-bolder card-product-price mb-2">
-        {{ menuItem.dish.price | currency : '' : '' }} zł
+        {{ menuItem.price | currency : '' : '' }} zł
       </div>
       <div class="text-center">
         Dostępne porcje:
@@ -28,7 +28,7 @@
       </div>
     </mat-card-content>
     <mat-card-actions class="text-center">
-      <button mat-button color="primary" (click)="showModal(menuItem)">EDYTUJ LIMIT</button>
+      <button mat-button color="primary" (click)="showModal(menuItem)">EDYTUJ</button>
       <button mat-button color="warn" (click)="deleteItem(menuItem)">USUŃ</button>
     </mat-card-actions>
   </mat-card>

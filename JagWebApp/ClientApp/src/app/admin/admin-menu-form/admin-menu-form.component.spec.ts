@@ -18,18 +18,17 @@ describe('AdminMenuFormComponent', () => {
         id: 1,
         name: 'A',
         category: { id: 2, name: 'categoryA' },
-        price: 3,
         amount: 4
     };
     const dish2: Dish = {
         id: 2,
         name: 'B',
         category: { id: 3, name: 'categoryB' },
-        price: 3,
         amount: 4
     };
     let dishes = [dish1, dish2];
     let dishControl: AbstractControl;
+    let priceControl: AbstractControl;
     let limitControl: AbstractControl;
 
     let dishService: DishService;
@@ -63,6 +62,7 @@ describe('AdminMenuFormComponent', () => {
         fixture.detectChanges();
 
         dishControl = component.dish;
+        priceControl = component.price;
         limitControl = component.limit;
     });
 
@@ -70,8 +70,9 @@ describe('AdminMenuFormComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should create form with two controls', () => {
+    it('should create form with three controls', () => {
         expect(dishControl).toBeTruthy();
+        expect(priceControl).toBeTruthy();
         expect(limitControl).toBeTruthy();
     });
 
@@ -79,6 +80,12 @@ describe('AdminMenuFormComponent', () => {
         dishControl.setValue('');
 
         expect(dishControl.invalid).toBeTruthy();
+    });
+
+    it('should make price control required', () => {
+        priceControl.setValue('');
+
+        expect(priceControl.invalid).toBeTruthy();
     });
 
     it('should make limit control required', () => {

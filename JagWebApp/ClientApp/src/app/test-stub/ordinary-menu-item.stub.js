@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.menuItemStub = {
+exports.ordinaryMenuItemStub = {
     id: 1,
     dish: {
         name: 'a',
@@ -8,10 +8,10 @@ exports.menuItemStub = {
             id: 1,
             name: 'b'
         },
-        price: 1,
         amount: 1
     },
+    price: 1,
     limit: 1,
     available: 1
 };
-//# sourceMappingURL=menu-item.stub.js.map
+//# sourceMappingURL=ordinary-menu-item.stub.js.map

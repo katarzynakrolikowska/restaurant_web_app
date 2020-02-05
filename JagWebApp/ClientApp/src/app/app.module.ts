@@ -9,7 +9,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RegisterFormComponent } from './register-form/register-form.component';
@@ -39,8 +38,8 @@ import { MatPaginatorIntl } from '@angular/material';
 import { AdminDishesMenuComponent } from './admin/admin-dishes-menu/admin-dishes-menu.component';
 import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
 import { AdminDishCardComponent } from './admin/admin-dish-card/admin-dish-card.component';
-import { DialogEditLimitComponent } from './admin/dialog-edit-limit/dialog-edit-limit.component';
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group/categories-button-toggle-group.component';
+import { DialogEditMenuItemComponent } from './admin/dialog-edit-menu-item/dialog-edit-menu-item.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -51,7 +50,6 @@ export function tokenGetter() {
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     RegisterFormComponent,
     LoginFormComponent,
     LoginPanelComponent,
@@ -68,7 +66,7 @@ export function tokenGetter() {
     AdminDishesMenuComponent,
     AdminMenuFormComponent,
     AdminDishCardComponent,
-    DialogEditLimitComponent,
+    DialogEditMenuItemComponent,
     CategoriesButtonToggleGroupComponent,
 
   ],
@@ -80,7 +78,6 @@ export function tokenGetter() {
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
       {
           path: '',
           runGuardsAndResolvers: 'always',
@@ -136,7 +133,7 @@ export function tokenGetter() {
     NgxSpinnerModule
 
     ],
-    entryComponents: [DialogCofirmComponent, DialogEditLimitComponent],
+    entryComponents: [DialogCofirmComponent, DialogEditMenuItemComponent],
   providers: [
       { provide: ErrorHandler, useClass: AppErrorHandler },
       {

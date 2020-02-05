@@ -15,5 +15,7 @@ namespace JagWebApp.Core
         void Add(Dish dish);
 
         void Remove(Dish dish);
+
+        Task<bool> DishesExist(IEnumerable<int> idsDishes);
     }
 }

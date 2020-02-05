@@ -73,9 +73,6 @@ namespace JagWebApp.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -93,17 +90,35 @@ namespace JagWebApp.Migrations
                     b.Property<int>("Available")
                         .HasColumnType("int");
 
-                    b.Property<int>("DishId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsMain")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("Limit")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
+
+                    b.ToTable("MenuItems");
+                });
+
+            modelBuilder.Entity("JagWebApp.Core.Models.MenuItemDish", b =>
+                {
+                    b.Property<int>("MenuItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MenuItemId", "DishId");
 
                     b.HasIndex("DishId");
 
-                    b.ToTable("MenuItems");
+                    b.ToTable("MenuItemDish");
                 });
 
             modelBuilder.Entity("JagWebApp.Core.Models.Photo", b =>
@@ -344,11 +359,17 @@ namespace JagWebApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("JagWebApp.Core.Models.MenuItem", b =>
+            modelBuilder.Entity("JagWebApp.Core.Models.MenuItemDish", b =>
                 {
                     b.HasOne("JagWebApp.Core.Models.Dish", "Dish")
                         .WithMany()
                         .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JagWebApp.Core.Models.MenuItem", "MenuItem")
+                        .WithMany("Dishes")
+                        .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

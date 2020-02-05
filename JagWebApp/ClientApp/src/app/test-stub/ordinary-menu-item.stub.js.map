@@ -1,0 +1,1 @@
+{"version":3,"file":"ordinary-menu-item.stub.js","sourceRoot":"","sources":["ordinary-menu-item.stub.ts"],"names":[],"mappings":";;AAGa,QAAA,oBAAoB,GAAqB;IAClD,EAAE,EAAE,CAAC;IACL,IAAI,EACJ;QACI,IAAI,EAAE,GAAG;QACT,QAAQ,EAAE;YACN,EAAE,EAAE,CAAC;YACL,IAAI,EAAE,GAAG;SACZ;QACD,MAAM,EAAE,CAAC;KACZ;IACD,KAAK,EAAE,CAAC;IACR,KAAK,EAAE,CAAC;IACR,SAAS,EAAE,CAAC;CACf,CAAC"}

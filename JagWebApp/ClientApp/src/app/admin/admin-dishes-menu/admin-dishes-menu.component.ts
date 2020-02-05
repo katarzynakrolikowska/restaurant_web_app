@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../../services/menu.service';
-import { MenuItem } from '../../models/menuItem';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { OrdinaryMenuItem } from '../../models/ordinary-menu-item';
+import { MainMenuItem } from '../../models/main-menu-item';
+import { UpdateMenuItem } from '../../models/update-menu-item';
 
 
 @Component({
@@ -10,8 +12,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
     styleUrls: ['./admin-dishes-menu.component.css']
 })
 export class AdminDishesMenuComponent implements OnInit {
-    menuItems: Array<MenuItem> = [];
-    filteredMenuItems: Array<MenuItem> = [];
+    ordinaryMenuItems: Array<OrdinaryMenuItem> = [];
+    mainMenuItem: MainMenuItem;
+    filteredMenuItems: Array<OrdinaryMenuItem> = [];
     currentSelectedCategoryId = 0;
 
     constructor(
@@ -22,17 +25,26 @@ export class AdminDishesMenuComponent implements OnInit {
         this.spinner.show();
         
         this.menuService.getMenuItems()
-            .subscribe((result: Array<MenuItem>) => {
-                this.menuItems = result;
-                this.sortArrayByDishName(this.menuItems);
-                this.filteredMenuItems = this.menuItems;
+            .subscribe((result: Array<MainMenuItem>) => {
+                result.forEach(item => {
+                    if (item.dishes.length === 1) {
+                        let ordinaryItem: OrdinaryMenuItem = this.getOrdinaryMenuItem(item);
+
+                        this.ordinaryMenuItems.push(ordinaryItem);
+                    } else 
+                        this.mainMenuItem = item;
+                    
+                });
+                this.sortArrayByDishName(this.ordinaryMenuItems);
+                this.filteredMenuItems = this.ordinaryMenuItems;
                 this.spinner.hide();
             });
     }
 
-    addMenuItem(item: MenuItem) {
-        this.menuItems.push(item);
-        this.sortArrayByDishName(this.menuItems);
+    addMenuItem(mainMenuItem: MainMenuItem) {
+        let item = this.getOrdinaryMenuItem(mainMenuItem);
+        this.ordinaryMenuItems.push(item);
+        this.sortArrayByDishName(this.ordinaryMenuItems);
 
         if (item.dish.category.id === this.currentSelectedCategoryId) {
             this.filteredMenuItems.push(item);
@@ -40,32 +52,44 @@ export class AdminDishesMenuComponent implements OnInit {
         }
     }
 
-    removeItemFromMenu(item: MenuItem) {
-        this.removeItem(this.menuItems, item.id);
+    removeItemFromMenu(item: OrdinaryMenuItem) {
+        this.removeItemFromArray(this.ordinaryMenuItems, item.id);
         if (item.dish.category.id === this.currentSelectedCategoryId) {
-            this.removeItem(this.filteredMenuItems, item.id);
+            this.removeItemFromArray(this.filteredMenuItems, item.id);
         }
     }
 
-    updateItemLimit(data) {
-        let index = this.menuItems.findIndex(i => i.id === data.id);
-        this.menuItems[index].available = data.limit;
+    updateItem(updateMenuItem: UpdateMenuItem) {
+        let index = this.ordinaryMenuItems.findIndex(i => i.id === updateMenuItem.id);
+        this.ordinaryMenuItems[index].price = updateMenuItem.data.price;
+        this.ordinaryMenuItems[index].available = updateMenuItem.data.available;
     }
 
-    toggle(value) {
-        this.currentSelectedCategoryId = value;
-        if (value === 0)
-            this.filteredMenuItems = this.menuItems;
+    toggleCategory(categoryId) {
+        this.currentSelectedCategoryId = categoryId;
+        if (categoryId === 0)
+            this.filteredMenuItems = this.ordinaryMenuItems;
         else
-            this.filteredMenuItems = this.menuItems.filter(item => item.dish.category.id === value);
+            this.filteredMenuItems = this.ordinaryMenuItems.filter(item => item.dish.category.id === categoryId);
     }
 
     private sortArrayByDishName(array) {
         array.sort((a, b) => a.dish.name.localeCompare(b.dish.name));
     }
 
-    private removeItem(array: Array<any>, itemId) {
+    private removeItemFromArray(array: Array<any>, itemId) {
         let index = array.findIndex(i => i.id === itemId);
         array.splice(index, 1);
+    }
+
+    private getOrdinaryMenuItem(item: MainMenuItem) {
+        let ordinaryMenuItem: OrdinaryMenuItem = {
+            id: item.id,
+            dish: item.dishes[0],
+            price: item.price,
+            limit: item.limit,
+            available: item.available,
+        }
+        return ordinaryMenuItem;
     }
 }
