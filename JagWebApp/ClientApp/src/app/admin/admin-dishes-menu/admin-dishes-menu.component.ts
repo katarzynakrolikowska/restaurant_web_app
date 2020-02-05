@@ -70,6 +70,11 @@ export class AdminDishesMenuComponent implements OnInit {
         this.ordinaryMenuItems[index].available = updateMenuItem.data.available;
     }
 
+    updateMainMenuItem(updateMenuItem: UpdateMenuItem) {
+        this.mainMenuItem.price = updateMenuItem.data.price;
+        this.mainMenuItem.available = updateMenuItem.data.available;
+    }
+
     toggleCategory(categoryId) {
         this.currentSelectedCategoryId = categoryId;
         if (categoryId === 0)

@@ -87,7 +87,7 @@ describe('AdminDishCardComponent', () => {
     });
 
     it('should open dialog when showModal is called', () => {
-        let spy = spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(3) })
+        let spy = spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(Object) })
         spyOn(menuService, 'updateItem').and.returnValue(of(Object));
 
         component.showModal(ordinaryMenuItemStub);
