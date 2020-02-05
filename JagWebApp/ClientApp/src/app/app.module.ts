@@ -40,6 +40,8 @@ import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.
 import { AdminDishCardComponent } from './admin/admin-dish-card/admin-dish-card.component';
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group/categories-button-toggle-group.component';
 import { DialogEditMenuItemComponent } from './admin/dialog-edit-menu-item/dialog-edit-menu-item.component';
+import { MainDishCardComponent } from './main-dish-card/main-dish-card.component';
+import { MainMenuItemViewComponent } from './main-menu-item-view/main-menu-item-view.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -68,6 +70,8 @@ export function tokenGetter() {
     AdminDishCardComponent,
     DialogEditMenuItemComponent,
     CategoriesButtonToggleGroupComponent,
+    MainDishCardComponent,
+    MainMenuItemViewComponent,
 
   ],
   imports: [

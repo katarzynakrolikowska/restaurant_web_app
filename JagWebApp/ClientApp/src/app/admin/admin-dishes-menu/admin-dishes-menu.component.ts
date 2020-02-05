@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { OrdinaryMenuItem } from '../../models/ordinary-menu-item';
 import { MainMenuItem } from '../../models/main-menu-item';
 import { UpdateMenuItem } from '../../models/update-menu-item';
+import { Dish } from '../../models/dish';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { UpdateMenuItem } from '../../models/update-menu-item';
 export class AdminDishesMenuComponent implements OnInit {
     ordinaryMenuItems: Array<OrdinaryMenuItem> = [];
     mainMenuItem: MainMenuItem;
+    dishes: Array<Dish>;
     filteredMenuItems: Array<OrdinaryMenuItem> = [];
     currentSelectedCategoryId = 0;
 
@@ -31,8 +33,11 @@ export class AdminDishesMenuComponent implements OnInit {
                         let ordinaryItem: OrdinaryMenuItem = this.getOrdinaryMenuItem(item);
 
                         this.ordinaryMenuItems.push(ordinaryItem);
-                    } else 
+                    } else {
                         this.mainMenuItem = item;
+                        this.dishes = item.dishes;
+                        console.log(this.mainMenuItem)
+                    }
                     
                 });
                 this.sortArrayByDishName(this.ordinaryMenuItems);

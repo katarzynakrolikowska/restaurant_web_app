@@ -15,6 +15,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
 
 
 
@@ -36,7 +38,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         MatAutocompleteModule,
         MatCardModule,
         MatChipsModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        MatToolbarModule,
+        MatListModule
     ]
 })
 

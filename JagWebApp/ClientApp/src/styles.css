@@ -84,3 +84,21 @@ button:focus {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
+
+.bg-lightgray {
+  background-color: #F7F9F9;
+}
+
+.img-default-dimensions {
+  max-height: 157.5px !important;
+  width: 150px !important;
+}
+
+.mat-card-title,
+.mat-card-header {
+  font-size: 16px !important;
+}
+
+.font-size-bigger {
+  font-size: 20px !important;
+}
