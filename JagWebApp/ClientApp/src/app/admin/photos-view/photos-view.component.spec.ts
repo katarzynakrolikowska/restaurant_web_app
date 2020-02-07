@@ -10,8 +10,8 @@ import { PhotoService } from '../../services/photo.service';
 import { of, empty } from 'rxjs';
 import { Photo } from '../../models/photo';
 import { ActivatedRoute } from '@angular/router';
-import { activatedRouteStub } from '../../test-stub/activated-route.stub';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { activatedRouteStub } from '../../test/stubs/activated-route.stub';
 
 
 describe('PhotosViewComponent', () => {

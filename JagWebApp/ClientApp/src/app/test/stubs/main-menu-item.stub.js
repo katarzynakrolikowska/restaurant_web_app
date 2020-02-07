@@ -1,6 +1,6 @@
-import { MainMenuItem } from "../models/main-menu-item";
-
-export const mainMenuItemStubWithOneDish: MainMenuItem = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mainMenuItemStubWithOneDish = {
     id: 1,
     dishes: [
         {
@@ -14,11 +14,10 @@ export const mainMenuItemStubWithOneDish: MainMenuItem = {
     ],
     price: 1,
     limit: 1,
-    available: 1
+    available: 1,
+    isMain: false
 };
-
-
-export const mainMenuItemStubWithTwoDishes: MainMenuItem = {
+exports.mainMenuItemStubWithTwoDishes = {
     id: 2,
     dishes: [
         {
@@ -40,5 +39,7 @@ export const mainMenuItemStubWithTwoDishes: MainMenuItem = {
     ],
     price: 1,
     limit: 1,
-    available: 1
+    available: 1,
+    isMain: true
 };
+//# sourceMappingURL=main-menu-item.stub.js.map

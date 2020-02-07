@@ -16,7 +16,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 
@@ -40,7 +42,9 @@ import { MatListModule } from '@angular/material/list';
         MatChipsModule,
         MatButtonToggleModule,
         MatToolbarModule,
-        MatListModule
+        MatCheckboxModule,
+        MatListModule,
+        MatDividerModule
     ]
 })
 

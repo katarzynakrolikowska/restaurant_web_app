@@ -6,6 +6,7 @@ import { UpdateMenuItem } from '../models/update-menu-item';
 import { MenuService } from '../services/menu.service';
 import { ToastrService } from 'ngx-toastr';
 import { SUCCESS_UPDATE_MENU_MESSAGE } from '../user-messages/messages';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu-item-view',
@@ -19,10 +20,19 @@ export class MainMenuItemViewComponent implements OnInit {
     @Output() onUpdateMainMenuItem = new EventEmitter();
 
 
-    constructor(public dialog: MatDialog, private menuService: MenuService, private toastr: ToastrService) { }
+    constructor(
+        public dialog: MatDialog,
+        private menuService: MenuService,
+        private toastr: ToastrService,
+        private router: Router
+    ) { }
 
     ngOnInit() {
         
+    }
+
+    addMainItem() {
+        this.router.navigate(['admin/menu/new/' + 'mainitem'])
     }
 
     showModal() {

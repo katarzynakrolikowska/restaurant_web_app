@@ -72,9 +72,9 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void Create_WhenSaveMenuItemHasMoreThanOneDishAndMainMenuItemExsist_ReturnsBadRequestObjectResult()
+        public async void Create_WhenSaveMenuItemIsMainItemAndMainMenuItemExsist_ReturnsBadRequestObjectResult()
         {
-            var saveMenuItem = new SaveMenuItemResource { Dishes = new Collection<int> { 1, 2 } };
+            var saveMenuItem = new SaveMenuItemResource { IsMain = true };
             _menuRepo.Setup(mr => mr.GetMainMenuItem())
                 .ReturnsAsync(new MenuItem());
 

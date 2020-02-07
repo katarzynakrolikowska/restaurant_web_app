@@ -1,4 +1,4 @@
-import { UpdateMenuItem } from "../models/update-menu-item";
+import { UpdateMenuItem } from "../../models/update-menu-item";
 
 export const updateMenuItemStub: UpdateMenuItem = {
     id: 1,

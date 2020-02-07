@@ -1,5 +1,17 @@
 
-<mat-toolbar color="accent" class="mb-3">Zestaw dnia</mat-toolbar>
+  <mat-toolbar class="mb-3">
+    <span>Zestaw dnia</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-mini-fab class="mx-2" (click)="addMainItem()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-mini-fab class="mx-2">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-mini-fab class="mx-2">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-toolbar>
 <div *ngIf="!mainMenuItem; else showMainMenuItem">
   Brak zestawu dnia
 </div>

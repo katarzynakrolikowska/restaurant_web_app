@@ -42,6 +42,7 @@ import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle
 import { DialogEditMenuItemComponent } from './admin/dialog-edit-menu-item/dialog-edit-menu-item.component';
 import { MainDishCardComponent } from './main-dish-card/main-dish-card.component';
 import { MainMenuItemViewComponent } from './main-menu-item-view/main-menu-item-view.component';
+import { BlankComponent } from './test/blank/blank.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -72,6 +73,7 @@ export function tokenGetter() {
     CategoriesButtonToggleGroupComponent,
     MainDishCardComponent,
     MainMenuItemViewComponent,
+    BlankComponent,
 
   ],
   imports: [
@@ -103,6 +105,12 @@ export function tokenGetter() {
               {
                   path: 'admin/dishes',
                   component: DishesComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
+                  path: 'admin/menu/new/:item',
+                  component: AdminMenuFormComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },

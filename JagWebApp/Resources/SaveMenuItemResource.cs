@@ -21,6 +21,8 @@ namespace JagWebApp.Resources
         [Min(0)]
         public int Limit { get; set; }
 
+        public bool IsMain { get; set; }
+
         public SaveMenuItemResource()
         {
             Dishes = new Collection<int>();

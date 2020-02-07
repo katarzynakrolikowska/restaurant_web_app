@@ -1,11 +1,4 @@
-
-<mat-tab-group class="mb-5">
-  <mat-tab label="Dodaj danie">
-    <app-admin-menu-form (onCreateMenuItem)="addMenuItem($event)"></app-admin-menu-form>
-  </mat-tab>
-  <mat-tab label="Dodaj zestaw dnia"> Content 2 </mat-tab>
-</mat-tab-group>
-
+  
 <div class="row justify-content-center mt-4">
   <div class="col-12 col-sm-5 col-md-4 col-lg-3 mb-5">
     <app-categories-button-toggle-group (onToggleCategory)="toggleCategory($event)">
@@ -17,7 +10,13 @@
                              (onUpdateMainMenuItem)="updateMainMenuItem($event)">
     </app-main-menu-item-view>
     <div class="row bg-lightgray">
-      <mat-toolbar color="accent" class="mb-3">Pozostałe dania</mat-toolbar>
+      <mat-toolbar class="mb-3">
+        <span>Również w ofercie</span>
+        <span class="toolbar-spacer"></span>
+        <button mat-mini-fab class="mx-2" (click)="addDishToMenu()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-toolbar>
       <div *ngIf="filteredMenuItems.length === 0; else showMenuItems">
         Brak zapisanych dań
       </div>
@@ -32,7 +31,7 @@
 
       <ng-template #noItems>Brak zapisanych dań.</ng-template>
     </div>
-      
+
   </div>
 </div>
 

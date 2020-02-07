@@ -46,7 +46,7 @@ namespace JagWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SaveMenuItemResource saveMenuItemResource)
         {
-            if (saveMenuItemResource.Dishes.Count > 1 && await _menuRepository.GetMainMenuItem() != null)
+            if (saveMenuItemResource.IsMain && await _menuRepository.GetMainMenuItem() != null)
                 return BadRequest("Zestaw dnia już istnieje");
 
             if (!await _dishRepository.DishesExist(saveMenuItemResource.Dishes))

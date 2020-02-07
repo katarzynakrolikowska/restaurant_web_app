@@ -27,26 +27,27 @@ export class DishFormComponent implements OnInit {
     form: FormGroup;
     categories: Array<Category>;
     dish: Dish;
-    id: number;
+    id;
 
     constructor(
         private categoryService: CategoryService,
         private dishService: DishService,
         private toastr: ToastrService,
         private router: Router,
-        private route: ActivatedRoute
-    ) {
-        
-        
-        //if (isNaN(this.id) || this.id <= 0) {
-        //    router.navigate(['/admin/dishes']);
-        //    return;
-        //}
+        private route: ActivatedRoute) {
+
+        if (route.snapshot.routeConfig.path === 'admin/dishes/new')
+            return;
+        else {
+            this.id = +this.route.snapshot.params['id'];;
+            if (isNaN(this.id) || this.id <= 0) {
+                router.navigate(['/admin/dishes']);
+                return;
+            }
+        }
     }
 
     ngOnInit() {
-        this.id = +this.route.snapshot.params['id'];
-
         let sources = [this.categoryService.getCategories()];
 
         if (this.id)

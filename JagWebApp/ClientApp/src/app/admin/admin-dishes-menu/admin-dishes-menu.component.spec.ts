@@ -5,9 +5,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { MenuService } from '../../services/menu.service';
 import { of } from 'rxjs';
-import { ordinaryMenuItemStub } from '../../test-stub/ordinary-menu-item.stub';
-import { mainMenuItemStubWithOneDish, mainMenuItemStubWithTwoDishes } from '../../test-stub/main-menu-item.stub';
-import { MainMenuItem } from '../../models/main-menu-item';
+import { RouterTestingModule } from '@angular/router/testing';
+import { mainMenuItemStubWithOneDish, mainMenuItemStubWithTwoDishes } from '../../test/stubs/main-menu-item.stub';
+import { ordinaryMenuItemStub } from '../../test/stubs/ordinary-menu-item.stub';
 
 describe('AdminDishesMenuComponent', () => {
     const baseURL = '';
@@ -19,7 +19,7 @@ describe('AdminDishesMenuComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AdminDishesMenuComponent],
             imports: [
-                HttpClientModule
+                HttpClientModule, RouterTestingModule.withRoutes([])
                 ],
             providers: [
                 { provide: 'BASE_URL', useValue: baseURL },
@@ -46,17 +46,6 @@ describe('AdminDishesMenuComponent', () => {
     it('should init menuItems', () => {
         expect(component.ordinaryMenuItems.length).toBe(1);
         expect(component.mainMenuItem).toBe(mainMenuItemStubWithTwoDishes);
-    });
-
-    it('should add menu item when addMenuItem is called', () => {
-        let item: MainMenuItem = Object.assign({}, mainMenuItemStubWithOneDish);
-        item.id = 3;
-
-        component.toggleCategory(item.dishes[0].category.id);
-        component.addMenuItem(item);
-
-        expect(component.ordinaryMenuItems.length).toBe(2);
-        expect(component.filteredMenuItems.length).toBe(2);
     });
 
     it('should remove menu item when removeItemFromMenu is called and item category is current selected catogory', () => {

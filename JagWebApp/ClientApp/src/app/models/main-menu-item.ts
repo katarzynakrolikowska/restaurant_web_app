@@ -6,4 +6,5 @@ export interface MainMenuItem {
     price: number;
     limit: number;
     available: number;
+    isMain?: boolean;
 }

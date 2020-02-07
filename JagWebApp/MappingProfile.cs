@@ -20,7 +20,6 @@ namespace JagWebApp
             CreateMap<CategoryResource, Category>();
             CreateMap<SaveMenuItemResource, MenuItem>()
                 .ForMember(mi => mi.Available, opt => opt.MapFrom(mir => mir.Limit))
-                .ForMember(mi => mi.IsMain, opt => opt.MapFrom(mir => mir.Dishes.Count != 1))
                 .ForMember(mi => mi.Dishes, opt => opt.Ignore())
                 .AfterMap((mir, mi) =>
                 {

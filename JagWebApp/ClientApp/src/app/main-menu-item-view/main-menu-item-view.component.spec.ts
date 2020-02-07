@@ -5,10 +5,11 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { mainMenuItemStubWithTwoDishes } from '../test-stub/main-menu-item.stub';
 import { MenuService } from '../services/menu.service';
-import { updateMenuItemStub } from '../test-stub/update-menu-item.stub';
 import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { mainMenuItemStubWithTwoDishes } from '../test/stubs/main-menu-item.stub';
+import { updateMenuItemStub } from '../test/stubs/update-menu-item.stub';
 
 describe('MainMenuItemViewComponent', () => {
     const baseURL = '';
@@ -23,7 +24,7 @@ describe('MainMenuItemViewComponent', () => {
         TestBed.configureTestingModule({
             declarations: [MainMenuItemViewComponent],
             imports: [HttpClientModule, MatToolbarModule, MatDialogModule, ToastrModule.forRoot(),
-                BrowserAnimationsModule],
+                BrowserAnimationsModule, RouterTestingModule.withRoutes([])],
             providers: [
                 { provide: 'BASE_URL', useValue: baseURL }
             ],

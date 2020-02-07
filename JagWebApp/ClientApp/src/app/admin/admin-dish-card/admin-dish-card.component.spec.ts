@@ -7,8 +7,8 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuService } from '../../services/menu.service';
 import { of } from 'rxjs';
-import { updateMenuItemStub } from '../../test-stub/update-menu-item.stub';
-import { ordinaryMenuItemStub } from '../../test-stub/ordinary-menu-item.stub';
+import { ordinaryMenuItemStub } from '../../test/stubs/ordinary-menu-item.stub';
+import { updateMenuItemStub } from '../../test/stubs/update-menu-item.stub';
 
 describe('AdminDishCardComponent', () => {
     const baseURL = '';

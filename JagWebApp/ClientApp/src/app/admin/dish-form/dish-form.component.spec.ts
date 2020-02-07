@@ -12,7 +12,7 @@ import { DishService } from '../../services/dish.service';
 import { ActivatedRoute } from '@angular/router';
 import { Dish } from '../../models/dish';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { activatedRouteStub } from '../../test-stub/activated-route.stub';
+import { activatedRouteStub } from '../../test/stubs/activated-route.stub';
 
 
 describe('DishFormComponent', () => {
@@ -63,7 +63,6 @@ describe('DishFormComponent', () => {
         nameControl = component.name;
         categoryControl = component.category;
         amountControl = component.amount;
-        
     });
 
     it('should create', () => {
@@ -101,13 +100,11 @@ describe('DishFormComponent', () => {
     });
 
     xit('should call the server to save dish after submit if form is valid', () => {
-        //activatedRouteStub.snapshot.params.id = 'new';
         let spy = spyOn(dishService, 'createDish').and.returnValue(empty());
         setControls();
 
         component.onSave();
 
-        //expect(component.id).toBe(2);
         expect(spy).toHaveBeenCalled();
     });
 
@@ -120,11 +117,8 @@ describe('DishFormComponent', () => {
     });
 
     it('should call the server to update dish if id is valid number', () => {
-        //activatedRouteStub.snapshot.params.id = '1';
-
         component.onSave();
 
-        //expect(component.id).toBe(1);
         expect(spyUpdateDish).toHaveBeenCalled();
     });
 

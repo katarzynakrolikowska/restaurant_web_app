@@ -4,5 +4,8 @@ export const activatedRouteStub = {
         params: {
             id: '1'
         },
+        routeConfig: {
+            path: 'admin/dishes/edit/1'
+        }
     },
 };

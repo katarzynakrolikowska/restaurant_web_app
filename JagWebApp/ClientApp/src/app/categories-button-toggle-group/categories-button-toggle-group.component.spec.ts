@@ -5,8 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatButtonToggleModule } from '@angular/material';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
-import { categoryStub } from '../test-stub/category.stub';
 import { of } from 'rxjs';
+import { categoryStub } from '../test/stubs/category.stub';
 
 describe('CategoriesButtonToggleGroupComponent', () => {
     const baseURL = '';
