@@ -47,7 +47,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     ) {
         this.routeParam = this.route.snapshot.params['item'];
         if (this.routeParam !== 'item' && this.routeParam !== 'mainitem') {
-            router.navigate(['admin/menu']);
+            router.navigate(['menu']);
         }
     }
 
@@ -150,11 +150,11 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
         this.menuService.create(item)
             .subscribe(() => {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.router.navigate(['admin/menu']);
+                this.router.navigate(['menu']);
             }, (errorResponse: HttpErrorResponse) => {
                 if (errorResponse.error === 'Zestaw dnia już istnieje') {
                     this.toastr.error(errorResponse.error);
-                    this.router.navigate(['admin/menu']);
+                    this.router.navigate(['menu']);
                 } else
                     this.toastr.error(ERROR_SERVER_MESSAGE);
             });
@@ -170,7 +170,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
         this.menuService.updateItem(this.mainMenuItemToUpdate.id, item)
             .subscribe(() => {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.router.navigate(['admin/menu']);
+                this.router.navigate(['menu']);
             });
     }
 

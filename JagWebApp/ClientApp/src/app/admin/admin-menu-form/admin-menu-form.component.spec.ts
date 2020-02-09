@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AdminMenuFormComponent } from './admin-menu-form.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -53,7 +52,7 @@ describe('AdminMenuFormComponent', () => {
                 ToastrModule.forRoot(),
                 BrowserAnimationsModule,
                 RouterTestingModule.withRoutes([
-                    { path: 'admin/menu', component: BlankComponent }
+                    { path: 'menu', component: BlankComponent }
                 ])
             ],
             providers: [

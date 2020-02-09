@@ -55,5 +55,4 @@ export class MainMenuItemViewComponent implements OnInit {
                     this.onDeleteMainMenuItem.emit();
                 });
     }
-
 }

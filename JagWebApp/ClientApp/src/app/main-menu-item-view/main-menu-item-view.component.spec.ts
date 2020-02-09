@@ -19,7 +19,6 @@ describe('MainMenuItemViewComponent', () => {
     let menuService: MenuService;
     let router: Router;
 
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [MainMenuItemViewComponent],
@@ -71,5 +70,4 @@ describe('MainMenuItemViewComponent', () => {
 
         expect(spy).toHaveBeenCalledWith(component.mainMenuItem.id);
     });
-
 });

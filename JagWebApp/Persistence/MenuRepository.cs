@@ -63,7 +63,5 @@ namespace JagWebApp.Persistence
         {
             _context.MenuItems.Remove(menuItem);
         }
-
-        
     }
 }

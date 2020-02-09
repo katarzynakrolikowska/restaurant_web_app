@@ -36,5 +36,4 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
     toggle(categoryId) {
         this.onToggleCategory.emit(categoryId);
     }
-
 }

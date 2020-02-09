@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AdminMainItemEditFormComponent } from './admin-main-item-edit-form.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,7 +25,7 @@ describe('AdminMainItemEditFormComponent', () => {
             imports: [
                 HttpClientModule, ToastrModule.forRoot(),
                 BrowserAnimationsModule, RouterTestingModule.withRoutes([
-                    { path: 'admin/menu', component: BlankComponent }
+                    { path: 'menu', component: BlankComponent }
                 ])
             ],
             providers: [

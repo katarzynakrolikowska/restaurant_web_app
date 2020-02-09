@@ -7,9 +7,7 @@ import { MenuButton } from '../models/menu-button';
   styleUrls: ['./menu-buttons.component.css']
 })
 export class MenuButtonsComponent implements OnInit {
-
     isMobile: boolean;
-
     @Input() buttons: Array<MenuButton>;
     @Output() onButtonClick = new EventEmitter();
 
@@ -32,5 +30,4 @@ export class MenuButtonsComponent implements OnInit {
     onClick(button: MenuButton) {
         this.onButtonClick.emit(button.label);
     }
-
 }

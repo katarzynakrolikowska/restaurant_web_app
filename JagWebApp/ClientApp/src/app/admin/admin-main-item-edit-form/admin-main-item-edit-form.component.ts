@@ -18,14 +18,14 @@ export class AdminMainItemEditFormComponent implements OnInit {
     constructor(private menuService: MenuService, private route: ActivatedRoute, private router: Router,
         private toastr: ToastrService) {
         if (this.route.snapshot.params['item'] !== 'mainitem') {
-            this.router.navigate(['/admin/menu']);
+            this.router.navigate(['menu']);
             return;
         }
             
         this.itemId = +this.route.snapshot.params['id'];
 
         if (isNaN(this.itemId) || this.itemId <= 0) {
-            this.router.navigate(['/admin/menu']);
+            this.router.navigate(['menu']);
             return;
         }
     }
@@ -35,7 +35,7 @@ export class AdminMainItemEditFormComponent implements OnInit {
             .subscribe((result: MainMenuItem) => {
                 if (!result.isMain) {
                     this.toastr.error(ERROR_SERVER_MESSAGE);
-                    this.router.navigate(['/admin/menu']);
+                    this.router.navigate(['menu']);
                 }
 
                 this.mainMenuItemToUpdate = result;
@@ -44,7 +44,7 @@ export class AdminMainItemEditFormComponent implements OnInit {
                     if (errorResponse.status !== 404)
                         this.toastr.error(ERROR_SERVER_MESSAGE);
 
-                    this.router.navigate(['/admin/menu']);
+                    this.router.navigate(['menu']);
                 });
     }
 }

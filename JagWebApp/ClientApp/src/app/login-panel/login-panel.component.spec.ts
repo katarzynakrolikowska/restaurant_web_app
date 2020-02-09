@@ -31,15 +31,9 @@ describe('LoginPanelComponent', () => {
         expect(component.step).toBe(0);
     });
 
-    //it('should open login panel after calling setStep with paramwter 0', () => {
-    //    
-    //});
-
     it('should set step to 1 after calling setStep with paramwter 1', () => {
         component.setStep(1);
 
         expect(component.step).toBe(1);
     });
-
-
 });

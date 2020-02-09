@@ -59,6 +59,5 @@ namespace JagWebApp.Persistence
 
             return dishesExist;
         }
-
     }
 }

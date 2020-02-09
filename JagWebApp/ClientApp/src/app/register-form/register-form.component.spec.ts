@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RegisterFormComponent } from './register-form.component';
 import { ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -7,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
 import { of, empty } from 'rxjs';
-import { EmailValidators } from '../validators/email.validaor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -21,9 +19,6 @@ describe('RegisterFormComponent', () => {
     let passwordControl: AbstractControl;
     let confirmPasswordControl: AbstractControl;
     let authService: AuthService;
-    let toast: ToastrService;
-
-    
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -46,8 +41,6 @@ describe('RegisterFormComponent', () => {
         passwordControl = component.password;
         confirmPasswordControl = component.confirmPassword;
         authService = TestBed.get(AuthService);
-        toast = TestBed.get(ToastrService);
-
     });
 
     it('should create', () => {
@@ -75,13 +68,7 @@ describe('RegisterFormComponent', () => {
     it('should make email control accepts only unique email', () => {
         spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
         spyOn(authService, 'loggedIn').and.returnValue(false);
-        
-        //spyOn(EmailValidators, 'shouldBeUnique').and.callFake(service => {
-        //    return control => {
-        //        return of({ shouldBeUnique: true })
-
-        //    };
-        //})
+      
         emailControl.setValue(emailAddress);
 
         expect(emailControl.invalid).toBeTruthy();
@@ -149,7 +136,5 @@ describe('RegisterFormComponent', () => {
         passwordControl.setValue(validPassword);
         confirmPasswordControl.setValue(validPassword);
     } 
-
-
 });
 
