@@ -43,6 +43,9 @@ import { DialogEditMenuItemComponent } from './admin/dialog-edit-menu-item/dialo
 import { MainDishCardComponent } from './main-dish-card/main-dish-card.component';
 import { MainMenuItemViewComponent } from './main-menu-item-view/main-menu-item-view.component';
 import { BlankComponent } from './test/blank/blank.component';
+import { DishesListComponent } from './dishes-list/dishes-list.component';
+import { AdminMainItemEditFormComponent } from './admin/admin-main-item-edit-form/admin-main-item-edit-form.component';
+import { MenuButtonsComponent } from './menu-buttons/menu-buttons.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -74,6 +77,9 @@ export function tokenGetter() {
     MainDishCardComponent,
     MainMenuItemViewComponent,
     BlankComponent,
+    DishesListComponent,
+    AdminMainItemEditFormComponent,
+    MenuButtonsComponent,
 
   ],
   imports: [
@@ -109,7 +115,13 @@ export function tokenGetter() {
                   canActivate: [AdminGuard]
               },
               {
-                  path: 'admin/menu/new/:item',
+                  path: 'admin/menu/:item/edit/:id',
+                  component: AdminMainItemEditFormComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
+                  path: 'admin/menu/:item/new',
                   component: AdminMenuFormComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
@@ -146,13 +158,11 @@ export function tokenGetter() {
 
     ],
     entryComponents: [DialogCofirmComponent, DialogEditMenuItemComponent],
-  providers: [
-      { provide: ErrorHandler, useClass: AppErrorHandler },
-      {
-          provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl
-      }
+    providers: [
+        { provide: ErrorHandler, useClass: AppErrorHandler },
+        { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
 
-  ],
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

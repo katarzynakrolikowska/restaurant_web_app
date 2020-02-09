@@ -110,7 +110,7 @@ namespace JagWebApp.Tests.Controllers
             MockDishesExsitMethod(true);
             _menuRepo.Setup(mr => mr.Add(It.IsAny<MenuItem>()));
 
-            var result = await _controller.Create(new SaveMenuItemResource()) as OkObjectResult;
+            var result = await _controller.Create(new SaveMenuItemResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }
@@ -135,17 +135,27 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void UpdateMenuItem_WhenMenuItemExists_ItemIsUpdated()
         {
-            var item = new MenuItem() { Limit = 1, Available = 1 };
+            var item = new MenuItem()
+            {
+                Dishes = new Collection<MenuItemDish> { new MenuItemDish() { DishId = 1 } },
+                Price = 1,
+                Limit = 1,
+                Available = 1,
+                IsMain = true
+            };
             var updateItem = new UpdateMenuItemResource
             {
+                Dishes = new Collection<int> { 1, 2 },
+                Price = 2,
                 Available = 2,
-                Price = 1
             };
             MockRepoToReturnMenuItem(item);
 
             await _controller.UpdateMenuItem(It.IsAny<int>(), updateItem);
 
             _unitOfWork.Verify(u => u.CompleteAsync());
+            Assert.Equal(2, item.Dishes.Count);
+            Assert.Equal(2, item.Price);
             Assert.Equal(2, item.Available);
             Assert.Equal(2, item.Limit);
         }

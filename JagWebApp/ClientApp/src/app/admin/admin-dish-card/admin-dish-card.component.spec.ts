@@ -70,9 +70,9 @@ describe('AdminDishCardComponent', () => {
     it('should call updateItem from service when updateItem is called', () => {
         let spyMenuService = spyOn(menuService, 'updateItem').and.returnValue(of(Object));
 
-        component.updateItem(updateMenuItemStub.id, updateMenuItemStub.data);
+        component.updateItem(jasmine.any(Number), updateMenuItemStub);
 
-        expect(spyMenuService).toHaveBeenCalledWith(updateMenuItemStub);
+        expect(spyMenuService).toHaveBeenCalledWith(jasmine.any(Number), updateMenuItemStub);
     });
 
     it('should show success toastr and emit event when updateItem from service returns success', () => {
@@ -80,10 +80,10 @@ describe('AdminDishCardComponent', () => {
         let spyToastr = spyOn(toastr, 'success');
         let spyEventEmitter = spyOn(component.onUpdateMenuItem, 'emit');
 
-        component.updateItem(updateMenuItemStub.id, updateMenuItemStub.data);
+        component.updateItem(jasmine.any(Number), updateMenuItemStub);
 
         expect(spyToastr).toHaveBeenCalled();
-        expect(spyEventEmitter).toHaveBeenCalledWith(updateMenuItemStub);
+        expect(spyEventEmitter).toHaveBeenCalledWith({ item: updateMenuItemStub, id: jasmine.any(Number)});
     });
 
     it('should open dialog when showModal is called', () => {

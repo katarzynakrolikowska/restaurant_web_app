@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { UpdateMenuItem } from '../models/update-menu-item';
+import { MainMenuItem } from '../models/main-menu-item';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +16,18 @@ export class MenuService {
             .pipe(map(response => response));
     }
 
+    getMenuItem(itemId) {
+        return this.http.get(this.baseUrl + 'api/menu/' + itemId)
+            .pipe(map(response => response));
+    }
+
     create(menuItem) {
         return this.http.post(this.baseUrl + 'api/menu', menuItem)
             .pipe(map(response => response));
     }
 
-    updateItem(updateMenuItem: UpdateMenuItem) {
-        return this.http.post(this.baseUrl + 'api/menu/' + updateMenuItem.id, updateMenuItem.data)
+    updateItem(id, updateMenuItem: UpdateMenuItem) {
+        return this.http.put(this.baseUrl + 'api/menu/' + id, updateMenuItem)
             .pipe(map(response => response));
     }
 

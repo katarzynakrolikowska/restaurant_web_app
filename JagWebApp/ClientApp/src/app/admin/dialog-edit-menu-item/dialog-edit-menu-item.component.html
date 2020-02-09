@@ -9,7 +9,7 @@
   <mat-form-field appearance="outline" class="position-block">
     <mat-label>Ilość dostępnych porcji</mat-label>
     <input matInput placeholder="Ilość dostępnych porcji" type="number" formControlName="available">
-    <mat-error *ngIf="available.invalid">{{ getLimitErrorMessage() }}</mat-error>
+    <mat-error *ngIf="available.invalid">{{ getAvailableErrorMessage() }}</mat-error>
   </mat-form-field>
 </div>
 <div mat-dialog-actions class="pb-3 content-right">

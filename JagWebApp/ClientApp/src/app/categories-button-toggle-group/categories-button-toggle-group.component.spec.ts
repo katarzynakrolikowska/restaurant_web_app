@@ -43,7 +43,7 @@ describe('CategoriesButtonToggleGroupComponent', () => {
     });
 
     it('should init categories', () => {
-        expect(component.categories.length).toBe(2);
+        expect(component.categories.length).toBe(3);
     });
 
     it('should emit event when toggle method is called', () => {

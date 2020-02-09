@@ -1,0 +1,21 @@
+
+  <span *ngIf="isMobile">
+    <button mat-mini-fab [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button *ngFor="let button of buttons"
+              mat-menu-item (click)="onClick(button)">
+        <mat-icon>{{ button.icon }}</mat-icon>
+        <span>{{ button.label }}</span>
+      </button>
+    </mat-menu>
+  </span>
+
+  <span *ngIf="!isMobile">
+    <button *ngFor="let button of buttons"
+            mat-mini-fab class="mx-2"
+            (click)="onClick(button)">
+      <mat-icon>{{ button.icon }}</mat-icon>
+    </button>
+  </span>

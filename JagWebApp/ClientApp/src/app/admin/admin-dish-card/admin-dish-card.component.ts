@@ -44,14 +44,12 @@ export class AdminDishCardComponent implements OnInit {
     }
 
     updateItem(itemId, data) {
-        let item: UpdateMenuItem = {
-            id: itemId,
-            data: data
-        }
-        this.menuService.updateItem(item)
+        let item: UpdateMenuItem = Object.assign({}, data);
+        
+        this.menuService.updateItem(itemId, item)
             .subscribe(() => {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.onUpdateMenuItem.emit(item);
+                this.onUpdateMenuItem.emit({ item: item, id: itemId });
             });
     }
 }

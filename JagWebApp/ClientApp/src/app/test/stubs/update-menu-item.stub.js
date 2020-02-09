@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateMenuItemStub = {
-    id: 1,
-    data: {
-        price: 1,
-        available: 1
-    }
+    price: 1,
+    available: 1
 };
 //# sourceMappingURL=update-menu-item.stub.js.map

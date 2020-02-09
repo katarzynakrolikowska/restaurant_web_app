@@ -19,6 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 
@@ -44,7 +45,8 @@ import { MatDividerModule } from '@angular/material/divider';
         MatToolbarModule,
         MatCheckboxModule,
         MatListModule,
-        MatDividerModule
+        MatDividerModule,
+        MatMenuModule
     ]
 })
 

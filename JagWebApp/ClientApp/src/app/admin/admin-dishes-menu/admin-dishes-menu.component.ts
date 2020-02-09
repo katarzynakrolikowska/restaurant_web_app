@@ -3,9 +3,9 @@ import { MenuService } from '../../services/menu.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { OrdinaryMenuItem } from '../../models/ordinary-menu-item';
 import { MainMenuItem } from '../../models/main-menu-item';
-import { UpdateMenuItem } from '../../models/update-menu-item';
 import { Router } from '@angular/router';
 import { Dish } from '../../models/dish';
+import { CATEGORY_ALL_MENU_ITEMS_ID, CATEGORY_MAIN_MENU_ITEM_ID } from '../../consts/app-consts';
 
 
 @Component({
@@ -14,10 +14,15 @@ import { Dish } from '../../models/dish';
     styleUrls: ['./admin-dishes-menu.component.css']
 })
 export class AdminDishesMenuComponent implements OnInit {
+    categoryAll = CATEGORY_ALL_MENU_ITEMS_ID;
+    categoryMainItem = CATEGORY_MAIN_MENU_ITEM_ID;
+
     ordinaryMenuItems: Array<OrdinaryMenuItem> = [];
     mainMenuItem: MainMenuItem;
     filteredMenuItems: Array<OrdinaryMenuItem> = [];
-    currentSelectedCategoryId = 0;
+    
+    currentSelectedCategoryId = CATEGORY_ALL_MENU_ITEMS_ID;
+    
 
     constructor(
         private menuService: MenuService,
@@ -35,7 +40,9 @@ export class AdminDishesMenuComponent implements OnInit {
                         this.mainMenuItem = item;
                 });
 
-                this.sortDishesByCategoryId(this.mainMenuItem.dishes);
+                if (this.mainMenuItem) 
+                    this.sortDishesByCategoryId(this.mainMenuItem.dishes);
+
                 this.sortOrdinaryMenuItemsByCategoryId(this.ordinaryMenuItems);
                 this.filteredMenuItems = this.ordinaryMenuItems;
                 this.spinner.hide();
@@ -43,7 +50,7 @@ export class AdminDishesMenuComponent implements OnInit {
     }
 
     addDishToMenu() {
-        this.router.navigate(['admin/menu/new/'  + 'item']);
+        this.router.navigate(['admin/menu/'  + 'item' + '/new']);
     }
 
     removeItemFromMenu(item: OrdinaryMenuItem) {
@@ -53,21 +60,21 @@ export class AdminDishesMenuComponent implements OnInit {
         }
     }
 
-    updateItem(updateMenuItem: UpdateMenuItem) {
-        let index = this.ordinaryMenuItems.findIndex(i => i.id === updateMenuItem.id);
-        this.ordinaryMenuItems[index].price = updateMenuItem.data.price;
-        this.ordinaryMenuItems[index].available = updateMenuItem.data.available;
-    }
-
-    updateMainMenuItem(updateMenuItem: UpdateMenuItem) {
-        this.mainMenuItem.price = updateMenuItem.data.price;
-        this.mainMenuItem.available = updateMenuItem.data.available;
+    updateItem(data) {
+        let index = this.ordinaryMenuItems.findIndex(i => i.id === data.id);
+        this.ordinaryMenuItems[index].price = data.item.price;
+        this.ordinaryMenuItems[index].available = data.item.available;
     }
 
     toggleCategory(categoryId) {
         this.currentSelectedCategoryId = categoryId;
-        categoryId === 0 ? this.filteredMenuItems = this.ordinaryMenuItems : 
+
+        categoryId === CATEGORY_ALL_MENU_ITEMS_ID ? this.filteredMenuItems = this.ordinaryMenuItems :
             this.filteredMenuItems = this.ordinaryMenuItems.filter(item => item.dish.category.id === categoryId);
+    }
+
+    removeMainItem() {
+        this.mainMenuItem = null;
     }
 
     private sortDishesByCategoryId(array: Array<Dish>) {

@@ -40,9 +40,9 @@ export class DialogEditMenuItemComponent implements OnInit {
                 '';
     }
 
-    getLimitErrorMessage() {
+    getAvailableErrorMessage() {
         return this.available.hasError('required') ? ERROR_REQUIRED_MESSAGE :
-            this.available.hasError('min') ? ERROR_PATTERN_MESSAGE :
+            this.available.hasError('min') ? ERROR_MIN_MESSAGE :
                 '';
     }
 }

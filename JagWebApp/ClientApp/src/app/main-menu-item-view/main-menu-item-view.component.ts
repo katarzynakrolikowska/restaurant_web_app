@@ -1,12 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { MainMenuItem } from '../models/main-menu-item';
-import { MatDialog } from '@angular/material';
-import { DialogEditMenuItemComponent } from '../admin/dialog-edit-menu-item/dialog-edit-menu-item.component';
-import { UpdateMenuItem } from '../models/update-menu-item';
-import { MenuService } from '../services/menu.service';
-import { ToastrService } from 'ngx-toastr';
-import { SUCCESS_UPDATE_MENU_MESSAGE } from '../user-messages/messages';
 import { Router } from '@angular/router';
+import { MenuButton } from '../models/menu-button';
+import { MenuService } from '../services/menu.service';
 
 @Component({
   selector: 'app-main-menu-item-view',
@@ -14,47 +10,50 @@ import { Router } from '@angular/router';
   styleUrls: ['./main-menu-item-view.component.css']
 })
 export class MainMenuItemViewComponent implements OnInit {
-
+    buttons: Array<MenuButton>;
     @Input() mainMenuItem: MainMenuItem;
+    @Output() onDeleteMainMenuItem = new EventEmitter();
 
-    @Output() onUpdateMainMenuItem = new EventEmitter();
-
-
-    constructor(
-        public dialog: MatDialog,
-        private menuService: MenuService,
-        private toastr: ToastrService,
-        private router: Router
-    ) { }
+    constructor(private router: Router, private menuService: MenuService) { }
 
     ngOnInit() {
-        
+        this.buttons = [
+            { label: 'Dodaj', icon: 'add' },
+            { label: 'Edytuj', icon: 'edit' },
+            { label: 'Usuń', icon: 'delete' }
+        ];
+    }
+
+    onButtonClick(buttonLabel: string) {
+        switch (buttonLabel) {
+            case this.buttons[0].label:
+                this.addMainItem();
+                break;
+            case this.buttons[1].label:
+                this.editMainItem();
+                break;
+            case this.buttons[2].label:
+                this.removeMainItem();
+                break;
+            default: return;
+        }
     }
 
     addMainItem() {
-        this.router.navigate(['admin/menu/new/' + 'mainitem'])
+        this.router.navigate(['admin/menu/mainitem/new']);
     }
 
-    showModal() {
-        const dialogRef = this.dialog.open(DialogEditMenuItemComponent, {
-            data: { price: this.mainMenuItem.price, available: this.mainMenuItem.available }
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result)
-                this.updateItem(result);
-        });
+    editMainItem() {
+        if (this.mainMenuItem)
+            this.router.navigate(['admin/menu/mainitem/edit/' + this.mainMenuItem.id]);
     }
 
-    updateItem(data) {
-        let item: UpdateMenuItem = {
-            id: this.mainMenuItem.id,
-            data: data
-        }
-        this.menuService.updateItem(item)
-            .subscribe(() => {
-                this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.onUpdateMainMenuItem.emit(item);
-            });
+    removeMainItem() {
+        if (this.mainMenuItem)
+            this.menuService.deleteItem(this.mainMenuItem.id)
+                .subscribe(() => {
+                    this.onDeleteMainMenuItem.emit();
+                });
     }
+
 }

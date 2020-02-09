@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DishService } from '../../services/dish.service';
 import { Dish } from '../../models/dish';
@@ -6,20 +6,18 @@ import {
     ERROR_REQUIRED_MESSAGE,
     ERROR_MISMATCH_MENU_ITEMS_MESSAGE,
     ERROR_PATTERN_MESSAGE,
-    SUCCESS_UPDATE_MENU_MESSAGE,
-    ERROR_MIN_MESSAGE,
+    SUCCESS_UPDATE_MENU_MESSAGE,    ERROR_MIN_MESSAGE,
     ERROR_SERVER_MESSAGE
 } from '../../user-messages/messages';
 import { menuItemMatch } from '../../validators/menu-item.validator';
 import { MenuService } from '../../services/menu.service';
 import { ToastrService } from 'ngx-toastr';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { CustomErrorStateMatcher } from '../../helpers/custom-error-state-matcher';
 import { InputAutocompleteData } from '../../models/input-autocomplete-data';
 import { SaveMenuItem } from '../../models/save-menu-item';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MainMenuItem } from '../../models/main-menu-item';
+import { UpdateMenuItem } from '../../models/update-menu-item';
 
 
 
@@ -28,7 +26,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     templateUrl: './admin-menu-form.component.html',
     styleUrls: ['./admin-menu-form.component.css']
 })
-export class AdminMenuFormComponent implements OnInit {
+export class AdminMenuFormComponent implements OnInit, OnChanges {
+    
     form: FormGroup;
     dishesFromService: Array<Dish>;
     dishesGroup: Array<InputAutocompleteData> = [];
@@ -36,6 +35,8 @@ export class AdminMenuFormComponent implements OnInit {
     routeParam: string;
     dishesToSave: Array<Dish> = [];
 
+    @Input() mainMenuItemToUpdate: MainMenuItem;
+    @Input() isUpdating: boolean;
 
     constructor(
         private dishService: DishService,
@@ -52,36 +53,24 @@ export class AdminMenuFormComponent implements OnInit {
 
     ngOnInit() {
         this.initForm();
-
+        
         this.dishService.getDishes()
-            .subscribe(result => {
-                let group = {};
-                this.dishesFromService = result;
-
+            .subscribe(data => {
+                this.dishesFromService = data as Array<Dish>;
                 this.setDishValidators();
-                
-                
-                result.forEach(dish => {
-                    group[dish.category.name] = group[dish.category.name] || [];
-                    group[dish.category.name]
-                        .push({ id: dish.id, name: dish.name, amount: dish.amount });
-                });
-
-                for (let [key, value] of Object.entries(group)) {
-                    let dishes = value as Array<Dish>;
-                    dishes.sort((a, b) => a.name.localeCompare(b.name));
-
-                    let data: InputAutocompleteData = {
-                        categoryName: key,
-                        dishes: dishes
-                    };
-
-                    this.dishesGroup.push(data);
-                }
+                this.setDishesGroup();
 
                 this.filteredDishesGroup = this.dishesGroup = this.dishesGroup.sort((a, b) =>
                     a.categoryName.localeCompare(b.categoryName));
             });
+    }
+
+    ngOnChanges(): void {
+        if (this.mainMenuItemToUpdate) {
+            this.dishesToSave = this.mainMenuItemToUpdate.dishes;
+            this.setFormValues();
+        }
+
     }
 
     filterDishes() {
@@ -91,15 +80,15 @@ export class AdminMenuFormComponent implements OnInit {
     }
 
     get dish() {
-        return this.form.get('dishId');
+        return this.form.get('dish');
     }
 
     get price() {
         return this.form.get('price');
     }
 
-    get limit() {
-        return this.form.get('limit');
+    get available() {
+        return this.form.get('available');
     }
 
     getDishErrorMessage() {
@@ -115,9 +104,9 @@ export class AdminMenuFormComponent implements OnInit {
                 '';
     }
 
-    getLimitErrorMessage() {
-        return this.limit.hasError('required') ? ERROR_REQUIRED_MESSAGE :
-            this.limit.hasError('min') ? ERROR_PATTERN_MESSAGE:
+    getAvailableErrorMessage() {
+        return this.available.hasError('required') ? ERROR_REQUIRED_MESSAGE :
+            this.available.hasError('min') ? ERROR_PATTERN_MESSAGE:
                 '';
     }
 
@@ -130,27 +119,35 @@ export class AdminMenuFormComponent implements OnInit {
 
         this.filteredDishesGroup = this.dishesGroup;
     }
-
-    removeDishFromSaveList(dishId) {
-        let index = this.dishesToSave.findIndex(d => d.id === dishId);
-        this.dishesToSave.splice(index, 1);
-
+    
+    updateDishesToSave(dishes: Array<Dish>) {
+        this.dishesToSave = dishes;
         if (this.dishesToSave.length === 0)
             this.dish.setErrors({ dishesEmpty: true });
+    }
+
+    getSelectedDishName(dish: Dish) {
+        return dish ? `${dish.name} - ${dish.amount} szt.` : '';
     }
 
     onSave() {     
         if (this.form.invalid)
             return;
 
-        let menuItem: SaveMenuItem = {
-            dishes: this.getDishesToSave(),
+        !this.mainMenuItemToUpdate ? this.saveItem() : this.updateItem();
+
+        this.filteredDishesGroup = this.dishesGroup;
+    }
+
+    private saveItem() {
+        let item: SaveMenuItem = {
+            dishes: this.getDishesToSaveIds(),
             price: this.price.value,
-            limit: this.limit.value,
+            available: this.available.value,
             isMain: this.routeParam === 'mainitem'
         };
 
-        this.menuService.create(menuItem)
+        this.menuService.create(item)
             .subscribe(() => {
                 this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
                 this.router.navigate(['admin/menu']);
@@ -161,12 +158,20 @@ export class AdminMenuFormComponent implements OnInit {
                 } else
                     this.toastr.error(ERROR_SERVER_MESSAGE);
             });
-
-        this.filteredDishesGroup = this.dishesGroup;
     }
 
-    getSelectedDishName(dish: Dish) {
-        return dish ? `${dish.name} - ${dish.amount} szt.` : '';
+    private updateItem() {
+        let item: UpdateMenuItem = {
+            dishes: this.getDishesToSaveIds(),
+            price: this.price.value,
+            available: this.available.value
+        };
+
+        this.menuService.updateItem(this.mainMenuItemToUpdate.id, item)
+            .subscribe(() => {
+                this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
+                this.router.navigate(['admin/menu']);
+            });
     }
 
     private filterGroup(value: string): InputAutocompleteData[] {
@@ -183,7 +188,29 @@ export class AdminMenuFormComponent implements OnInit {
         return opt.filter(item => item.name.toLowerCase().includes(filterValue));
     };
 
-    private getDishesToSave() {
+    private setDishesGroup() {
+        let group = {};
+
+        this.dishesFromService.forEach(dish => {
+            group[dish.category.name] = group[dish.category.name] || [];
+            group[dish.category.name]
+                .push({ id: dish.id, name: dish.name, amount: dish.amount });
+        });
+
+        for (let [key, value] of Object.entries(group)) {
+            let dishes = value as Array<Dish>;
+            dishes.sort((a, b) => a.name.localeCompare(b.name));
+
+            let data: InputAutocompleteData = {
+                categoryName: key,
+                dishes: dishes
+            };
+
+            this.dishesGroup.push(data);
+        }
+    }
+
+    private getDishesToSaveIds() {
         let ids: Array<number> = [];
         if (this.routeParam === 'mainitem') 
             this.dishesToSave.forEach(d => ids.push(d.id));
@@ -197,12 +224,21 @@ export class AdminMenuFormComponent implements OnInit {
             this.dish.setValidators(menuItemMatch(this.dishesFromService));
     }
 
+
     private initForm() {
         this.form = new FormGroup({
-            dishId: new FormControl('', Validators.required),
+            dish: new FormControl(''),
             price: new FormControl('', [Validators.required, Validators.min(0.01)]),
-            limit: new FormControl('', [Validators.required, Validators.min(0)])
+            available: new FormControl('', [Validators.required, Validators.min(0)])
         });
+
+        if (!this.isUpdating)
+            this.dish.setValidators(Validators.required);
+    }
+
+    private setFormValues() {
+        this.price.setValue(this.mainMenuItemToUpdate.price);
+        this.available.setValue(this.mainMenuItemToUpdate.available);
     }
 }
 

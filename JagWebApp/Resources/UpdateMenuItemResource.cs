@@ -1,4 +1,5 @@
 ﻿using DataAnnotationsExtensions;
+using JagWebApp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +10,8 @@ namespace JagWebApp.Resources
 {
     public class UpdateMenuItemResource
     {
+        public ICollection<int> Dishes { get; set; }
+
         [Min(0)]
         [Required]
         public decimal Price { get; set; }

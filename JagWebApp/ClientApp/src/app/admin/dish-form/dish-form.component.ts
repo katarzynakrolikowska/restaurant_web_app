@@ -39,7 +39,7 @@ export class DishFormComponent implements OnInit {
         if (route.snapshot.routeConfig.path === 'admin/dishes/new')
             return;
         else {
-            this.id = +this.route.snapshot.params['id'];;
+            this.id = +this.route.snapshot.params['id'];
             if (isNaN(this.id) || this.id <= 0) {
                 router.navigate(['/admin/dishes']);
                 return;

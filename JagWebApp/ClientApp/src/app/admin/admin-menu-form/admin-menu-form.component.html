@@ -10,7 +10,7 @@
           <mat-label>Danie</mat-label>
           <input type="text"
                  matInput placeholder="Danie"
-                 formControlName="dishId"
+                 formControlName="dish"
                  [matAutocomplete]="autoGroup"
                  (keyup)="filterDishes()"/>
           <mat-error *ngIf="dish.invalid">{{ getDishErrorMessage() }}</mat-error>
@@ -41,28 +41,17 @@
         <mat-form-field appearance="outline" class="position-block">
           <mat-label>Ilość dostępnych porcji</mat-label>
           <input matInput
-                 formControlName="limit"
+                 formControlName="available"
                  placeholder="Ilość dostępnych porcji"
                  type="number"
                  [errorStateMatcher]="matcher">
-          <mat-error *ngIf="limit.invalid">{{ getLimitErrorMessage() }}</mat-error>
+          <mat-error *ngIf="available.invalid">{{ getAvailableErrorMessage() }}</mat-error>
         </mat-form-field>
       </div>
       <div *ngIf="routeParam === 'mainitem'" class="mb-2">
-        <mat-list role="list">
-          <div *ngFor="let dish of dishesToSave">
-            <mat-list-item role="listitem">
-              {{ dish.name }}
-              <button mat-icon-button type="button" class="element-right" (click)="removeDishFromSaveList(dish.id)">
-                <mat-icon>delete_outline</mat-icon>
-              </button>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-          </div>
-          
-        </mat-list>
+        <app-dishes-list [dishes]="dishesToSave" (onDishClick)="updateDishesToSave($event)"></app-dishes-list>
       </div>
-      <button mat-raised-button color="primary" type="submit" class="mt-2 mb-4">Dodaj</button>
+      <button mat-raised-button color="primary" type="submit" class="mt-2 mb-4">Zapisz</button>
     </form>
   </div>
 </div>

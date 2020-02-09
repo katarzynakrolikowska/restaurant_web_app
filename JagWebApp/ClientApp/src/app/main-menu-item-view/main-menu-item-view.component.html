@@ -1,17 +1,9 @@
 
-  <mat-toolbar class="mb-3">
-    <span>Zestaw dnia</span>
-    <span class="toolbar-spacer"></span>
-    <button mat-mini-fab class="mx-2" (click)="addMainItem()">
-      <mat-icon>add</mat-icon>
-    </button>
-    <button mat-mini-fab class="mx-2">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button mat-mini-fab class="mx-2">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </mat-toolbar>
+<mat-toolbar class="mb-3">
+  <span>Zestaw dnia</span>
+  <span class="toolbar-spacer"></span>
+  <app-menu-buttons [buttons]="buttons" (onButtonClick)="onButtonClick($event)"></app-menu-buttons>
+</mat-toolbar>
 <div *ngIf="!mainMenuItem; else showMainMenuItem">
   Brak zestawu dnia
 </div>
@@ -25,16 +17,14 @@
       <div class="col-12 text-center font-weight-bolder font-size-bigger mb-2">
         {{ mainMenuItem.price | currency : '' : ''  }} zł
       </div>
-      <div class="col-12 text-center mb-2">
+      <div class="col-12 text-center mb-4">
         Dostepne porcje:
         <span *ngIf="mainMenuItem.available > 0; else noProducts">{{ mainMenuItem.available }}</span>
         <ng-template #noProducts>
           brak
         </ng-template>
       </div>
-      <div class="col-12 text-center mb-3">
-        <button mat-button color="primary" (click)="showModal()">EDYTUJ</button>
-      </div>
+      
     </div>
   </div>
 </ng-template>

@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { mainMenuItemStubWithOneDish, mainMenuItemStubWithTwoDishes } from '../../test/stubs/main-menu-item.stub';
 import { ordinaryMenuItemStub } from '../../test/stubs/ordinary-menu-item.stub';
+import { CATEGORY_ALL_MENU_ITEMS_ID } from '../../consts/app-consts';
 
 describe('AdminDishesMenuComponent', () => {
     const baseURL = '';
@@ -64,23 +65,23 @@ describe('AdminDishesMenuComponent', () => {
     });
 
     it('should update menu item when updateItem is called', () => {
-        let item = {
+        let data = {
             id: 1,
-            data: {
+            item: {
                 price: 2,
                 available: 2
             }
         };
 
-        component.updateItem(item);
-        let updatedItem = component.ordinaryMenuItems.filter(i => i.id === item.id)[0];
+        component.updateItem(data);
+        let updatedItem = component.ordinaryMenuItems.filter(i => i.id === data.id)[0];
 
         expect(updatedItem.available).toBe(2);
         expect(updatedItem.price).toBe(2);
     });
 
-    it('should filter menu items to all items when toggleCategory is called with 0', () => {
-        component.toggleCategory(0);
+    it('should filter menu items to all items when toggleCategory is called with CATEGORY_ALL_MENU_ITEMS_ID', () => {
+        component.toggleCategory(CATEGORY_ALL_MENU_ITEMS_ID);
 
         expect(component.filteredMenuItems.length).toBe(1);
     });

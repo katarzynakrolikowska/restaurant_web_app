@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { BlankComponent } from '../../test/blank/blank.component';
+import { mainMenuItemStubWithTwoDishes } from '../../test/stubs/main-menu-item.stub';
 
 describe('AdminMenuFormComponent', () => {
     const baseURL = '';
@@ -76,7 +77,7 @@ describe('AdminMenuFormComponent', () => {
 
         dishControl = component.dish;
         priceControl = component.price;
-        limitControl = component.limit;
+        limitControl = component.available;
     });
 
     it('should create', () => {
@@ -106,25 +107,16 @@ describe('AdminMenuFormComponent', () => {
         expect(component.filteredDishesGroup[0].categoryName).toBe('categoryA');
     });
 
-    it('should create menu item when onSave is called and form is valid', () => {
-        let spy = spyOn(menuService, 'create').and.returnValue(of(Object));
-        setFormsControl();
-        component.routeParam = 'item';
+    it('should update dishesToSave when updateDishesToSave is callled', () => {
+        component.updateDishesToSave([dish1]);
 
-        component.onSave();
-
-        expect(spy).toHaveBeenCalled();
+        expect(component.dishesToSave.length).toBe(1);
     });
 
-    it('should show error when onSave is called and menuService returns error', () => {
-        spyOn(menuService, 'create').and.callFake(() => throwError(new Error('error')));
-        let spy = spyOn(toastr, 'error');
-        setFormsControl();
-        component.routeParam = 'item';
+    it('should set error of dish control when dishesToSave is empty after updating', () => {
+        component.updateDishesToSave([]);
 
-        component.onSave();
-
-        expect(spy).toHaveBeenCalled();
+        expect(dishControl.errors).toEqual({ dishesEmpty: true });
     });
 
     it('should add dish to save list when addDishToSaveList is called and main item is creating', () => {
@@ -143,14 +135,35 @@ describe('AdminMenuFormComponent', () => {
         component.addDishToSaveList(dish1);
 
         expect(component.dishesToSave.includes(dish1)).toBeFalsy();
+    }); 
+
+    it('should create menu item when onSave is called, form is valid and main item to update is undefined', () => {
+        let spy = spyOn(menuService, 'create').and.returnValue(of(Object));
+        setFormsControl();
+
+        component.onSave();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('should remove dish from save list when removeDishFromSaveList is called', () => {
-        component.dishesToSave = [dish1];
+    it('should show error when onSave is called and item creating failed', () => {
+        spyOn(menuService, 'create').and.callFake(() => throwError(new Error('error')));
+        let spy = spyOn(toastr, 'error');
+        setFormsControl();
 
-        component.removeDishFromSaveList(dish1.id);
+        component.onSave();
 
-        expect(component.dishesToSave.includes(dish1)).toBeFalsy();
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should update menu item when onSave is called, form is valid and main item to update is defined', () => {
+        component.mainMenuItemToUpdate = mainMenuItemStubWithTwoDishes;
+        let spy = spyOn(menuService, 'updateItem').and.returnValue(of(Object));
+        setFormsControl();
+
+        component.onSave();
+
+        expect(spy).toHaveBeenCalled();
     });
 
     function setFormsControl() {
