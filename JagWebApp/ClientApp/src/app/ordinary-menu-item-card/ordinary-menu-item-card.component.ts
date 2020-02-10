@@ -15,6 +15,7 @@ import { UpdateMenuItem } from '../models/update-menu-item';
 export class OrdinaryMenuItemCardComponent implements OnInit {
     defualtImg: string;
     @Input() menuItem: OrdinaryMenuItem;
+    @Input() isAdmin: boolean;
     @Output() onDeleteMenuItem = new EventEmitter();
     @Output() onUpdateMenuItem = new EventEmitter();
 
