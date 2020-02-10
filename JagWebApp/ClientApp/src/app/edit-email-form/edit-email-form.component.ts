@@ -58,11 +58,11 @@ export class EditEmailFormComponent implements OnInit {
             this.spinner.show();
 
             this.user.email = this.email.value;
-            this.userService.saveEmail(this.user).subscribe(() => {
+            this.userService.saveEmail(this.user)
+                .subscribe(() => {
                 this.spinner.hide();
                 this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
             });
         }
     }
-
 }

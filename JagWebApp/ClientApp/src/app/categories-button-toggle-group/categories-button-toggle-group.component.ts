@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
+import { CATEGORY_ALL_MENU_ITEMS_ID, CATEGORY_MAIN_MENU_ITEM_ID } from '../consts/app-consts';
 
 @Component({
   selector: 'app-categories-button-toggle-group',
@@ -17,17 +18,22 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
         this.categoryService.getCategories()
             .subscribe((result: Array<Category>) => {
                 this.categories = result.sort((a, b) => a.name.localeCompare(b.name));
-                let category: Category = {
-                    id: 0,
-                    name: 'Wszystkie kategorie'
+                let categoryAll: Category = {
+                    id: CATEGORY_ALL_MENU_ITEMS_ID,
+                    name: 'Wszystkie dania'
                 };
 
-                this.categories.unshift(category);
+                let categoryMainItem: Category = {
+                    id: CATEGORY_MAIN_MENU_ITEM_ID,
+                    name: 'Zestaw dnia'
+                };
+               
+                this.categories.unshift(categoryMainItem);
+                this.categories.unshift(categoryAll);
             });
     }
 
     toggle(categoryId) {
         this.onToggleCategory.emit(categoryId);
     }
-
 }

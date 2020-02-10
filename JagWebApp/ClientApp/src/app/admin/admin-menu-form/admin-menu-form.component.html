@@ -1,46 +1,57 @@
 
-  <form [formGroup]="form" (ngSubmit)="onSave()" class="p-4 tab-content-border">
-    <div class="mb-2">
-      <mat-form-field appearance="outline" class="position-block">
-        <mat-label>Danie</mat-label>
-        <input type="text"
-               matInput placeholder="Danie"
-               formControlName="dishId"
-               [matAutocomplete]="autoGroup"
-               (keyup)="filterDishes()"
-               [errorStateMatcher]="matcher" />
-        <mat-error *ngIf="dish.invalid">{{getDishErrorMessage()}}</mat-error>
-        <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="getSelectedDishName">
-          <mat-optgroup *ngFor="let group of filteredDishesGroup" [label]="group.categoryName">
-            <mat-option *ngFor="let dish of group.dishes" [value]="dish">
-              {{dish.name }} - {{ dish.amount }} szt.
-            </mat-option>
-          </mat-optgroup>
-        </mat-autocomplete>
-      </mat-form-field>
-    </div>
-    <div class="mb-2">
-      <mat-form-field appearance="outline" class="position-block">
-        <mat-label>Cena</mat-label>
-        <input matInput
-               formControlName="price"
-               placeholder="Cena"
-               type="number"
-               step="0.01"
-               [errorStateMatcher]="matcher">
-        <mat-error *ngIf="price.invalid">{{ getPriceErrorMessage() }}</mat-error>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field appearance="outline" class="position-block" >
-        <mat-label>Ilość dostępnych porcji</mat-label>
-        <input matInput
-               formControlName="limit"
-               placeholder="Ilość dostępnych porcji"
-               type="number"
-               [errorStateMatcher]="matcher">
-        <mat-error *ngIf="limit.invalid">{{ getLimitErrorMessage() }}</mat-error>
-      </mat-form-field>
-    </div>
-    <button mat-raised-button color="primary" [disabled]="form.invalid" type="submit" class="mt-2 mb-4">Dodaj</button>
-  </form>
+<div class="row">
+  <mat-toolbar class="mb-3 col-12">
+    Dodaj pozycję do Menu
+  </mat-toolbar>
+  <div class="col-12 col-md-10 col-lg-6">
+    <form [formGroup]="form" (ngSubmit)="onSave()" class="p-4">
+      <div class="mb-2">
+        <mat-form-field appearance="outline" class="position-block">
+          <mat-label>Danie</mat-label>
+          <input type="text"
+                 matInput placeholder="Danie"
+                 formControlName="dish"
+                 [matAutocomplete]="autoGroup"
+                 (keyup)="filterDishes()"/>
+          <mat-error *ngIf="dish.invalid">{{ getDishErrorMessage() }}</mat-error>
+          <mat-autocomplete #autoGroup="matAutocomplete"
+                            [displayWith]="getSelectedDishName"
+                            (optionSelected)="addDishToSaveList($event.option.value)">
+            <mat-optgroup *ngFor="let group of filteredDishesGroup" [label]="group.categoryName">
+              <mat-option *ngFor="let dish of group.dishes" [value]="dish">
+                {{ dish.name }} - {{ dish.amount }} szt.
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="outline" class="position-block">
+          <mat-label>Cena</mat-label>
+          <input matInput
+                 formControlName="price"
+                 placeholder="Cena"
+                 type="number"
+                 step="0.01"
+                 [errorStateMatcher]="matcher">
+          <mat-error *ngIf="price.invalid">{{ getPriceErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="outline" class="position-block">
+          <mat-label>Ilość dostępnych porcji</mat-label>
+          <input matInput
+                 formControlName="available"
+                 placeholder="Ilość dostępnych porcji"
+                 type="number"
+                 [errorStateMatcher]="matcher">
+          <mat-error *ngIf="available.invalid">{{ getAvailableErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div *ngIf="routeParam === 'mainitem'" class="mb-2">
+        <app-dishes-list [dishes]="dishesToSave" (onDishClick)="updateDishesToSave($event)"></app-dishes-list>
+      </div>
+      <button mat-raised-button color="primary" type="submit" class="mt-2 mb-4">Zapisz</button>
+    </form>
+  </div>
+</div>

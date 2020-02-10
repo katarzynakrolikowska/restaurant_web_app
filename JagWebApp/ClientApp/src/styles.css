@@ -71,6 +71,11 @@ button:focus {
   margin: auto;
 }
 
+.element-right {
+  display: table !important;
+  margin-left: auto !important;
+}
+
 /*.cursor-pointer {
   cursor: pointer !important;
 }*/
@@ -79,8 +84,36 @@ button:focus {
   width: 100%;
 }
 
-.tab-content-border {
+/*.tab-content-border {
   border: 1px solid rgba(0,0,0,.12);
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+}*/
+
+.bg-lightgray {
+  background-color: #F7F9F9;
+}
+
+.img-default-dimensions {
+  max-height: 157.5px !important;
+  width: 150px !important;
+}
+
+.mat-card-title,
+.mat-card-header {
+  font-size: 16px !important;
+}
+
+.font-size-bigger {
+  font-size: 20px !important;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 768px) {
+  .mat-toolbar {
+    font-size: 16px !important;
+  }
 }

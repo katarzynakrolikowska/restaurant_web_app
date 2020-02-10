@@ -23,7 +23,6 @@ import {
   styleUrls: ['./register-form.component.css']
 })
 export class RegisterFormComponent implements OnInit {
-
     user: User;
     form: FormGroup;
     @Output() onNewUserRegistered = new EventEmitter();

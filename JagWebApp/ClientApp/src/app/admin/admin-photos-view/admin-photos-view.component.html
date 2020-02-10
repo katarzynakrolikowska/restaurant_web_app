@@ -1,0 +1,31 @@
+
+<h4>Zaktualizuj zdjęcie</h4>
+<mat-form-field appearance="outline">
+  <mat-label>Dodaj zdjęcie</mat-label>
+  <ngx-mat-file-input #removableInput placeholder="Photo" (change)="uploadPhoto()" #fileInput></ngx-mat-file-input>
+  <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <mat-icon matSuffix>folder</mat-icon>
+</mat-form-field>
+<div *ngIf="photos" >
+  <div *ngFor="let p of photos" class="position-inline mr-4">
+    <img src="/uploads/{{p.thumbnailName}}" class="img-thumbnail m-1" />
+    <div class="m-1 position-block" >
+      <button mat-raised-button
+              [matTooltip]="p.isMain ? 'Główne zdjęcie' : 'Ustaw jako główne zdjęcie'"
+              [class.photo-main]="p.isMain"
+              class="button-icon-width mr-4"
+              (click)="toggleMainPhoto(p.id)">
+        <mat-icon>check_circle_outline</mat-icon>
+      </button>
+      <button mat-raised-button
+              color="warn"
+              matTooltip="Usuń zdjęcie"
+              class="button-icon-width"
+              (click)="deletePhoto(p.id)">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

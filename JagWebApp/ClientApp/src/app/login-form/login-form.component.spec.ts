@@ -95,19 +95,6 @@ describe('LoginFormComponent', () => {
         expect(spy).toHaveBeenCalledWith(['/']);
     });
 
-    //it('should redirect user to redirectUrl', () => {
-    //    let router = TestBed.get(Router);
-    //    let route = TestBed.get(ActivatedRoute);
-    //    let spy = spyOn(router, 'navigate');
-    //    spyOn(authService, 'login').and.returnValue(of({}));
-    //    setControls();
-        
-
-    //    component.login();
-
-    //    expect(spy).toHaveBeenCalledWith(['a']);
-    //});
-
     it('should set error notification when server returns error', () => {
         let errorRespone = new HttpErrorResponse({});
         spyOn(authService, 'login').and.returnValue(throwError(errorRespone));
@@ -127,7 +114,6 @@ describe('LoginFormComponent', () => {
         component.login();
 
         expect(component.errorMessage).toContain('email');
-
     });
 
     function setControls() {

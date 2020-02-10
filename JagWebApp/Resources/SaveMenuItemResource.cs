@@ -10,8 +10,6 @@ namespace JagWebApp.Resources
 {
     public class SaveMenuItemResource
     {
-        public int Id { get; set; }
-
         [CollectionLength]
         public ICollection<int> Dishes { get; set; }
 
@@ -19,7 +17,9 @@ namespace JagWebApp.Resources
         public decimal Price { get; set; }
 
         [Min(0)]
-        public int Limit { get; set; }
+        public int Available { get; set; }
+
+        public bool IsMain { get; set; }
 
         public SaveMenuItemResource()
         {

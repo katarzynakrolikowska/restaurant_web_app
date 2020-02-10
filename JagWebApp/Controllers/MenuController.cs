@@ -41,12 +41,23 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<IEnumerable<MenuItem>, IEnumerable<MenuItemResource>>(menuItems));
         }
 
+        //GET: api/menu/1
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMenuItem(int id)
+        {
+            var item = await _menuRepository.GetMenuItem(id);
+            if (item == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<MenuItem, MenuItemResource>(item));
+        }
+
         //POST: api/menu
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(SaveMenuItemResource saveMenuItemResource)
         {
-            if (saveMenuItemResource.Dishes.Count > 1 && await _menuRepository.GetMainMenuItem() != null)
+            if (saveMenuItemResource.IsMain && await _menuRepository.GetMainMenuItem() != null)
                 return BadRequest("Zestaw dnia już istnieje");
 
             if (!await _dishRepository.DishesExist(saveMenuItemResource.Dishes))
@@ -57,24 +68,22 @@ namespace JagWebApp.Controllers
             _menuRepository.Add(menuItem);
             await _unitOfWork.CompleteAsync();
 
-            var menuItemFromRepo = await _menuRepository.GetMenuItem(menuItem.Id);
-
-            return Ok(_mapper.Map<MenuItemResource>(menuItemFromRepo));
+            return Ok();
         }
 
-        //POST: api/menu/1
+        //PUT: api/menu/1
         [Authorize(Roles = "Admin")]
-        [HttpPost("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMenuItem(int id, UpdateMenuItemResource updateMenuItemResource)
         {
             var item = await _menuRepository.GetMenuItem(id);
             if (item == null)
                 return NotFound();
 
-            item.Price = updateMenuItemResource.Price;
-            item.Limit = updateMenuItemResource.Available - item.Available + item.Limit;
-            item.Available = updateMenuItemResource.Available;
-           
+            if (item.IsMain && (updateMenuItemResource.Dishes == null || updateMenuItemResource.Dishes.Count == 0))
+                return BadRequest();
+
+            _mapper.Map(updateMenuItemResource, item);
             await _unitOfWork.CompleteAsync();
 
             return Ok();

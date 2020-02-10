@@ -17,5 +17,4 @@ namespace JagWebApp.Resources
 
         public int DishId { get; set; }
     }
-
 }

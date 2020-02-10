@@ -1,0 +1,18 @@
+
+  <mat-card class="dish-card mb-4">
+    <img *ngIf="dish.mainPhoto; else defaultImage"
+         mat-card-image src="/uploads/{{ dish.mainPhoto.thumbnailName }}"
+         alt="">
+    <ng-template #defaultImage>
+      <div class="text-center">
+        <img mat-card-image src="/uploads/{{ defualtImg }}" alt="" class="img-default-dimensions">
+      </div>
+    </ng-template>
+    <mat-card-header>
+      <mat-card-title class="mb-1">
+        {{ dish.name }}
+        <span *ngIf="dish.amount > 1">({{ dish.amount }} szt.)</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-subtitle>{{ dish.category.name }}</mat-card-subtitle>
+  </mat-card>

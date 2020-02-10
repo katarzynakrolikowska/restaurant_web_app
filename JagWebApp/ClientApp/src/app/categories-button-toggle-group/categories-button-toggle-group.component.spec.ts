@@ -1,12 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonToggleModule } from '@angular/material';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
-import { categoryStub } from '../test-stub/category.stub';
 import { of } from 'rxjs';
+import { categoryStub } from '../test/stubs/category.stub';
 
 describe('CategoriesButtonToggleGroupComponent', () => {
     const baseURL = '';
@@ -43,7 +42,7 @@ describe('CategoriesButtonToggleGroupComponent', () => {
     });
 
     it('should init categories', () => {
-        expect(component.categories.length).toBe(2);
+        expect(component.categories.length).toBe(3);
     });
 
     it('should emit event when toggle method is called', () => {

@@ -1,0 +1,12 @@
+
+  <mat-list role="list">
+    <div *ngFor="let dish of dishes">
+      <mat-list-item role="listitem">
+        {{ dish.name }}
+        <button mat-icon-button type="button" class="element-right" (click)="removeFromList(dish.id)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-list>

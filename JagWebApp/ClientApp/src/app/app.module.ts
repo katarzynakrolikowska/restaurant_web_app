@@ -1,11 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
-
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -27,19 +25,26 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { SpinnerComponent } from './spinner/spinner.component';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { DishesComponent } from './admin/dishes/dishes.component';
-import { DishFormComponent } from './admin/dish-form/dish-form.component';
-import { DialogCofirmComponent } from './dialog-cofirm/dialog-cofirm.component';
-import { DishTabsComponent } from './admin/dish-tabs/dish-tabs.component';
-import { PhotosViewComponent } from './admin/photos-view/photos-view.component';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { CustomMatPaginatorIntl } from './helpers/custom-mat-paginator-intl';
 import { MatPaginatorIntl } from '@angular/material';
-import { AdminDishesMenuComponent } from './admin/admin-dishes-menu/admin-dishes-menu.component';
 import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
-import { AdminDishCardComponent } from './admin/admin-dish-card/admin-dish-card.component';
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group/categories-button-toggle-group.component';
-import { DialogEditMenuItemComponent } from './admin/dialog-edit-menu-item/dialog-edit-menu-item.component';
+import { MainMenuItemViewComponent } from './main-menu-item-view/main-menu-item-view.component';
+import { BlankComponent } from './test/blank/blank.component';
+import { DishesListComponent } from './dishes-list/dishes-list.component';
+import { AdminMainItemEditFormComponent } from './admin/admin-main-item-edit-form/admin-main-item-edit-form.component';
+import { MenuButtonsComponent } from './menu-buttons/menu-buttons.component';
+import { MenuViewComponent } from './menu-view/menu-view.component';
+import { AdminOrdinaryItemEditDialogComponent } from './admin/admin-ordinary-item-edit-dialog/admin-ordinary-item-edit-dialog.component';
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { OrdinaryMenuItemCardComponent } from './ordinary-menu-item-card/ordinary-menu-item-card.component';
+import { AdminDishesViewComponent } from './admin/admin-dishes-view/admin-dishes-view.component';
+import { AdminDishFormComponent } from './admin/admin-dish-form/admin-dish-form.component';
+import { AdminDishTabsComponent } from './admin/admin-dish-tabs/admin-dish-tabs.component';
+import { AdminPhotosViewComponent } from './admin/admin-photos-view/admin-photos-view.component';
+import { MainMenuItemDishCardComponent } from './main-menu-item-dish-card/main-menu-item-dish-card.component';
+import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view/ordinary-menu-items-view.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -58,16 +63,23 @@ export function tokenGetter() {
     EditPasswordFormComponent,
     SpinnerComponent,
     NotFoundComponent,
-    DishesComponent,
-    DishFormComponent,
-    DialogCofirmComponent,
-    DishTabsComponent,
-    PhotosViewComponent,
-    AdminDishesMenuComponent,
+    AdminDishesViewComponent,
+    AdminDishFormComponent,
+    DialogConfirmComponent,
+    AdminDishTabsComponent,
+    AdminPhotosViewComponent,
+    MenuViewComponent,
     AdminMenuFormComponent,
-    AdminDishCardComponent,
-    DialogEditMenuItemComponent,
+    OrdinaryMenuItemCardComponent,
+    AdminOrdinaryItemEditDialogComponent,
     CategoriesButtonToggleGroupComponent,
+    MainMenuItemDishCardComponent,
+    MainMenuItemViewComponent,
+    BlankComponent,
+    DishesListComponent,
+    AdminMainItemEditFormComponent,
+    MenuButtonsComponent,
+    OrdinaryMenuItemsViewComponent,
 
   ],
   imports: [
@@ -86,27 +98,38 @@ export function tokenGetter() {
               
               {
                   path: 'admin/dishes/new',
-                  component: DishFormComponent,
+                  component: AdminDishFormComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
               {
                   path: 'admin/dishes/edit/:id',
-                  component: DishTabsComponent,
+                  component: AdminDishTabsComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
               {
                   path: 'admin/dishes',
-                  component: DishesComponent,
+                  component: AdminDishesViewComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
               },
               {
-                  path: 'admin/menu',
-                  component: AdminDishesMenuComponent,
+                  path: 'admin/menu/:item/edit/:id',
+                  component: AdminMainItemEditFormComponent,
                   data: { roles: ['Admin'] },
                   canActivate: [AdminGuard]
+              },
+              {
+                  path: 'admin/menu/:item/new',
+                  component: AdminMenuFormComponent,
+                  data: { roles: ['Admin'] },
+                  canActivate: [AdminGuard]
+              },
+              {
+                  path: 'menu',
+                  component: MenuViewComponent,
+                  
               },
               {
                   path: 'user/data',
@@ -133,14 +156,12 @@ export function tokenGetter() {
     NgxSpinnerModule
 
     ],
-    entryComponents: [DialogCofirmComponent, DialogEditMenuItemComponent],
-  providers: [
-      { provide: ErrorHandler, useClass: AppErrorHandler },
-      {
-          provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl
-      }
+    entryComponents: [DialogConfirmComponent, AdminOrdinaryItemEditDialogComponent],
+    providers: [
+        { provide: ErrorHandler, useClass: AppErrorHandler },
+        { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
 
-  ],
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

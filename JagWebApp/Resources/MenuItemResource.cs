@@ -20,6 +20,8 @@ namespace JagWebApp.Resources
 
         public int Available { get; set; }
 
+        public bool IsMain { get; set; }
+
         public MenuItemResource()
         {
             Dishes = new Collection<DishResource>();
