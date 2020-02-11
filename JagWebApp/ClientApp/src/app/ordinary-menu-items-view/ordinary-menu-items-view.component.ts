@@ -1,6 +1,7 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-ordinary-menu-items-view',
@@ -12,7 +13,7 @@ export class OrdinaryMenuItemsViewComponent {
     @Output() onDeleteItem = new EventEmitter();
     @Output() onUpdateItem = new EventEmitter();
         
-    constructor(private router: Router) { }
+    constructor(private router: Router, private authService: AuthService) { }
 
     addDishToMenu() {
         this.router.navigate(['admin/menu/item/new']);

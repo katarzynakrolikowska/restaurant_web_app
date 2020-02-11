@@ -3,7 +3,7 @@
     <mat-toolbar class="mb-3">
       <span>Również w ofercie</span>
       <span class="toolbar-spacer"></span>
-      <button mat-mini-fab class="mx-2" (click)="addDishToMenu()">
+      <button *ngIf="authService.isAdmin()" mat-mini-fab class="mx-2" (click)="addDishToMenu()">
         <mat-icon>add</mat-icon>
       </button>
     </mat-toolbar>
@@ -13,8 +13,9 @@
     <ng-template #showMenuItems>
       <div *ngFor="let item of filteredMenuItems" class="col-md-6 col-lg-4">
         <app-ordinary-menu-item-card [menuItem]="item"
-                             (onDeleteMenuItem)="onDeleteItem.emit($event)"
-                             (onUpdateMenuItem)="onUpdateItem.emit($event)">
+                                     [isAdmin]="authService.isAdmin()"
+                                     (onDeleteMenuItem)="onDeleteItem.emit($event)"
+                                     (onUpdateMenuItem)="onUpdateItem.emit($event)">
         </app-ordinary-menu-item-card>
       </div>
     </ng-template>

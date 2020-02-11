@@ -2,7 +2,10 @@
 <mat-toolbar class="mb-3">
   <span>Zestaw dnia</span>
   <span class="toolbar-spacer"></span>
-  <app-menu-buttons [buttons]="buttons" (onButtonClick)="onButtonClick($event)"></app-menu-buttons>
+  <app-menu-buttons *ngIf="authService.isAdmin()"
+                    [buttons]="buttons"
+                    (onButtonClick)="onButtonClick($event)">
+  </app-menu-buttons>
 </mat-toolbar>
 <div *ngIf="!mainMenuItem; else showMainMenuItem">
   Brak zestawu dnia
@@ -24,7 +27,11 @@
           brak
         </ng-template>
       </div>
-      
+      <div *ngIf="!authService.isAdmin()" class="col-12 text-center mb-3">
+        <button mat-flat-button color="primary">
+          DODAJ DO KOSZYKA
+        </button>
+      </div>
     </div>
   </div>
 </ng-template>

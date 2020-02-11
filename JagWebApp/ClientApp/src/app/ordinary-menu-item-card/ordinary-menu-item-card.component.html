@@ -27,8 +27,14 @@
         </ng-template>
       </div>
     </mat-card-content>
-    <mat-card-actions class="text-center">
-      <button mat-button color="primary" (click)="showModal(menuItem)">EDYTUJ</button>
-      <button mat-button color="warn" (click)="deleteItem(menuItem)">USUŃ</button>
+    <mat-card-actions class="text-center mb-2">
+      <span *ngIf="isAdmin; else displayAddToCartButton">
+        <button mat-button color="primary" (click)="showModal(menuItem)">EDYTUJ</button>
+        <button mat-button color="warn" (click)="deleteItem(menuItem)">USUŃ</button>
+      </span>
+      <ng-template #displayAddToCartButton>
+        <button mat-flat-button color="primary" >DODAJ DO KOSZYKA
+        </button>
+      </ng-template>   
     </mat-card-actions>
   </mat-card>
