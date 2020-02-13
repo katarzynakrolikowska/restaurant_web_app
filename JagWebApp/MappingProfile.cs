@@ -52,6 +52,18 @@ namespace JagWebApp
                     
                 });
 
+            CreateMap<SaveCartResource, Cart>()
+                .ForMember(c => c.Items, opt => opt.Ignore())
+                .AfterMap((cr, c) =>
+                {
+                    c.Items.Add(new CartItem { MenuItemId = cr.MenuItemId, Amount = 1 });
+                });
+
+            CreateMap<SaveCartItemResource, CartItem>()
+                .ForMember(ci => ci.Amount, opt => opt.MapFrom(cir => 1));
+                
+
+
             CreateMap<Dish, DishResource>()
                 .ForMember(dr => dr.MainPhoto, opt => opt.MapFrom(d => d.Photos.SingleOrDefault(p => p.IsMain == true)));
             CreateMap<Dish, SaveDishResource>();
@@ -80,6 +92,9 @@ namespace JagWebApp
                         null
                     }
                 )));
+
+            CreateMap<Cart, CartResource>();
+            CreateMap<CartItem, CartItemResource>();
         }
     }
 }

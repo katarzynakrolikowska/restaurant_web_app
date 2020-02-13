@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,7 +13,7 @@ export class NavMenuComponent {
     isExpanded = false;
     menuRouterLink: string;
 
-    constructor(private authService: AuthService,  private toastr: ToastrService) { }
+    constructor(private authService: AuthService, private toastr: ToastrService, private router: Router) { }
     
     collapse() {
         this.isExpanded = false;
@@ -29,6 +30,7 @@ export class NavMenuComponent {
     logout() {
         localStorage.removeItem('token');
         this.toastr.info("Zostałeś wylogowany");
+        this.router.navigate(['/']);
     }
 
     isAdmin() {

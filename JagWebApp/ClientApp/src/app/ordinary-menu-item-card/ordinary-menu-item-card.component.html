@@ -33,8 +33,8 @@
         <button mat-button color="warn" (click)="deleteItem(menuItem)">USUŃ</button>
       </span>
       <ng-template #displayAddToCartButton>
-        <button mat-flat-button color="primary" >DODAJ DO KOSZYKA
-        </button>
+        <app-add-to-cart-button [menu-item-id]="menuItem.id" [item-available]="menuItem.available > 0">
+        </app-add-to-cart-button>
       </ng-template>   
     </mat-card-actions>
   </mat-card>

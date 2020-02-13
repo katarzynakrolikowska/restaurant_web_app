@@ -39,6 +39,9 @@ export class AuthService {
     }
 
     isAdmin() {
+        if (!this.loggedIn())
+            return false;
+
         this.decodeToken();
         let roles = this.decodedToken.role as Array<string>;
 

@@ -28,9 +28,8 @@
         </ng-template>
       </div>
       <div *ngIf="!authService.isAdmin()" class="col-12 text-center mb-3">
-        <button mat-flat-button color="primary">
-          DODAJ DO KOSZYKA
-        </button>
+        <app-add-to-cart-button [menu-item-id]="mainMenuItem.id" [item-available]="mainMenuItem.available > 0">
+        </app-add-to-cart-button>
       </div>
     </div>
   </div>

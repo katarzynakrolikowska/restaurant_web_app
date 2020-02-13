@@ -36,4 +36,8 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
     toggle(categoryId) {
         this.onToggleCategory.emit(categoryId);
     }
+
+    checked(id) {
+        return id === CATEGORY_ALL_MENU_ITEMS_ID;
+    }
 }

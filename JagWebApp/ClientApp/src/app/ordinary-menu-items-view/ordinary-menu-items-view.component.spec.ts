@@ -3,15 +3,21 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('OrdinaryMenuItemsViewComponent', () => {
+    const baseURL = '';
+
     let component: OrdinaryMenuItemsViewComponent;
     let fixture: ComponentFixture<OrdinaryMenuItemsViewComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [OrdinaryMenuItemsViewComponent],
-            imports: [RouterTestingModule.withRoutes([])],
+            imports: [RouterTestingModule.withRoutes([]), HttpClientModule],
+            providers: [
+                { provide: 'BASE_URL', useValue: baseURL }
+            ],
             schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();

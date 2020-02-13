@@ -45,6 +45,8 @@ import { AdminDishTabsComponent } from './admin/admin-dish-tabs/admin-dish-tabs.
 import { AdminPhotosViewComponent } from './admin/admin-photos-view/admin-photos-view.component';
 import { MainMenuItemDishCardComponent } from './main-menu-item-dish-card/main-menu-item-dish-card.component';
 import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view/ordinary-menu-items-view.component';
+import { AddToCartButtonComponent } from './add-to-cart-button/add-to-cart-button.component';
+import { NavCartButtonComponent } from './nav-cart-button/nav-cart-button.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -80,6 +82,8 @@ export function tokenGetter() {
     AdminMainItemEditFormComponent,
     MenuButtonsComponent,
     OrdinaryMenuItemsViewComponent,
+    AddToCartButtonComponent,
+    NavCartButtonComponent,
 
   ],
   imports: [
@@ -127,16 +131,12 @@ export function tokenGetter() {
                   canActivate: [AdminGuard]
               },
               {
-                  path: 'menu',
-                  component: MenuViewComponent,
-                  
-              },
-              {
                   path: 'user/data',
                   component: UserDataTabsComponent
               }
           ]
-      },
+        },
+        { path: 'menu', component: MenuViewComponent },
         { path: 'login', component: LoginPanelComponent },
         { path: '**', component: NotFoundComponent }
     ]),

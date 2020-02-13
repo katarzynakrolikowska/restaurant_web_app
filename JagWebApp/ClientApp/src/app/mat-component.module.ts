@@ -20,6 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 
@@ -46,7 +47,8 @@ import { MatMenuModule } from '@angular/material/menu';
         MatCheckboxModule,
         MatListModule,
         MatDividerModule,
-        MatMenuModule
+        MatMenuModule,
+        MatBadgeModule
     ]
 })
 

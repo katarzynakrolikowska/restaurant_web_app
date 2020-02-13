@@ -42,6 +42,8 @@ namespace JagWebApp
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {

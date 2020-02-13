@@ -34,6 +34,7 @@ namespace JagWebApp.Controllers
         }
 
         //GET: api/menu
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetMenu()
         {

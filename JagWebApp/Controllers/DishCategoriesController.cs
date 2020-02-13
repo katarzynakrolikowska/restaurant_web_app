@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class DishCategoriesController : ControllerBase
