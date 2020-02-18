@@ -6,12 +6,10 @@ namespace JagWebApp.Core
 {
     public interface ICartItemRepository
     {
-        Task<IEnumerable<CartItem>> GetCartItems(int cartId);
-
         Task<CartItem> GetCartItem(int cartId, int menuItemId);
 
-        int GetCartItemsCount(int cartId);
+        void Add(Cart cart, int menuItemId);
 
-        void Add(CartItem cartItem);
+        void Remove(Cart cart, CartItem item);
     }
 }

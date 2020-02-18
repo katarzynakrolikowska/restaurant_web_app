@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
 {
     [AllowAnonymous]
-    [Route("api/[controller]")]
+    [Route("api/carts/{cartId}/items")]
     [ApiController]
     public class CartItemsController : ControllerBase
     {
@@ -37,39 +33,64 @@ namespace JagWebApp.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        //GET: api/cartItems/count/1
-        [HttpGet("count/{cartId}")]
-        public async Task<IActionResult> GetCartItemsCount(int cartId)
-        {
-            var count = 0;
-
-            if (await _cartRepository.GetCart(cartId) != null)
-                count = _cartItemRepository.GetCartItemsCount(cartId);
-
-            return Ok(count);
-        }
-
-        //POST: api/cartItems
+        //POST: api/carts/1/items
         [HttpPost]
-        public async Task<IActionResult> Create(SaveCartItemResource saveCartItemResource)
+        public async Task<IActionResult> Create(int cartId, [FromBody] int menuItemId)
         {
-            var menuItem = await _menuRepository.GetMenuItem(saveCartItemResource.MenuItemId);
-            if (menuItem == null ||
-                await _cartRepository.GetCart(saveCartItemResource.CartId) == null ||
-                menuItem.Available < 1)
+            var menuItem = await _menuRepository.GetMenuItem(menuItemId);
+            if (menuItem == null)
+                return BadRequest();
+
+            var cart = await _cartRepository.GetCart(cartId);
+            if (cart == null || menuItem.Available < 1)
                 return BadRequest();
 
             var cartItem = await _cartItemRepository
-                .GetCartItem(saveCartItemResource.CartId, saveCartItemResource.MenuItemId);
+                .GetCartItem(cartId, menuItemId);
 
-            if (cartItem != null)
+            if (cartItem == null)
+                _cartItemRepository.Add(cart, menuItemId);
+            else if (cartItem.Amount < menuItem.Available)
                 cartItem.Amount++;
             else
-                _cartItemRepository.Add(_mapper.Map<SaveCartItemResource, CartItem>(saveCartItemResource));
+                return BadRequest();
 
             await _unitOfWork.CompleteAsync();
 
-            return Ok();
+            return Ok(_mapper.Map<Cart, CartResource>(cart));
+        }
+
+        //DELETE: api/carts/1/items/1
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int cartId, int id)
+        {
+            var menuItem = await _menuRepository.GetMenuItem(id);
+            if (menuItem == null)
+                return BadRequest();
+
+            var cart = await _cartRepository.GetCart(cartId);
+            if (cart == null)
+                return BadRequest();
+
+            var cartItem = await _cartItemRepository.GetCartItem(cartId, id);
+            if (cartItem == null)
+                return BadRequest();
+
+            if (cart.Items.Count == 1 && cartItem.Amount == 1)
+            {
+                _cartRepository.Remove(cart);
+                await _unitOfWork.CompleteAsync();
+                return Ok(); 
+            }
+            
+            if (cartItem.Amount == 1)
+                _cartItemRepository.Remove(cart, cartItem);
+            else
+                cartItem.Amount--;
+
+            await _unitOfWork.CompleteAsync();
+
+            return Ok(_mapper.Map<Cart, CartResource>(cart));
         }
     }
 }

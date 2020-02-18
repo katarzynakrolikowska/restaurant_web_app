@@ -11,5 +11,7 @@ namespace JagWebApp.Core
         Task<Cart> GetCart(int id);
 
         void Add(Cart cart);
+
+        void Remove(Cart cart);
     }
 }

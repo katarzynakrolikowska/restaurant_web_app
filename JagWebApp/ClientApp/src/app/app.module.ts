@@ -45,8 +45,8 @@ import { AdminDishTabsComponent } from './admin/admin-dish-tabs/admin-dish-tabs.
 import { AdminPhotosViewComponent } from './admin/admin-photos-view/admin-photos-view.component';
 import { MainMenuItemDishCardComponent } from './main-menu-item-dish-card/main-menu-item-dish-card.component';
 import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view/ordinary-menu-items-view.component';
-import { AddToCartButtonComponent } from './add-to-cart-button/add-to-cart-button.component';
 import { NavCartButtonComponent } from './nav-cart-button/nav-cart-button.component';
+import { CartActionButtonsComponent } from './cart-action-buttons/cart-action-buttons.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -82,7 +82,7 @@ export function tokenGetter() {
     AdminMainItemEditFormComponent,
     MenuButtonsComponent,
     OrdinaryMenuItemsViewComponent,
-    AddToCartButtonComponent,
+    CartActionButtonsComponent,
     NavCartButtonComponent,
 
   ],

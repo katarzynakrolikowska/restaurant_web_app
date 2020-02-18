@@ -3,8 +3,9 @@ import { NavCartButtonComponent } from './nav-cart-button.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CartItemsSharedService } from '../services/cart-items-shared.service';
-import { CartItemsService } from '../services/cart-items.service';
 import { of } from 'rxjs';
+import { CartService } from '../services/cart.service';
+import { cartStub } from '../test/stubs/cart-stub';
 
 
 describe('NavCartButtonComponent', () => {
@@ -13,7 +14,7 @@ describe('NavCartButtonComponent', () => {
     let component: NavCartButtonComponent;
     let fixture: ComponentFixture<NavCartButtonComponent>;
     let cartItemSharedService: CartItemsSharedService;
-    let cartItemService: CartItemsService;
+    let cartService: CartService;
     let spy;
 
     beforeEach(async(() => {
@@ -32,9 +33,9 @@ describe('NavCartButtonComponent', () => {
         fixture = TestBed.createComponent(NavCartButtonComponent);
         component = fixture.componentInstance;
         cartItemSharedService = TestBed.get(CartItemsSharedService);
-        cartItemService = TestBed.get(CartItemsService);
+        cartService = TestBed.get(CartService);
         spyOn(localStorage, 'getItem').and.returnValue("1");
-        spy = spyOn(cartItemService, 'getCartItemsCount').and.returnValue(of(2));
+        spy = spyOn(cartService, 'getCart').and.returnValue(of(cartStub));
 
         fixture.detectChanges();
     });
@@ -43,17 +44,26 @@ describe('NavCartButtonComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should init cart items count if cart exists', () => {
-        expect(spy).toHaveBeenCalledWith("1");
-        expect(component.cartItemsCount).toBe(2);
+    it('should init cart if cart exists', () => {
+        expect(spy).toHaveBeenCalled();
+        expect(component.cartItemsQuantity).toBe(1);
     });
 
     it('should increase cart items count by one when cartItemSharedService share info item is added to cart', () => {
-        spyOnProperty(cartItemSharedService, 'itemsContent$').and.returnValue(of(true));
+        spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(true));
 
         component.ngOnInit();
         fixture.detectChanges();
 
-        expect(component.cartItemsCount).toBe(3);
+        expect(component.cartItemsQuantity).toBe(3);
+    });
+
+    it('should decrease cart items count by one when cartItemSharedService share info item is removed from cart', () => {
+        spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(false));
+
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        expect(component.cartItemsQuantity).toBe(1);
     });
 });

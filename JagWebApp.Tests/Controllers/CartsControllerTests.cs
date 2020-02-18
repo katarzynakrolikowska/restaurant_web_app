@@ -31,9 +31,41 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
+        public void GetCart_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.GetCart(It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void GetCart_WhenCartDoesNotExist_ReturnsBadRequest()
+        {
+            Cart cart = null;
+            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()))
+                .ReturnsAsync(cart);
+
+            var result = await _controller.GetCart(It.IsAny<int>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void GetCart_WhenCartExists_ReturnsOkObjectResult()
+        {
+            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()))
+                .ReturnsAsync(new Cart());
+
+            var result = await _controller.GetCart(It.IsAny<int>()) as OkObjectResult;
+
+            Assert.Equal(200, result.StatusCode);
+            Assert.IsType<CartResource>(result.Value);
+        }
+
+        [Fact]
         public void Create_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Create(It.IsAny<SaveCartResource>());
+            var result = _controller.Create(It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
@@ -43,7 +75,7 @@ namespace JagWebApp.Tests.Controllers
         {
             _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()));
 
-            var result = await _controller.Create(new SaveCartResource()) as BadRequestResult;
+            var result = await _controller.Create(It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -54,7 +86,7 @@ namespace JagWebApp.Tests.Controllers
             _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
                 .ReturnsAsync(new MenuItem { Available = 0 });
 
-            var result = await _controller.Create(new SaveCartResource()) as BadRequestResult;
+            var result = await _controller.Create(It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -64,7 +96,7 @@ namespace JagWebApp.Tests.Controllers
         {
             SetValidInputForCreateMethod();
 
-            await _controller.Create(new SaveCartResource());
+            await _controller.Create(It.IsAny<int>());
 
             _cartRepo.Verify(cr => cr.Add(It.IsAny<Cart>()));
         }
@@ -74,10 +106,10 @@ namespace JagWebApp.Tests.Controllers
         {
             SetValidInputForCreateMethod();
 
-            var result = await _controller.Create(new SaveCartResource()) as OkObjectResult;
+            var result = await _controller.Create(It.IsAny<int>()) as OkObjectResult;
 
             Assert.Equal(200, result.StatusCode);
-            Assert.IsType<int>(result.Value);
+            Assert.IsType<CartResource>(result.Value);
         }
 
         private void SetValidInputForCreateMethod()

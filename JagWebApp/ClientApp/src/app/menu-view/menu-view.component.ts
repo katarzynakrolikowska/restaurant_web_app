@@ -5,6 +5,7 @@ import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
 import { MainMenuItem } from '../models/main-menu-item';
 import { MenuService } from '../services/menu.service';
 import { Dish } from '../models/dish';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -23,7 +24,9 @@ export class MenuViewComponent implements OnInit {
     currentSelectedCategoryId = CATEGORY_ALL_MENU_ITEMS_ID;
     
 
-    constructor( private menuService: MenuService, private spinner: NgxSpinnerService) { }
+    constructor(
+        private menuService: MenuService,
+        private spinner: NgxSpinnerService) { }
 
     ngOnInit() {
         this.spinner.show();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -37,41 +38,9 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void GetCartItemsCount_WhenCalled_ReturnsOkObjectResult()
-        {
-            var result = await _controller.GetCartItemsCount(It.IsAny<int>()) as OkObjectResult;
-
-            Assert.Equal(200, result.StatusCode);
-            Assert.IsType<int>(result.Value);
-        }
-
-        [Fact]
-        public async void GetCartItemsCount_WhenCartDoesNotExist_ReturnsZero()
-        {
-            //_cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()));
-
-            var result = await _controller.GetCartItemsCount(It.IsAny<int>()) as OkObjectResult;
-
-            Assert.Equal(0, result.Value);
-        }
-
-        [Fact]
-        public async void GetCartItemsCount_WhenCartExists_ReturnsItemsCount()
-        {
-            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()))
-                .ReturnsAsync(new Cart());
-            _cartItemRepo.Setup(cir => cir.GetCartItemsCount(It.IsAny<int>()))
-                .Returns(1);
-
-            var result = await _controller.GetCartItemsCount(It.IsAny<int>()) as OkObjectResult;
-
-            Assert.Equal(1, result.Value);
-        }
-
-        [Fact]
         public void Create_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Create(It.IsAny<SaveCartItemResource>());
+            var result = _controller.Create(It.IsAny<int>(), It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
@@ -79,9 +48,10 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void Create_WhenMenuItemDoesNotExist_ReturnsBadRequestResult()
         {
-            _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()));
+            MenuItem item = null;
+            MockGetMenuItemFromMenuRepo(item);
 
-            var result =await _controller.Create(new SaveCartItemResource()) as BadRequestResult;
+            var result =await _controller.Create(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -89,11 +59,11 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void Create_WhenCartDoesNotExist_ReturnsBadRequestResult()
         {
-            _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
-                .ReturnsAsync(new MenuItem());
-            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()));
+            Cart cart = null;
+            MockGetMenuItemFromMenuRepo(new MenuItem());
+            MockGetCartFromCartRepo(cart);
 
-            var result = await _controller.Create(new SaveCartItemResource()) as BadRequestResult;
+            var result = await _controller.Create(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -101,51 +71,169 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void Create_WhenMenuItemIsSoldOut_ReturnsBadRequestResult()
         {
-            _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
-                .ReturnsAsync(new MenuItem { Available = 0 });
-            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()))
-                .ReturnsAsync(new Cart());
+            MockGetMenuItemFromMenuRepo(new MenuItem { Available = 0 });
+            MockGetCartFromCartRepo(new Cart());
 
-            var result = await _controller.Create(new SaveCartItemResource()) as BadRequestResult;
+            var result = await _controller.Create(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Create_WhenCartItemDoesNotExist_NewCartItemIsSaved()
+        public async void Create_WhenCartItemsAmountIsEqualToMenuItemAvailable_ReturnsBadRequestResult()
         {
-            SetValidInputForCreateMethod();
-            _cartItemRepo.Setup(cir => cir.GetCartItem(It.IsAny<int>(), It.IsAny<int>()));
-            _cartItemRepo.Setup(cir => cir.Add(It.IsAny<CartItem>()));
+            MockGetMenuItemFromMenuRepo(new MenuItem { Available = 1 });
+            MockGetCartFromCartRepo(new Cart());
+            MockGetCartItemFromCartItemRepo(new CartItem { Amount = 1 });
+                
+            var result = await _controller.Create(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Create_WhenCartItemDoesNotExist_CartItemIsSaved()
+        {
+            CartItem cartItem = null;
+            MockGetMenuItemFromMenuRepo(new MenuItem { Available = 1 });
+            MockGetCartFromCartRepo(new Cart());
+            MockGetCartItemFromCartItemRepo(cartItem);
+            _cartItemRepo.Setup(cir => cir.Add(It.IsAny<Cart>(), It.IsAny<int>()));
             _unitOfWork.Setup(uow => uow.CompleteAsync());
 
-            await _controller.Create(new SaveCartItemResource());
+            var result = await _controller.Create(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
 
             _unitOfWork.Verify(uow => uow.CompleteAsync());
-            _cartItemRepo.Verify(cir => cir.Add(It.IsAny<CartItem>()));
+            _cartItemRepo.Verify(cir => cir.Add(It.IsAny<Cart>(), It.IsAny<int>()));
+            Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]
         public async void Create_WhenCartItemExists_CartItemAmountIsIncreasedByOne()
         {
             var cartItem = new CartItem { Amount = 1 };
-            SetValidInputForCreateMethod();
-            _cartItemRepo.Setup(cir => cir.GetCartItem(It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync(cartItem);
+            MockGetMenuItemFromMenuRepo(new MenuItem { Available = 2 });
+            MockGetCartFromCartRepo(new Cart());
+            MockGetCartItemFromCartItemRepo(cartItem);
             _unitOfWork.Setup(uow => uow.CompleteAsync());
 
-            await _controller.Create(new SaveCartItemResource());
+            var result = await _controller.Create(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
 
             _unitOfWork.Verify(uow => uow.CompleteAsync());
             Assert.Equal(2, cartItem.Amount);
+            Assert.Equal(200, result.StatusCode);
         }
 
-        private void SetValidInputForCreateMethod()
+        [Fact]
+        public void Remove_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.Remove(It.IsAny<int>(), It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void Remove_WhenMenuItemDoesNotExist_ReturnsBadRequestResult()
+        {
+            MenuItem menuItem = null;
+            MockGetMenuItemFromMenuRepo(menuItem);
+
+            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartDoesNotExist_ReturnsBadRequestResult()
+        {
+            Cart cart = null;
+            MockGetMenuItemFromMenuRepo(new MenuItem());
+            MockGetCartFromCartRepo(cart);
+
+            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartItemDoesNotExist_ReturnsBadRequestResult()
+        {
+            CartItem cartItem = null;
+            MockGetMenuItemFromMenuRepo(new MenuItem());
+            MockGetCartFromCartRepo(new Cart());
+            MockGetCartItemFromCartItemRepo(cartItem);
+
+            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartContainsOneItemWithAmountEqualsToOne_CartIsRemoved()
+        {
+            var item = new CartItem { Amount = 1 };
+            MockGetMenuItemFromMenuRepo(new MenuItem());
+            MockGetCartFromCartRepo(new Cart { Items = new Collection<CartItem> { item } });
+            MockGetCartItemFromCartItemRepo(item);
+            _cartRepo.Setup(cr => cr.Remove(It.IsAny<Cart>()));
+            _unitOfWork.Setup(uow => uow.CompleteAsync());
+
+            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as OkResult;
+
+            _unitOfWork.Verify(uow => uow.CompleteAsync());
+            _cartRepo.Verify(cr => cr.Remove(It.IsAny<Cart>()));
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartContainsSeveralItemsAndCartItemAmountIsEqualToOne_CartItemIsRemoved()
+        {
+            var items = new Collection<CartItem> { new CartItem(), new CartItem() };
+            MockGetMenuItemFromMenuRepo(new MenuItem());
+            MockGetCartFromCartRepo(new Cart { Items = items });
+            MockGetCartItemFromCartItemRepo(new CartItem { Amount = 1 });
+            _cartItemRepo.Setup(cir => cir.Remove(It.IsAny<Cart>(), It.IsAny<CartItem>()));
+            _unitOfWork.Setup(uow => uow.CompleteAsync());
+
+            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+
+            _unitOfWork.Verify(uow => uow.CompleteAsync());
+            _cartItemRepo.Verify(cir => cir.Remove(It.IsAny<Cart>(), It.IsAny<CartItem>()));
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartItemAmountIsGreaterThanOne_CartItemAmountIsDecreasedByOne()
+        {
+            var cartItem = new CartItem { Amount = 2 };
+            MockGetMenuItemFromMenuRepo(new MenuItem());
+            MockGetCartFromCartRepo(new Cart());
+            MockGetCartItemFromCartItemRepo(cartItem);
+            _unitOfWork.Setup(uow => uow.CompleteAsync());
+
+            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+
+            _unitOfWork.Verify(uow => uow.CompleteAsync());
+            Assert.Equal(1, cartItem.Amount);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        private void MockGetMenuItemFromMenuRepo(MenuItem item)
         {
             _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
-                .ReturnsAsync(new MenuItem { Available = 1 });
+               .ReturnsAsync(item);
+        }
+
+        private void MockGetCartFromCartRepo(Cart cart)
+        {
             _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()))
-                .ReturnsAsync(new Cart());
+                .ReturnsAsync(cart);
+        }
+
+        private void MockGetCartItemFromCartItemRepo(CartItem item)
+        {
+            _cartItemRepo.Setup(cir => cir.GetCartItem(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(item);
         }
     }
 }

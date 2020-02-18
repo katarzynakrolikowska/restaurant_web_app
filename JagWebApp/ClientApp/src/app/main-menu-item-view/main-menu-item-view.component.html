@@ -28,8 +28,8 @@
         </ng-template>
       </div>
       <div *ngIf="!authService.isAdmin()" class="col-12 text-center mb-3">
-        <app-add-to-cart-button [menu-item-id]="mainMenuItem.id" [item-available]="mainMenuItem.available > 0">
-        </app-add-to-cart-button>
+        <app-cart-action-buttons [menu-item-id]="mainMenuItem.id" [available]="mainMenuItem.available">
+        </app-cart-action-buttons>
       </div>
     </div>
   </div>

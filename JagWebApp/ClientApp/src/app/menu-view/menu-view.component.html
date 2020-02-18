@@ -5,16 +5,16 @@
     </app-categories-button-toggle-group>
   </div>
   <div class="col-8 col-sm-6 col-md-8 col-lg-9">
-    <app-main-menu-item-view *ngIf="currentSelectedCategoryId === categoryMainItem || 
+    <app-main-menu-item-view *ngIf="currentSelectedCategoryId === categoryMainItem ||
                              currentSelectedCategoryId === categoryAll"
                              [mainMenuItem]="mainMenuItem"
                              class="row justify-content-center bg-lightgray mb-4"
                              (onDeleteMainMenuItem)="removeMainItem()">
     </app-main-menu-item-view>
     <app-ordinary-menu-items-view *ngIf="currentSelectedCategoryId !== categoryMainItem"
-                             [filteredMenuItems]="filteredMenuItems"
-                             (onDeleteItem)="removeItemFromMenu($event)"
-                             (onUpdateItem)="updateItem($event)">
+                                  [filteredMenuItems]="filteredMenuItems"
+                                  (onDeleteItem)="removeItemFromMenu($event)"
+                                  (onUpdateItem)="updateItem($event)">
     </app-ordinary-menu-items-view>
   </div>
 </div>

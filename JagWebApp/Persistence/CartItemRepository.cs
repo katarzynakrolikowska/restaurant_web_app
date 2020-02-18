@@ -18,12 +18,7 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task<IEnumerable<CartItem>> GetCartItems(int cartId)
-        {
-            return await _context.CartItems
-                .Where(ci => ci.CartId == cartId)
-                .ToListAsync();
-        }
+        
 
         public async Task<CartItem> GetCartItem(int cartId, int menuItemId)
         {
@@ -32,18 +27,15 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync(ci => ci.MenuItemId == menuItemId);
         }
 
-        public int GetCartItemsCount(int cartId)
+        public void Add(Cart cart, int menuItemId)
         {
-            return _context.CartItems
-                .Where(ci => ci.CartId == cartId)
-                .Sum(ci => ci.Amount);
+            var item = new CartItem { MenuItemId = menuItemId, Amount = 1 };
+            cart.Items.Add(item);
         }
 
-        public void Add(CartItem cartItem)
+        public void Remove(Cart cart, CartItem item)
         {
-            _context.CartItems.Add(cartItem);
+            cart.Items.Remove(item);
         }
-
-       
     }
 }

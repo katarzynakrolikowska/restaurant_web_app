@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -35,28 +36,33 @@ namespace JagWebApp.Controllers
         }
 
         //GET: api/carts
-        [HttpGet]
-        public async Task<IActionResult> GetCarts()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCart(int id)
         {
-            var carts = await _cartRepository.GetCarts();
+            var cart = await _cartRepository.GetCart(id);
+            if (cart == null)
+                return BadRequest();
 
-            return Ok(_mapper.Map<IEnumerable<Cart>, IEnumerable<CartResource>>(carts));
+            return Ok(_mapper.Map<Cart, CartResource>(cart));
         }
 
         //POST: api/carts
         [HttpPost]
-        public async Task<IActionResult> Create(SaveCartResource saveCartResource)
+        public async Task<IActionResult> Create([FromBody] int menuItemId)
         {
-            var menuItem = await _menuRepository.GetMenuItem(saveCartResource.MenuItemId);
+            var menuItem = await _menuRepository.GetMenuItem(menuItemId);
             if (menuItem == null || menuItem.Available < 1)
                 return BadRequest();
 
-            var cart = _mapper.Map<SaveCartResource, Cart>(saveCartResource);
+            var cart = new Cart 
+            { 
+                Items = new Collection<CartItem> { new CartItem { MenuItemId = menuItemId, Amount = 1 } } 
+            };
             _cartRepository.Add(cart);
 
             await _unitOfWork.CompleteAsync();
 
-            return Ok(cart.Id);
+            return Ok(_mapper.Map<Cart, CartResource>(cart));
         }
 
     }

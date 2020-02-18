@@ -13,7 +13,7 @@ namespace JagWebApp.Persistence
 {
     public class PhotoRepository : IPhotoRepository
     {
-        public const string ROOT_NAME = "uploads";
+        private const string ROOT_NAME = "uploads";
 
         private readonly JagDbContext _context;
         private readonly IFileService _fileService;
