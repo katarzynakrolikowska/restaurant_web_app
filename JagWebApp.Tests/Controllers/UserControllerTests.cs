@@ -44,7 +44,7 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangeEmail_WhenUserExistsAndUpdatingIsSuccessful_ReturnsOkActionResult()
         {
-            SetInitialMockingToReturnSuccessWhenEmailIsModifying(It.IsAny<int>());
+            SetInitialMockingToReturnSuccessWhenEmailIsModified(It.IsAny<int>());
 
             var result = await _controller
                 .ChangeEmail(It.IsAny<int>(), new UserForLoginResource()) as OkObjectResult;
@@ -55,7 +55,7 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangeEmail_WhenUserIsValid_UpdateMethodIsCalled()
         {
-            SetInitialMockingToReturnSuccessWhenEmailIsModifying(id: 1);
+            SetInitialMockingToReturnSuccessWhenEmailIsModified(id: 1);
             _userManager.Setup(um => um.SetEmailAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
             _userManager.Setup(um => um.SetUserNameAsync(It.IsAny<User>(), It.IsAny<string>()))
@@ -72,7 +72,7 @@ namespace JagWebApp.Tests.Controllers
         public async void ChangeEmail_WhenUserExistsAndIsValid_ReturnsToken()
         {
             var tokenObject = new { token = "a" };
-            SetInitialMockingToReturnSuccessWhenEmailIsModifying(id: 1);
+            SetInitialMockingToReturnSuccessWhenEmailIsModified(id: 1);
             _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
                 .ReturnsAsync("a");
 
@@ -201,7 +201,7 @@ namespace JagWebApp.Tests.Controllers
             Assert.Equal("a", errors[0].Description);
         }
 
-        private void SetInitialMockingToReturnSuccessWhenEmailIsModifying(int id)
+        private void SetInitialMockingToReturnSuccessWhenEmailIsModified(int id)
         {
             SetInitialMockingForValidUser(id);
 

@@ -15,7 +15,10 @@ export class MainMenuItemViewComponent implements OnInit {
     @Input() mainMenuItem: MainMenuItem;
     @Output() onDeleteMainMenuItem = new EventEmitter();
 
-    constructor(private router: Router, private menuService: MenuService, private authService: AuthService) { }
+    constructor(
+        private router: Router,
+        private menuService: MenuService,
+        private authService: AuthService) { }
 
     ngOnInit() {
         this.buttons = [

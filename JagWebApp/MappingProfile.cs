@@ -3,6 +3,7 @@ using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,8 +50,18 @@ namespace JagWebApp
                         foreach (var id in addedDishes)
                             mi.Dishes.Add(new MenuItemDish { DishId = id });
                     }
-                    
                 });
+
+            CreateMap<SaveCartResource, Cart>()
+                .ForMember(c => c.Items, opt => opt.Ignore())
+                .AfterMap((scr, c) =>
+                {
+                    c.Items = new Collection<CartItem>
+                    {
+                        new CartItem { MenuItemId = scr.MenuItemId, Amount = 1 }
+                    };
+                });
+
 
             CreateMap<Dish, DishResource>()
                 .ForMember(dr => dr.MainPhoto, opt => opt.MapFrom(d => d.Photos.SingleOrDefault(p => p.IsMain == true)));
@@ -80,6 +91,9 @@ namespace JagWebApp
                         null
                     }
                 )));
+
+            CreateMap<Cart, CartResource>();
+            CreateMap<CartItem, CartItemResource>();
         }
     }
 }

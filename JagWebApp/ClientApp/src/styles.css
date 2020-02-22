@@ -117,3 +117,8 @@ button:focus {
     font-size: 16px !important;
   }
 }
+
+.nav-mat-button {
+  min-width: 48px !important;
+  padding: 0 0 !important;
+}

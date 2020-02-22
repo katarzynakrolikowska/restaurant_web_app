@@ -9,6 +9,7 @@ import { OrdinaryMenuItemCardComponent } from './ordinary-menu-item-card.compone
 import { MenuService } from '../services/menu.service';
 import { ordinaryMenuItemStub } from '../test/stubs/ordinary-menu-item.stub';
 import { updateMenuItemStub } from '../test/stubs/update-menu-item.stub';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('OrdinaryMenuItemCardComponent', () => {
     const baseURL = '';
@@ -29,7 +30,8 @@ describe('OrdinaryMenuItemCardComponent', () => {
             ],
             providers: [
                 { provide: 'BASE_URL', useValue: baseURL }
-            ]
+            ],
+            schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
     }));
@@ -41,7 +43,6 @@ describe('OrdinaryMenuItemCardComponent', () => {
         menuService = TestBed.get(MenuService);
         toastr = TestBed.get(ToastrService);
         dialog = TestBed.get(MatDialog);
-        fixture.detectChanges();
     });
 
     it('should create', () => {

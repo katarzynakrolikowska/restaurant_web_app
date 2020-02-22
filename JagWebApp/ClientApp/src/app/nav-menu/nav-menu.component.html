@@ -1,55 +1,60 @@
 <header>
-  <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow"
-  >
+  <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">JagWebApp</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <a class="navbar-brand" [routerLink]="['/']">Jagienka</a>
+
+      <div class="navbar-collapse collapse d-sm-inline-flex"
+           [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li *ngIf="loggedIn()" class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/menu']">Menu</a>
           </li>
           <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/admin/dishes']">Dania</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a *ngIf="!loggedIn()" class="nav-link text-dark" [routerLink]="['/login']">Logowanie</a>
-            <div *ngIf="loggedIn()" class="btn-group" dropdown>
-              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                      aria-controls="dropdown-basic">
-                {{ this.authService.getUserEmail() }} <span class="caret"></span>
-              </button>
-              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                  role="menu" aria-labelledby="button-basic">
-                <li role="menuitem"><a class="dropdown-item" [routerLink]="['/user/data']">Twoje dane</a></li>
-                <li class="divider dropdown-divider"></li>
-                <li role="menuitem">
-                  <a class="dropdown-item" href="#" (click)="logout()">Wyloguj się</a>
-                </li>
-              </ul>
-            </div>
-          </li>
         </ul>
       </div>
+      <div>
+        <button *ngIf="!loggedIn(); else userProfileLink"
+                mat-button
+                class="nav-mat-button"
+                [matMenuTriggerFor]="menu">
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/login']">Zaloguj się</button>
+        </mat-menu>
+        <ng-template #userProfileLink>
+          <button mat-button class="nav-mat-button" [matMenuTriggerFor]="menu">
+            <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['/user/data']">Twoje dane</button>
+            <button mat-menu-item (click)="logout()">Wyloguj się</button>
+          </mat-menu>
+        </ng-template>
+        <span *ngIf="!isAdmin()">
+          <app-nav-cart-button [user-id]="authService.getUserId()"></app-nav-cart-button>
+        </span>
+      </div>
+
     </div>
+    <button mat-button
+            class="d-sm-none"
+            type="button"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+            aria-label="Toggle navigation"
+            [attr.aria-expanded]="isExpanded"
+            (click)="toggle()">
+      <mat-icon *ngIf="!isExpanded">menu</mat-icon>
+      <mat-icon *ngIf="isExpanded">menu_open</mat-icon>
+    </button>
   </nav>
 </header>
+

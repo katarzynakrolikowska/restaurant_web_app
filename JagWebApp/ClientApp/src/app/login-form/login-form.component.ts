@@ -28,7 +28,6 @@ export class LoginFormComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
         this.initForm();
     }
 
@@ -46,11 +45,10 @@ export class LoginFormComponent implements OnInit {
             }, (errorRespone: HttpErrorResponse) => {
                     this.spinner.hide();
                     this.errorLogin = true;
-                    if (errorRespone.status == 401) {
-                        this.errorMessage = 'Nieprawidłowy email lub hasło.';
-                    } else {
+
+                    errorRespone.status == 401 ?
+                        this.errorMessage = 'Nieprawidłowy email lub hasło.' :
                         this.errorMessage = ERROR_SERVER_MESSAGE;
-                    }
             });
         }
     }

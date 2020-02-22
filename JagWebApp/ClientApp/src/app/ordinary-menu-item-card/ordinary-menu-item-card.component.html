@@ -5,7 +5,7 @@
          alt="">
     <ng-template #defaultImage>
       <div class="text-center">
-        <img mat-card-image src="/uploads/{{ defualtImg }}" alt="" class="img-default-dimensions">
+        <img mat-card-image src="/uploads/default.png" alt="" class="img-default-dimensions">
       </div>
     </ng-template>
     <mat-card-header>
@@ -33,8 +33,8 @@
         <button mat-button color="warn" (click)="deleteItem(menuItem)">USUŃ</button>
       </span>
       <ng-template #displayAddToCartButton>
-        <button mat-flat-button color="primary" >DODAJ DO KOSZYKA
-        </button>
+        <app-cart-action-buttons [menu-item-id]="menuItem.id" [available]="menuItem.available">
+        </app-cart-action-buttons>
       </ng-template>   
     </mat-card-actions>
   </mat-card>
