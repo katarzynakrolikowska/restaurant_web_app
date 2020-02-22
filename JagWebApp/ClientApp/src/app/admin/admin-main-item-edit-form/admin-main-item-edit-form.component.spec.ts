@@ -7,11 +7,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BlankComponent } from '../../test/blank/blank.component';
 import { activatedRouteStub } from '../../test/stubs/activated-route.stub';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MenuService } from '../../services/menu.service';
-import { of, throwError, Scheduler } from 'rxjs';
-import { mainMenuItemStubWithTwoDishes } from '../../test/stubs/main-menu-item.stub';
-import { ERROR_SERVER_MESSAGE } from '../../user-messages/messages';
+import { of, throwError } from 'rxjs';
+import { menuItemStubWithTwoDishes } from '../../test/stubs/menu-item.stub';
 
 describe('AdminMainItemEditFormComponent', () => {
     const baseURL = '';
@@ -41,18 +40,16 @@ describe('AdminMainItemEditFormComponent', () => {
         fixture = TestBed.createComponent(AdminMainItemEditFormComponent);
         component = fixture.componentInstance;
         menuService = TestBed.get(MenuService);
-        fixture.detectChanges();
     });
 
     it('should create', () => {
+        spyOnMenuServiceToReturnMenuItem();
+
         expect(component).toBeTruthy();
     });
 
     it('should init main menu item', () => {
-        spyOn(menuService, 'getMenuItem').and.returnValue(of(mainMenuItemStubWithTwoDishes));
-
-        component.ngOnInit();
-        fixture.detectChanges();
+        spyOnMenuServiceToReturnMenuItem();
 
         expect(component.mainMenuItemToUpdate.price).toBe(1);
     });
@@ -60,6 +57,16 @@ describe('AdminMainItemEditFormComponent', () => {
     it('should NOT init main menu item when service returns error', () => {
         spyOn(menuService, 'getMenuItem').and.returnValue(throwError(new Error('error')));
 
+        component.ngOnInit();
+        fixture.detectChanges();
+
         expect(component.mainMenuItemToUpdate).toBe(undefined);
     });
+
+    function spyOnMenuServiceToReturnMenuItem() {
+        spyOn(menuService, 'getMenuItem').and.returnValue(of(menuItemStubWithTwoDishes));
+
+        component.ngOnInit();
+        fixture.detectChanges();
+    }
 });

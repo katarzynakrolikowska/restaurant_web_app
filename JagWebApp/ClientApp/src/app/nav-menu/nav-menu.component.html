@@ -39,7 +39,7 @@
           </mat-menu>
         </ng-template>
         <span *ngIf="!isAdmin()">
-          <app-nav-cart-button></app-nav-cart-button>
+          <app-nav-cart-button [user-id]="authService.getUserId()"></app-nav-cart-button>
         </span>
       </div>
 

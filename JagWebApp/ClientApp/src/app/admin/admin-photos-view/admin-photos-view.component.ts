@@ -14,7 +14,6 @@ import { ERROR_SERVER_MESSAGE } from '../../user-messages/messages';
   styleUrls: ['./admin-photos-view.component.css']
 })
 export class AdminPhotosViewComponent implements OnInit {
-
     id: number;
     @ViewChild('fileInput', { static: true }) fileInput: FileInputComponent;
     photos: Array<Photo>;

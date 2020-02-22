@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
 {
-    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class CartsController : ControllerBase
@@ -21,21 +17,25 @@ namespace JagWebApp.Controllers
         private readonly ICartRepository _cartRepository;
         private readonly IMenuRepository _menuRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
         public CartsController(
             ICartRepository cartRepository, 
             IMenuRepository menuRepository, 
-            IUnitOfWork unitOfWork, 
+            IUnitOfWork unitOfWork,
+            UserManager<User> userManager,
             IMapper mapper)
         {
             _cartRepository = cartRepository;
             _menuRepository = menuRepository;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
             _mapper = mapper;
         }
 
-        //GET: api/carts
+        //GET: api/carts/1
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCart(int id)
         {
@@ -46,18 +46,42 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Cart, CartResource>(cart));
         }
 
-        //POST: api/carts
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] int menuItemId)
+        //GET: api/carts/user/1
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserCart(int userId)
         {
-            var menuItem = await _menuRepository.GetMenuItem(menuItemId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null || await _userManager.IsInRoleAsync(user, "Admin"))
+                return BadRequest();
+
+            if (userId != GetLoggedInUserId())
+                return BadRequest();
+
+            var cart = await _cartRepository.GetUserCart(userId);
+            
+            return Ok(_mapper.Map<Cart, CartResource>(cart));
+        }
+
+
+        //POST: api/carts
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Create(SaveCartResource saveCart)
+        {
+            var menuItem = await _menuRepository.GetMenuItem(saveCart.MenuItemId);
             if (menuItem == null || menuItem.Available < 1)
                 return BadRequest();
 
-            var cart = new Cart 
-            { 
-                Items = new Collection<CartItem> { new CartItem { MenuItemId = menuItemId, Amount = 1 } } 
-            };
+            var cart = _mapper.Map<SaveCartResource, Cart>(saveCart);
+
+            int? userId = GetLoggedInUserId();
+            if (userId != null)
+            {
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+                if (!await _userManager.IsInRoleAsync(user, "Admin"))
+                    cart.UserId = userId;
+            }
+
             _cartRepository.Add(cart);
 
             await _unitOfWork.CompleteAsync();
@@ -65,5 +89,40 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Cart, CartResource>(cart));
         }
 
+        //PUT: api/carts/1
+        [HttpPut("{cartId}")]
+        public async Task<IActionResult> Update(int cartId)
+        {
+            var cart = await _cartRepository.GetCart(cartId, false);
+            if (cart == null)
+                return BadRequest();
+
+            int? userId = GetLoggedInUserId();
+            if (userId == null)
+                return BadRequest();
+
+            var loggedInUser = await _userManager.FindByIdAsync(userId.ToString());
+            if (await _userManager.IsInRoleAsync(loggedInUser, "Admin"))
+                return BadRequest();
+
+            var userCart = await _cartRepository.GetUserCart((int)userId);
+            if (userCart == null)
+                cart.UserId = userId;
+            else
+            {
+                _cartRepository.AddCartItemsToAnotherCart(cart, userCart);
+                _cartRepository.Remove(cart);
+            }
+            
+            await _unitOfWork.CompleteAsync();
+
+            var newCart = await _cartRepository.GetUserCart((int)userId);
+            return Ok(_mapper.Map<Cart, CartResource>(newCart));
+        }
+
+        private int? GetLoggedInUserId()
+        {
+            return Core.Models.User.GetLoggedInUserId((ClaimsIdentity)User.Identity);
+        }
     }
 }

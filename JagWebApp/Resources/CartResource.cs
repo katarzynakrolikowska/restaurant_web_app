@@ -10,6 +10,8 @@ namespace JagWebApp.Resources
     {
         public int Id { get; set; }
 
+        public int UserId { get; set; }
+
         public ICollection<CartItemResource> Items { get; set; }
 
         public CartResource()

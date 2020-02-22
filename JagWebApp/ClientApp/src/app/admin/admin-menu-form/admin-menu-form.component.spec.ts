@@ -13,7 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { BlankComponent } from '../../test/blank/blank.component';
-import { mainMenuItemStubWithTwoDishes } from '../../test/stubs/main-menu-item.stub';
+import { menuItemStubWithTwoDishes } from '../../test/stubs/menu-item.stub';
 
 describe('AdminMenuFormComponent', () => {
     const baseURL = '';
@@ -156,7 +156,7 @@ describe('AdminMenuFormComponent', () => {
     });
 
     it('should update menu item when onSave is called, form is valid and main item to update is defined', () => {
-        component.mainMenuItemToUpdate = mainMenuItemStubWithTwoDishes;
+        component.mainMenuItemToUpdate = menuItemStubWithTwoDishes;
         let spy = spyOn(menuService, 'updateItem').and.returnValue(of(Object));
         setFormsControl();
 

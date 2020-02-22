@@ -1,5 +1,5 @@
 
-<button *ngIf="menuItemQuantity === 0; else showItemQuantity"
+<button *ngIf="menuItemQuantity < 1; else showItemQuantity"
         mat-flat-button color="accent"
         (click)="addItemToCart()"
         [disabled]="available === 0">
@@ -12,7 +12,7 @@
   <span class="px-4">
     {{ menuItemQuantity }}
   </span>
-<button mat-mini-fab (click)="addAnotherItemToCart()" [disabled]="menuItemQuantity === available">
+<button mat-mini-fab (click)="addAnotherItemToCart()" [disabled]="menuItemQuantity >= available">
   <mat-icon>add</mat-icon>
 </button>
 </ng-template>

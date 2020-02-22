@@ -43,7 +43,6 @@ describe('OrdinaryMenuItemCardComponent', () => {
         menuService = TestBed.get(MenuService);
         toastr = TestBed.get(ToastrService);
         dialog = TestBed.get(MatDialog);
-        fixture.detectChanges();
     });
 
     it('should create', () => {

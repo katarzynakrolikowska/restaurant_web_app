@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { MenuService } from '../services/menu.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { mainMenuItemStubWithTwoDishes } from '../test/stubs/main-menu-item.stub';
+import { menuItemStubWithTwoDishes } from '../test/stubs/menu-item.stub';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
@@ -35,7 +35,7 @@ describe('MainMenuItemViewComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(MainMenuItemViewComponent);
         component = fixture.componentInstance;
-        component.mainMenuItem = mainMenuItemStubWithTwoDishes;
+        component.mainMenuItem = menuItemStubWithTwoDishes;
         menuService = TestBed.get(MenuService);
         router = TestBed.get(Router);
         fixture.detectChanges();
@@ -54,7 +54,7 @@ describe('MainMenuItemViewComponent', () => {
     });
 
     it('should redirect user to main item editin form when onButtonClick is called with second button label and main item is defined', () => {
-        component.mainMenuItem = mainMenuItemStubWithTwoDishes;    
+        component.mainMenuItem = menuItemStubWithTwoDishes;    
         let spy = spyOn(router, 'navigate');
 
         component.onButtonClick(component.buttons[1].label);
@@ -63,7 +63,7 @@ describe('MainMenuItemViewComponent', () => {
     });
 
     it('should remove main item when onButtonClick is called with third button label and main item is defined', () => {
-        component.mainMenuItem = mainMenuItemStubWithTwoDishes;
+        component.mainMenuItem = menuItemStubWithTwoDishes;
         let spy = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
 
         component.onButtonClick(component.buttons[2].label);

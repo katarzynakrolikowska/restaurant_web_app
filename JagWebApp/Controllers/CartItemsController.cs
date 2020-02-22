@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace JagWebApp.Controllers
 {
     [AllowAnonymous]
-    [Route("api/carts/{cartId}/items")]
+    [Route("api/carts/{cartId}/item")]
     [ApiController]
     public class CartItemsController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace JagWebApp.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        //POST: api/carts/1/items
+        //POST: api/carts/1/item
         [HttpPost]
         public async Task<IActionResult> Create(int cartId, [FromBody] int menuItemId)
         {
@@ -60,19 +60,15 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Cart, CartResource>(cart));
         }
 
-        //DELETE: api/carts/1/items/1
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove(int cartId, int id)
+        //DELETE: api/carts/1/item/1
+        [HttpDelete("{menuItemId}")]
+        public async Task<IActionResult> Remove(int cartId, int menuItemId)
         {
-            var menuItem = await _menuRepository.GetMenuItem(id);
-            if (menuItem == null)
-                return BadRequest();
-
             var cart = await _cartRepository.GetCart(cartId);
             if (cart == null)
                 return BadRequest();
 
-            var cartItem = await _cartItemRepository.GetCartItem(cartId, id);
+            var cartItem = await _cartItemRepository.GetCartItem(cartId, menuItemId);
             if (cartItem == null)
                 return BadRequest();
 

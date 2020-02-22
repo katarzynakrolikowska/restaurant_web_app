@@ -2,8 +2,6 @@
 using JagWebApp.Core.Models;
 using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,8 +15,6 @@ namespace JagWebApp.Persistence
         {
             _context = context;
         }
-
-        
 
         public async Task<CartItem> GetCartItem(int cartId, int menuItemId)
         {

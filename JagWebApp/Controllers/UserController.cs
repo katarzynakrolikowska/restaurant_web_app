@@ -19,7 +19,9 @@ namespace JagWebApp.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ITokenRepository _tokenRepository;
 
-        public UserController(UserManager<User> userManager, ITokenRepository tokenRepository)
+        public UserController(
+            UserManager<User> userManager, 
+            ITokenRepository tokenRepository)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
@@ -74,10 +76,9 @@ namespace JagWebApp.Controllers
             return BadRequest(result.Errors);
         }
 
-        private int GetLoggedInUserId()
+        private int? GetLoggedInUserId()
         {
-            var id = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-            return int.Parse(id);
+            return Core.Models.User.GetLoggedInUserId((ClaimsIdentity)User.Identity);
         }
     }
 }

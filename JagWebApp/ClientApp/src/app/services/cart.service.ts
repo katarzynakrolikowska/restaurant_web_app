@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { SaveCart } from '../models/save-cart';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,25 @@ export class CartService {
             .pipe(map(result => result));
     }
 
-    create(menuItemId) {
-        return this.http.post(this.baseUrl + 'api/carts', menuItemId)
+    getUserCart(userId) {
+        return this.http.get(this.baseUrl + 'api/carts/user/' + userId)
             .pipe(map(result => result));
     }
 
+    create(cart: SaveCart) {
+        return this.http.post(this.baseUrl + 'api/carts', cart)
+            .pipe(map(result => result));
+    }
+
+    update() {
+        let headers = new HttpHeaders();
+        headers = headers.append('content-type', 'application/json');
+
+        return this.http.put(this.baseUrl + 'api/carts/' + this.cartId, null, { headers: headers })
+            .pipe(map(result => result));
+    }
+
+    private get cartId() {
+        return localStorage.getItem('cartId');
+    }
 }

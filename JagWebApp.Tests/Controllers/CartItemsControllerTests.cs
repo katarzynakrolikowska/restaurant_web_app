@@ -133,17 +133,6 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void Remove_WhenMenuItemDoesNotExist_ReturnsBadRequestResult()
-        {
-            MenuItem menuItem = null;
-            MockGetMenuItemFromMenuRepo(menuItem);
-
-            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as BadRequestResult;
-
-            Assert.Equal(400, result.StatusCode);
-        }
-
-        [Fact]
         public async void Remove_WhenCartDoesNotExist_ReturnsBadRequestResult()
         {
             Cart cart = null;
@@ -226,7 +215,7 @@ namespace JagWebApp.Tests.Controllers
 
         private void MockGetCartFromCartRepo(Cart cart)
         {
-            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>()))
+            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>(), true))
                 .ReturnsAsync(cart);
         }
 

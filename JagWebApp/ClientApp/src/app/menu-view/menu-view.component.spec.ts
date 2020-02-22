@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MenuViewComponent } from './menu-view.component';
 import { MenuService } from '../services/menu.service';
-import { mainMenuItemStubWithOneDish, mainMenuItemStubWithTwoDishes } from '../test/stubs/main-menu-item.stub';
+import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from '../test/stubs/menu-item.stub';
 import { ordinaryMenuItemStub } from '../test/stubs/ordinary-menu-item.stub';
 import { CATEGORY_ALL_MENU_ITEMS_ID } from '../consts/app-consts';
 
@@ -35,7 +35,7 @@ describe('MenuViewComponent', () => {
         component = fixture.componentInstance;
         menuService = TestBed.get(MenuService);
         spyOn(menuService, 'getMenuItems').and
-            .returnValue(of([mainMenuItemStubWithOneDish, mainMenuItemStubWithTwoDishes]));
+            .returnValue(of([menuItemStubWithOneDish, menuItemStubWithTwoDishes]));
         fixture.detectChanges();
     });
 
@@ -45,7 +45,7 @@ describe('MenuViewComponent', () => {
 
     it('should init menuItems', () => {
         expect(component.ordinaryMenuItems.length).toBe(1);
-        expect(component.mainMenuItem).toBe(mainMenuItemStubWithTwoDishes);
+        expect(component.mainMenuItem).toBe(menuItemStubWithTwoDishes);
     });
 
     it('should remove menu item when removeItemFromMenu is called and item category is current selected catogory', () => {

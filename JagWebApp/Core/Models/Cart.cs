@@ -10,6 +10,10 @@ namespace JagWebApp.Core.Models
     {
         public int Id { get; set; }
 
+        public User User { get; set; }
+
+        public int? UserId { get; set; }
+
         public ICollection<CartItem> Items { get; set; }
 
         public Cart()

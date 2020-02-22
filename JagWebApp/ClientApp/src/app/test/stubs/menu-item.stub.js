@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mainMenuItemStubWithOneDish = {
+exports.menuItemStubWithOneDish = {
     id: 1,
     dishes: [
         {
@@ -17,7 +17,7 @@ exports.mainMenuItemStubWithOneDish = {
     available: 1,
     isMain: false
 };
-exports.mainMenuItemStubWithTwoDishes = {
+exports.menuItemStubWithTwoDishes = {
     id: 2,
     dishes: [
         {
