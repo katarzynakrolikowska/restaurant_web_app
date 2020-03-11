@@ -11,10 +11,10 @@ import {
     ERROR_EMAIL_MESSAGE,
     ERROR_UNIQUE_EMAIL_MESSAGE,
     ERROR_MISMATCH_PASSWORDS_MESSAGE,
-    ERROR_CONFIRM_PASSWORD_MESSAGE,
     ERROR_MIN_LENGTH_PASSWORD_MESSAGE,
     ERROR_MAX_LENGTH_PASSWORD_MESSAGE
 } from '../user-messages/messages';
+import { MismatchErrorStateMatcher } from '../helpers/error-state-matcher';
 
 
 @Component({
@@ -25,6 +25,8 @@ import {
 export class RegisterFormComponent implements OnInit {
     user: User;
     form: FormGroup;
+    mismatchErrorMatcher = new MismatchErrorStateMatcher();
+
     @Output() onNewUserRegistered = new EventEmitter();
 
     constructor(
@@ -37,12 +39,7 @@ export class RegisterFormComponent implements OnInit {
     ngOnInit() {
         this.initForm();
 
-        this.confirmPassword.setValidators(
-            [
-                Validators.required,
-                passwordsMatch(this.password)
-            ]
-        );
+        this.form.setValidators(passwordsMatch(this.password, this.confirmPassword));
     }
 
     register() {
@@ -71,10 +68,8 @@ export class RegisterFormComponent implements OnInit {
                     '';
     }
 
-    getPasswordConfirmErrorMessage() {
-        return this.confirmPassword.hasError('required') ? ERROR_CONFIRM_PASSWORD_MESSAGE :
-            this.confirmPassword.hasError('mismatch') ? ERROR_MISMATCH_PASSWORDS_MESSAGE :
-            '';
+    getMismatchErrorMessage() {
+        return ERROR_MISMATCH_PASSWORDS_MESSAGE;
     }
 
     get email() {

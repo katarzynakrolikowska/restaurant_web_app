@@ -13,6 +13,7 @@ describe('EditEmailFormComponent', () => {
     let fixture: ComponentFixture<EditEmailFormComponent>;
     let userService: UserService;
     let service: AuthService;
+    let emailAddress = 'email@abc.com';
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -33,6 +34,7 @@ describe('EditEmailFormComponent', () => {
         service = TestBed.get(AuthService);
         spyOn(service, 'loggedIn').and.returnValue(true);
         spyOn(service, 'getUserEmail').and.returnValue('email@abc.com');
+        spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
         fixture.detectChanges();
     });
 
@@ -45,17 +47,12 @@ describe('EditEmailFormComponent', () => {
     });
 
     xit('should init form input with logged in user email', () => {
-        let emailAddress = 'email@abc.com';
-        spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
-
         fixture.detectChanges();
 
         expect(component.email.value).toBe(emailAddress);
     });
 
     it('should call the server to change user email after submit', () => {
-        let emailAddress = 'email@abc.com';
-        spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
         let spy = spyOn(userService, 'saveEmail').and.returnValue(empty());
         component.email.setValue(emailAddress);
 

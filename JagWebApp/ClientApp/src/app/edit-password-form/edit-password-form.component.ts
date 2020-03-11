@@ -9,12 +9,10 @@ import {
     SUCCESS_SAVE_DATA_MESSAGE,
     ERROR_SERVER_MESSAGE,
     ERROR_REQUIRED_MESSAGE,
-    ERROR_MISMATCH_PASSWORDS_MESSAGE,
-    ERROR_CONFIRM_PASSWORD_MESSAGE,
     ERROR_MIN_LENGTH_PASSWORD_MESSAGE,
     ERROR_MAX_LENGTH_PASSWORD_MESSAGE
 } from '../user-messages/messages';
-import { CustomErrorStateMatcher } from '../helpers/custom-error-state-matcher';
+import { CustomErrorStateMatcher, MismatchErrorStateMatcher } from '../helpers/error-state-matcher';
 import { ChangePasswordView } from '../models/change-password-view';
 
 
@@ -29,6 +27,7 @@ export class EditPasswordFormComponent implements OnInit {
     errorMessage: string;
     invalid: boolean = false;
     matcher = new CustomErrorStateMatcher();
+    mismatchErrorMatcher = new MismatchErrorStateMatcher();
 
     constructor(
         private userService: UserService,
@@ -39,12 +38,7 @@ export class EditPasswordFormComponent implements OnInit {
     ngOnInit() {
         this.initForm();
 
-        this.confirmPassword.setValidators(
-            [
-                Validators.required,
-                passwordsMatch(this.newPassword)
-            ]
-        );
+        this.form.setValidators(passwordsMatch(this.newPassword, this.confirmPassword));
     }
 
     savePassword() {
@@ -79,14 +73,8 @@ export class EditPasswordFormComponent implements OnInit {
     getNewPasswordErrorMessage() {
         return this.newPassword.hasError('required') ? ERROR_REQUIRED_MESSAGE :
             this.newPassword.hasError('minlength') ? ERROR_MIN_LENGTH_PASSWORD_MESSAGE :
-                this.newPassword.hasError('maxlength') ? ERROR_MAX_LENGTH_PASSWORD_MESSAGE :
+            this.newPassword.hasError('maxlength') ? ERROR_MAX_LENGTH_PASSWORD_MESSAGE :
                     '';
-    }
-
-    getPasswordConfirmErrorMessage() {
-        return this.confirmPassword.hasError('required') ? ERROR_CONFIRM_PASSWORD_MESSAGE :
-            this.confirmPassword.hasError('mismatch') ? ERROR_MISMATCH_PASSWORDS_MESSAGE :
-                '';
     }
 
     get currentPassword() {
