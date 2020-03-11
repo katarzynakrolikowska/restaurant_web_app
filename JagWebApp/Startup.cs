@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -18,6 +17,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace JagWebApp
 {
@@ -84,8 +87,10 @@ namespace JagWebApp
                     .Build();
 
                 opt.Filters.Add(new AuthorizeFilter(policy));
+                opt.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
             })
-                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+                .AddNewtonsoftJson(opt => 
+                    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 
             // In production, the Angular files will be served from this directory
@@ -143,6 +148,22 @@ namespace JagWebApp
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+        }
+
+        private static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
+        {
+            var builder = new ServiceCollection()
+                .AddLogging()
+                .AddMvc()
+                .AddNewtonsoftJson()
+                .Services.BuildServiceProvider();
+
+            return builder
+                .GetRequiredService<IOptions<MvcOptions>>()
+                .Value
+                .InputFormatters
+                .OfType<NewtonsoftJsonPatchInputFormatter>()
+                .First();
         }
     }
 }

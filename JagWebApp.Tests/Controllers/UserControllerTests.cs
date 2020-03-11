@@ -4,13 +4,12 @@ using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -25,8 +24,6 @@ namespace JagWebApp.Tests.Controllers
 
         public UserControllerTests()
         {
-            _user = new User();
-
             var mockUserStore = new Mock<IUserStore<User>>();
             _userManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
             _tokenRepo = new Mock<ITokenRepository>();
@@ -36,88 +33,42 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public void ChangeEmail_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.ChangeEmail(It.IsAny<int>(), It.IsAny<UserForLoginResource>());
+            var result = _controller.ChangeEmail(It.IsAny<JsonPatchDocument<User>>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void ChangeEmail_WhenUserExistsAndUpdatingIsSuccessful_ReturnsOkActionResult()
+        public async void ChangeEmail_WhenUserIsLoggedOut_ReturnsBadRequestResult()
         {
-            SetInitialMockingToReturnSuccessWhenEmailIsModified(It.IsAny<int>());
+            SetInitialUser(null);
 
             var result = await _controller
-                .ChangeEmail(It.IsAny<int>(), new UserForLoginResource()) as OkObjectResult;
+                .ChangeEmail(new JsonPatchDocument<User>()) as BadRequestResult;
 
-            Assert.Equal(200, result.StatusCode);
+            Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void ChangeEmail_WhenUserIsValid_UpdateMethodIsCalled()
+        public async void ChangeEmail_WhenInputIsNull_ReturnsBadRequestResult()
         {
-            SetInitialMockingToReturnSuccessWhenEmailIsModified(id: 1);
-            _userManager.Setup(um => um.SetEmailAsync(It.IsAny<User>(), It.IsAny<string>()))
-                .ReturnsAsync(IdentityResult.Success);
-            _userManager.Setup(um => um.SetUserNameAsync(It.IsAny<User>(), It.IsAny<string>()))
-                .ReturnsAsync(IdentityResult.Success);
-
-            await _controller.ChangeEmail(1, new UserForLoginResource());
-
-            _userManager.Verify(um => um.SetEmailAsync(It.IsAny<User>(), It.IsAny<string>()));
-            _userManager.Verify(um => um.SetUserNameAsync(It.IsAny<User>(), It.IsAny<string>()));
-            _userManager.Verify(um => um.UpdateAsync(It.IsAny<User>()));
-        }
-
-        [Fact]
-        public async void ChangeEmail_WhenUserExistsAndIsValid_ReturnsToken()
-        {
-            var tokenObject = new { token = "a" };
-            SetInitialMockingToReturnSuccessWhenEmailIsModified(id: 1);
-            _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
-                .ReturnsAsync("a");
+            SetInitialUser(1);
 
             var result = await _controller
-                .ChangeEmail(1, new UserForLoginResource()) as ObjectResult;
+                .ChangeEmail(null) as BadRequestResult;
 
-            Assert.Equal(tokenObject.ToString(), result.Value.ToString());
-        }
-
-        [Fact]
-        public async void ChangeEmail_WhenUserNotFound_ReturnsNotFoundResult()
-        {
-            User user = null;
-            _userManager.Setup(um => um.FindByIdAsync("1"))
-                .ReturnsAsync(user);
-
-            var result = await _controller
-                .ChangeEmail(1, new UserForLoginResource()) as NotFoundObjectResult;
-
-            Assert.Equal(404, result.StatusCode);
-        }
-
-        [Fact]
-        public async void ChangeEmail_WhenLoggedInUserIdIsNotEqualToPostedId_ReturnsUnauthorizedResult()
-        {
-            var loggedInUserId = 2;
-            SetInitialUser(loggedInUserId);
-            _userManager.Setup(um => um.FindByIdAsync("1"))
-                .ReturnsAsync(new User());
-
-            var result = await _controller
-                .ChangeEmail(1, new UserForLoginResource()) as UnauthorizedObjectResult;
-
-            Assert.Equal(401, result.StatusCode);
+            Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
         public async void ChangeEmail_WhenUpdatingFailed_ReturnsBadRequestResult()
         {
-            var identityError = new IdentityError() { Code = "400", Description = "a"};
-            SetInitialMockingForValidUser(id: 1);
-            _userManager.Setup(um => um.UpdateAsync(It.IsAny<User>()))
-               .ReturnsAsync(IdentityResult.Failed(identityError));
+            var identityError = new IdentityError() { Code = "400", Description = "a" };
+            SetInitialUser(1);
+            MockFindByIdAsyncOfUserManager(new User());
+            MockUpdateAsyncOfUserManager(IdentityResult.Failed(identityError));
 
-            var result = await _controller.ChangeEmail(1, new UserForLoginResource()) as ObjectResult;
+            var result = await _controller.ChangeEmail(new JsonPatchDocument<User>()) as ObjectResult;
             var errors = result.Value as List<IdentityError>;
 
             Assert.Equal(400, result.StatusCode);
@@ -125,22 +76,67 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
+        public async void ChangeEmail_WhenUserIsLoggedInAndInputIsValid_UpdateMethodIsCalled()
+        {
+            SetInitialUser(1);
+            MockFindByIdAsyncOfUserManager(new User());
+            MockUpdateAsyncOfUserManager(IdentityResult.Success);
+
+            await _controller.ChangeEmail(new JsonPatchDocument<User>());
+
+            _userManager.Verify(um => um.UpdateAsync(It.IsAny<User>()));
+        }
+
+        [Fact]
+        public async void ChangeEmail_WhenUserExistsAndIsValid_ReturnsToken()
+        {
+            var tokenObj = new { token = "a" };
+            SetInitialUser(1);
+            MockFindByIdAsyncOfUserManager(new User());
+            MockUpdateAsyncOfUserManager(IdentityResult.Success);
+            MockGenerateTokenFromTokenRepo("a");
+
+            var result = await _controller
+                .ChangeEmail(new JsonPatchDocument<User>()) as OkObjectResult;
+
+            Assert.Equal(tokenObj.ToString(), result.Value.ToString());
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
         public void ChangePassword_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.ChangePassword(It.IsAny<int>(), It.IsAny<ChangePasswordViewModelResource>());
+            var result = _controller.ChangePassword(It.IsAny<ChangePasswordViewModelResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void ChangePassword_WhenUserExistsAndUpdatingIsSuccessful_ReturnsOkActionResult()
+        public async void ChangePassword_WhenUserIsLoggedOut_ReturnsBadRequestResultResult()
         {
-            SetInitialMockingToReturnSuccessWhenPasswordIsModifying(id: 1);
+            SetInitialUser(null);
 
             var result = await _controller
-                .ChangePassword(1, new ChangePasswordViewModelResource()) as OkResult;
+                .ChangePassword(new ChangePasswordViewModelResource()) as BadRequestResult;
 
-            Assert.Equal(200, result.StatusCode);
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void ChangePassword_WhenUpdatingFailed_ReturnsBadRequestResult()
+        {
+            var identityError = new IdentityError() { Code = "400", Description = "a" };
+            SetInitialUser(1);
+            MockFindByIdAsyncOfUserManager(new User());
+            MockChangePasswordAsyncOfUserManager(IdentityResult.Failed(identityError));
+
+
+            var result = await _controller
+                .ChangePassword(new ChangePasswordViewModelResource()) as BadRequestObjectResult;
+            var errors = result.Value as List<IdentityError>;
+
+            Assert.Equal(400, result.StatusCode);
+            Assert.Equal("a", errors[0].Description);
         }
 
         [Fact]
@@ -151,82 +147,56 @@ namespace JagWebApp.Tests.Controllers
                 CurrentPassword = "a",
                 NewPassword = "b"
             };
-            SetInitialMockingToReturnSuccessWhenPasswordIsModifying(id: 1);
+            var user = new User();
+            SetInitialUser(1);
+            MockFindByIdAsyncOfUserManager(user);
+            MockChangePasswordAsyncOfUserManager(IdentityResult.Success);
 
-            await _controller.ChangePassword(1, viewModel);
+            await _controller.ChangePassword(viewModel);
 
-            _userManager.Verify(um => um.ChangePasswordAsync(_user, "a", "b"));
+            _userManager.Verify(um => um.ChangePasswordAsync(user, "a", "b"));
         }
 
         [Fact]
-        public async void ChangePassword_WhenUserNotFound_ReturnsNotFoundResult()
+        public async void ChangePassword_WhenUserIsLoggedInAndUpdatingIsSuccessful_ReturnsOkActionResult()
         {
-            User user = null;
-            _userManager.Setup(um => um.FindByIdAsync("1"))
-                .ReturnsAsync(user);
+            SetInitialUser(1);
+            MockFindByIdAsyncOfUserManager(new User());
+            MockChangePasswordAsyncOfUserManager(IdentityResult.Success);
+
 
             var result = await _controller
-                .ChangePassword(1, new ChangePasswordViewModelResource()) as NotFoundObjectResult;
+                .ChangePassword(new ChangePasswordViewModelResource()) as OkResult;
 
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(200, result.StatusCode);
         }
 
-        [Fact]
-        public async void ChangePassword_WhenLoggedInUserIdIsNotEqualToPostedId_ReturnsUnauthorizedResult()
+        private void MockUpdateAsyncOfUserManager(IdentityResult result)
         {
-            var loggedInUserId = 2;
-            SetInitialUser(loggedInUserId);
-            _userManager.Setup(um => um.FindByIdAsync("1"))
-                .ReturnsAsync(new User());
-
-            var result = await _controller
-                .ChangePassword(1, new ChangePasswordViewModelResource()) as UnauthorizedObjectResult;
-
-            Assert.Equal(401, result.StatusCode);
-        }
-
-        [Fact]
-        public async void ChangePassword_WhenUpdatingFailed_ReturnsBadRequestResult()
-        {
-            var identityError = new IdentityError() { Code = "400", Description = "a" };
-            SetInitialMockingForValidUser(id: 1);
-            _userManager.Setup(um => um.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(IdentityResult.Failed(identityError));
-
-            var result = await _controller
-                .ChangePassword(1, new ChangePasswordViewModelResource()) as ObjectResult;
-            var errors = result.Value as List<IdentityError>;
-
-            Assert.Equal(400, result.StatusCode);
-            Assert.Equal("a", errors[0].Description);
-        }
-
-        private void SetInitialMockingToReturnSuccessWhenEmailIsModified(int id)
-        {
-            SetInitialMockingForValidUser(id);
-
             _userManager.Setup(um => um.UpdateAsync(It.IsAny<User>()))
-                .ReturnsAsync(IdentityResult.Success);
+                .ReturnsAsync(result);
         }
 
-        private void SetInitialMockingToReturnSuccessWhenPasswordIsModifying(int id)
+        private void MockFindByIdAsyncOfUserManager(User user)
         {
-            SetInitialMockingForValidUser(id);
-
-            _userManager.Setup(um => 
-                um.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(IdentityResult.Success);
+            _userManager.Setup(um => um.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync(user);
         }
 
-        private void SetInitialMockingForValidUser(int id)
+        private void MockGenerateTokenFromTokenRepo(string token)
         {
-            SetInitialUser(id);
-
-            _userManager.Setup(um => um.FindByIdAsync(id.ToString()))
-                .ReturnsAsync(_user);
+            _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
+               .ReturnsAsync(token);
         }
 
-        private void SetInitialUser(int id)
+        private void MockChangePasswordAsyncOfUserManager(IdentityResult result)
+        {
+            _userManager
+               .Setup(um => um.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
+               .ReturnsAsync(result);
+        }
+
+        private void SetInitialUser(int? id)
         {
             var identity = new GenericIdentity("", "");
             var nameIdentifierClaim = new Claim(ClaimTypes.NameIdentifier, id.ToString());

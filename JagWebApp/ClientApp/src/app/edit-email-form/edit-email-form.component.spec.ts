@@ -32,7 +32,6 @@ describe('EditEmailFormComponent', () => {
         userService = TestBed.get(UserService);
         service = TestBed.get(AuthService);
         spyOn(service, 'loggedIn').and.returnValue(true);
-        spyOn(service, 'getUserId').and.returnValue(1);
         spyOn(service, 'getUserEmail').and.returnValue('email@abc.com');
         fixture.detectChanges();
     });
@@ -45,7 +44,7 @@ describe('EditEmailFormComponent', () => {
         expect(component.email).toBeTruthy();
     });
 
-    xit('should init form input with proper email', () => {
+    xit('should init form input with logged in user email', () => {
         let emailAddress = 'email@abc.com';
         spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
 

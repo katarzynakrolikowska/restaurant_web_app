@@ -3,7 +3,6 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { passwordsMatch } from '../validators/password.validator';
 import { UserService } from '../services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
@@ -34,7 +33,6 @@ export class EditPasswordFormComponent implements OnInit {
     constructor(
         private userService: UserService,
         private toastr: ToastrService,
-        private authService: AuthService,
         private spinner: NgxSpinnerService
     ) { }
 
@@ -50,28 +48,27 @@ export class EditPasswordFormComponent implements OnInit {
     }
 
     savePassword() {
-        if (this.form.valid) {
-            this.spinner.show();
-            let id = this.authService.getUserId();
+        if (this.form.invalid)
+            return;
 
-            this.view = Object.assign({}, this.form.value);
-            this.userService.savePassword(this.view, id)
-                .subscribe(() => {
-                    this.invalid = false;
-                    this.spinner.hide();
-                    this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
-                }, (error: HttpErrorResponse) => {
-                    this.invalid = true;
-                    this.spinner.hide();
+        this.spinner.show();
+        this.view = Object.assign({}, this.form.value);
 
-                    if (error.status === 400)
-                        this.errorMessage = 'To nie jest Twoje stare hasło';
-                    else
-                        this.errorMessage = ERROR_SERVER_MESSAGE;
-                });
+        this.userService.savePassword(this.view)
+            .subscribe(() => {
+                this.invalid = false;
+                this.spinner.hide();
+                this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
+            }, (error: HttpErrorResponse) => {
+                this.invalid = true;
+                this.spinner.hide();
 
-            this.form.reset();
-        }
+                error.status === 400 ?
+                    this.errorMessage = 'To nie jest Twoje stare hasło' :
+                    this.errorMessage = ERROR_SERVER_MESSAGE;
+            });
+
+        this.form.reset();
     }
 
     getCurrentPasswordErrorMessage() {

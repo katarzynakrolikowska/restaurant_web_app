@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
@@ -27,45 +24,40 @@ namespace JagWebApp.Controllers
             _tokenRepository = tokenRepository;
         }
 
-        //POST: api/user/email/1
-        [HttpPost("email/{id}")]
-        public async Task<IActionResult> ChangeEmail(int id, UserForLoginResource userForLoginResource)
+        //PATCH: api/user/email
+        [HttpPatch("email")]
+        public async Task<IActionResult> ChangeEmail([FromBody] JsonPatchDocument<User> patchUser)
         {
+            var id = GetLoggedInUserId();
+            if (id == null)
+                return BadRequest();
+
+            if (patchUser == null)
+                return BadRequest();
+
             var userToModify = await _userManager.FindByIdAsync(id.ToString());
 
-            if (userToModify == null)
-                return NotFound("Nie znaleziono użytkownika");
-
-            if (id != GetLoggedInUserId())
-                return Unauthorized("Brak uprawnień");
-
-
-            await _userManager.SetEmailAsync(userToModify, userForLoginResource.Email);
-            await _userManager.SetUserNameAsync(userToModify, userForLoginResource.Email);
+            patchUser.ApplyTo(userToModify, ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var result = await _userManager.UpdateAsync(userToModify);
 
             if (result.Succeeded)
-            {
-                return Ok(new
-                {
-                    token = _tokenRepository.GenerateToken(userToModify).Result
-                });
-            }
+                return Ok(new { token = _tokenRepository.GenerateToken(userToModify).Result });
 
             return BadRequest(result.Errors);
         }
 
-        //POST: api/user/password/1
-        [HttpPost("password/{id}")]
-        public async Task<IActionResult> ChangePassword(int id, ChangePasswordViewModelResource viewModel)
+        //PUT: api/user/password
+        [HttpPut("password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModelResource viewModel)
         {
-            var userToModify = await _userManager.FindByIdAsync(id.ToString());
-            if (userToModify == null)
-                return NotFound("Nie znaleziono użytkownika");
+            var id = GetLoggedInUserId();
+            if (id == null)
+                return BadRequest();
 
-            if (id != GetLoggedInUserId())
-                return Unauthorized("Brak uprawnień");
+            var userToModify = await _userManager.FindByIdAsync(id.ToString());
 
             var result = await _userManager
                 .ChangePasswordAsync(userToModify, viewModel.CurrentPassword, viewModel.NewPassword);
