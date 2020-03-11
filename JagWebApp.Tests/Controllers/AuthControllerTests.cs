@@ -97,6 +97,20 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
+        public async void Login_WhenUserEmailIsInvalid_ReturnsUnauthorizedResult()
+        {
+            User user = null;
+            _userManager.Setup(um => um.FindByEmailAsync("a"))
+                .ReturnsAsync(user);
+
+
+            var result = await _controller.Login(new UserForLoginResource()) as UnauthorizedResult;
+
+            Assert.Equal(401, result.StatusCode);
+        }
+
+
+        [Fact]
         public async void Login_WhenCalled_CheckPasswordSignInAsyncIsCalled()
         {
             var user = new User() { Email = "a" };
@@ -116,7 +130,7 @@ namespace JagWebApp.Tests.Controllers
         {
             var token = new { token = "a" };
             _userManager.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(It.IsAny<User>());
+                .ReturnsAsync(new User());
             _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
                 .ReturnsAsync("a");
             _signInManager.Setup(sm => sm.CheckPasswordSignInAsync(It.IsAny<User>(), It.IsAny<string>(), false))
