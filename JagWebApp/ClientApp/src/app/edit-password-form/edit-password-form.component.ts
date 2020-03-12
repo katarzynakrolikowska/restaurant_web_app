@@ -3,19 +3,16 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { passwordsMatch } from '../validators/password.validator';
 import { UserService } from '../services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
     SUCCESS_SAVE_DATA_MESSAGE,
     ERROR_SERVER_MESSAGE,
     ERROR_REQUIRED_MESSAGE,
-    ERROR_MISMATCH_PASSWORDS_MESSAGE,
-    ERROR_CONFIRM_PASSWORD_MESSAGE,
     ERROR_MIN_LENGTH_PASSWORD_MESSAGE,
     ERROR_MAX_LENGTH_PASSWORD_MESSAGE
 } from '../user-messages/messages';
-import { CustomErrorStateMatcher } from '../helpers/custom-error-state-matcher';
+import { CustomErrorStateMatcher, MismatchErrorStateMatcher } from '../helpers/error-state-matcher';
 import { ChangePasswordView } from '../models/change-password-view';
 
 
@@ -30,48 +27,42 @@ export class EditPasswordFormComponent implements OnInit {
     errorMessage: string;
     invalid: boolean = false;
     matcher = new CustomErrorStateMatcher();
+    mismatchErrorMatcher = new MismatchErrorStateMatcher();
 
     constructor(
         private userService: UserService,
         private toastr: ToastrService,
-        private authService: AuthService,
         private spinner: NgxSpinnerService
     ) { }
 
     ngOnInit() {
         this.initForm();
 
-        this.confirmPassword.setValidators(
-            [
-                Validators.required,
-                passwordsMatch(this.newPassword)
-            ]
-        );
+        this.form.setValidators(passwordsMatch(this.newPassword, this.confirmPassword));
     }
 
     savePassword() {
-        if (this.form.valid) {
-            this.spinner.show();
-            let id = this.authService.getUserId();
+        if (this.form.invalid)
+            return;
 
-            this.view = Object.assign({}, this.form.value);
-            this.userService.savePassword(this.view, id)
-                .subscribe(() => {
-                    this.invalid = false;
-                    this.spinner.hide();
-                    this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
-                }, (error: HttpErrorResponse) => {
-                    this.invalid = true;
-                    this.spinner.hide();
+        this.spinner.show();
+        this.view = Object.assign({}, this.form.value);
 
-                    if (error.status === 400)
-                        this.errorMessage = 'To nie jest Twoje stare hasło';
-                    else
-                        this.errorMessage = ERROR_SERVER_MESSAGE;
-                });
+        this.userService.savePassword(this.view)
+            .subscribe(() => {
+                this.invalid = false;
+                this.spinner.hide();
+                this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
+            }, (error: HttpErrorResponse) => {
+                this.invalid = true;
+                this.spinner.hide();
 
-            this.form.reset();
-        }
+                error.status === 400 ?
+                    this.errorMessage = 'To nie jest Twoje stare hasło' :
+                    this.errorMessage = ERROR_SERVER_MESSAGE;
+            });
+
+        this.form.reset();
     }
 
     getCurrentPasswordErrorMessage() {
@@ -82,14 +73,8 @@ export class EditPasswordFormComponent implements OnInit {
     getNewPasswordErrorMessage() {
         return this.newPassword.hasError('required') ? ERROR_REQUIRED_MESSAGE :
             this.newPassword.hasError('minlength') ? ERROR_MIN_LENGTH_PASSWORD_MESSAGE :
-                this.newPassword.hasError('maxlength') ? ERROR_MAX_LENGTH_PASSWORD_MESSAGE :
+            this.newPassword.hasError('maxlength') ? ERROR_MAX_LENGTH_PASSWORD_MESSAGE :
                     '';
-    }
-
-    getPasswordConfirmErrorMessage() {
-        return this.confirmPassword.hasError('required') ? ERROR_CONFIRM_PASSWORD_MESSAGE :
-            this.confirmPassword.hasError('mismatch') ? ERROR_MISMATCH_PASSWORDS_MESSAGE :
-                '';
     }
 
     get currentPassword() {

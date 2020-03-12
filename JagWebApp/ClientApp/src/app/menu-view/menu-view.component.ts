@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { CATEGORY_ALL_MENU_ITEMS_ID, CATEGORY_MAIN_MENU_ITEM_ID } from '../consts/app-consts';
+import { ALL_MENU_ITEMS_CATEGORY_ID, MAIN_MENU_ITEM_CATEGORY_ID  } from '../consts/app.consts';
 import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
-import { MainMenuItem } from '../models/main-menu-item';
+import { MenuItem } from '../models/menu-item';
 import { MenuService } from '../services/menu.service';
 import { Dish } from '../models/dish';
-import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -14,14 +13,14 @@ import { AuthService } from '../services/auth.service';
     styleUrls: ['./menu-view.component.css']
 })
 export class MenuViewComponent implements OnInit {
-    categoryAll = CATEGORY_ALL_MENU_ITEMS_ID;
-    categoryMainItem = CATEGORY_MAIN_MENU_ITEM_ID;
+    categoryAll = ALL_MENU_ITEMS_CATEGORY_ID ;
+    categoryMainItem = MAIN_MENU_ITEM_CATEGORY_ID ;
 
     ordinaryMenuItems: Array<OrdinaryMenuItem> = [];
-    mainMenuItem: MainMenuItem;
+    mainMenuItem: MenuItem;
     filteredMenuItems: Array<OrdinaryMenuItem> = [];
     
-    currentSelectedCategoryId = CATEGORY_ALL_MENU_ITEMS_ID;
+    currentSelectedCategoryId = ALL_MENU_ITEMS_CATEGORY_ID ;
     
 
     constructor(
@@ -32,8 +31,8 @@ export class MenuViewComponent implements OnInit {
         this.spinner.show();
         
         this.menuService.getMenuItems()
-            .subscribe((result: Array<MainMenuItem>) => {
-                result.forEach(item => {
+            .subscribe((menuItems: Array<MenuItem>) => {
+                menuItems.forEach(item => {
                     !item.isMain ? this.ordinaryMenuItems.push(this.getOrdinaryMenuItem(item)) : 
                         this.mainMenuItem = item;
                 });
@@ -63,7 +62,8 @@ export class MenuViewComponent implements OnInit {
     toggleCategory(categoryId) {
         this.currentSelectedCategoryId = categoryId;
 
-        categoryId === CATEGORY_ALL_MENU_ITEMS_ID ? this.filteredMenuItems = this.ordinaryMenuItems :
+        categoryId === ALL_MENU_ITEMS_CATEGORY_ID ?
+            this.filteredMenuItems = this.ordinaryMenuItems :
             this.filteredMenuItems = this.ordinaryMenuItems.filter(item => item.dish.category.id === categoryId);
     }
 
@@ -84,7 +84,7 @@ export class MenuViewComponent implements OnInit {
         array.splice(index, 1);
     }
 
-    private getOrdinaryMenuItem(item: MainMenuItem) {
+    private getOrdinaryMenuItem(item: MenuItem) {
         let ordinaryMenuItem: OrdinaryMenuItem = {
             id: item.id,
             dish: item.dishes[0],

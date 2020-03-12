@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { MainMenuItem } from '../models/main-menu-item';
+import { MenuItem } from '../models/menu-item';
 import { Router } from '@angular/router';
 import { MenuButton } from '../models/menu-button';
 import { MenuService } from '../services/menu.service';
@@ -12,8 +12,9 @@ import { AuthService } from '../services/auth.service';
 })
 export class MainMenuItemViewComponent implements OnInit {
     buttons: Array<MenuButton>;
-    @Input() mainMenuItem: MainMenuItem;
-    @Output() onDeleteMainMenuItem = new EventEmitter();
+
+    @Input('main-menu-item') mainMenuItem: MenuItem;
+    @Output('onDeleteMainMenuItem') onDeleteMainMenuItem = new EventEmitter();
 
     constructor(
         private router: Router,

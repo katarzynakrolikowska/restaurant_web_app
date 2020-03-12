@@ -5,21 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { CartItemsSharedService } from '../services/cart-items-shared.service';
 import { of } from 'rxjs';
 import { CartService } from '../services/cart.service';
-import { cartStubWithOneItem } from '../test/stubs/cart.stub';
-import { Cart } from '../models/cart';
-import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from '../test/stubs/menu-item.stub';
-import { CART_ID } from '../consts/app-consts';
+import { cartStubWithOneItem, cartSubWithDifferentItems } from '../test/stubs/cart.stub';
+import { CART_ID } from '../consts/app.consts';
 
 
 describe('NavCartButtonComponent', () => {
     const baseURL = '';
-    let cart: Cart = {
-        id: 2,
-        items: [
-            { menuItem: menuItemStubWithOneDish, amount: 1 },
-            { menuItem: menuItemStubWithTwoDishes, amount: 1 },
-        ]
-    }
     let component: NavCartButtonComponent;
     let fixture: ComponentFixture<NavCartButtonComponent>;
     let cartItemSharedService: CartItemsSharedService;
@@ -80,7 +71,7 @@ describe('NavCartButtonComponent', () => {
 
     it('should update user cart when user log in and cart is not empty', () => {
         component.userId = 1;
-        let spy = spyOn(cartService, 'update').and.returnValue(of(cart));
+        let spy = spyOn(cartService, 'update').and.returnValue(of(cartSubWithDifferentItems));
         let spyLocalStorage = spyOn(localStorage, 'removeItem');
 
         component.ngOnChanges();
@@ -93,7 +84,7 @@ describe('NavCartButtonComponent', () => {
     it('should init cart to user cart when user log in and cart is empty', () => {
         component.userId = 1;
         component.cartItemsQuantity = 0;
-        let spy = spyOn(cartService, 'getUserCart').and.returnValue(of(cart));
+        let spy = spyOn(cartService, 'getUserCart').and.returnValue(of(cartSubWithDifferentItems));
 
         component.ngOnChanges();
 

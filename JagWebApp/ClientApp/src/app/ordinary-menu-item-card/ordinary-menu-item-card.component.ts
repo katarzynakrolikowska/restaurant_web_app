@@ -13,10 +13,10 @@ import { UpdateMenuItem } from '../models/update-menu-item';
   styleUrls: ['./ordinary-menu-item-card.component.css']
 })
 export class OrdinaryMenuItemCardComponent {
-    @Input() menuItem: OrdinaryMenuItem;
-    @Input() isAdmin: boolean;
-    @Output() onDeleteMenuItem = new EventEmitter();
-    @Output() onUpdateMenuItem = new EventEmitter();
+    @Input('menu-item') menuItem: OrdinaryMenuItem;
+    @Input('is-admin') isAdmin: boolean;
+    @Output('onDeleteMenuItem') onDeleteMenuItem = new EventEmitter();
+    @Output('onUpdateMenuItem') onUpdateMenuItem = new EventEmitter();
 
     constructor(private menuService: MenuService, private toastr: ToastrService, public dialog: MatDialog) { }
 
@@ -33,9 +33,9 @@ export class OrdinaryMenuItemCardComponent {
             data: { price: menuItem.price, available: menuItem.available }
         });
 
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result)
-                this.updateItem(menuItem.id, result);
+        dialogRef.afterClosed().subscribe(dialogResult => {
+            if (dialogResult)
+                this.updateItem(menuItem.id, dialogResult);
         });
     }
 

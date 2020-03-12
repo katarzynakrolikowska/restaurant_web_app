@@ -92,19 +92,6 @@ describe('RegisterFormComponent', () => {
         expect(passwordControl.invalid).toBeTruthy();
     });
 
-    it('should make confirmPassword control required', () => {
-        confirmPasswordControl.setValue('');
-
-        expect(confirmPasswordControl.invalid).toBeTruthy();
-    });
-
-    it('should make confirmPassword control invalid if passwords not match', () => {
-        passwordControl.setValue('aaaaaa');
-        confirmPasswordControl.setValue('aaaaab');
-
-        expect(confirmPasswordControl.invalid).toBeTruthy();
-    });
-
     it('should call the server to register new user after submit if form is valid', () => {
         let spyRegister = spyOn(authService, 'register').and.returnValue(empty());
 

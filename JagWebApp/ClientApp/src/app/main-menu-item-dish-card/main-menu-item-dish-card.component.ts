@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Dish } from '../models/dish';
 
 @Component({
@@ -6,14 +6,9 @@ import { Dish } from '../models/dish';
     templateUrl: './main-menu-item-dish-card.component.html',
     styleUrls: ['./main-menu-item-dish-card.component.css']
 })
-export class MainMenuItemDishCardComponent implements OnInit {
-    defualtImg: string;
+export class MainMenuItemDishCardComponent {
 
-    @Input() dish: Dish;
+    @Input('dish') dish: Dish;
 
     constructor() { }
-
-    ngOnInit() {
-        this.defualtImg = 'default.png';
-    }
 }

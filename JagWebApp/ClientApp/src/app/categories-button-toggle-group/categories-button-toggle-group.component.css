@@ -1,6 +1,7 @@
 
 .sticky-top {
   top: 80px;
+  z-index: auto;
 }
 
 @media (max-width: 575px) {

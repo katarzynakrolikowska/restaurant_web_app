@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { Cart } from '../models/cart';
 import { SaveCart } from '../models/save-cart';
 import { AuthService } from '../services/auth.service';
-import { CART_ID } from '../consts/app-consts';
+import { CART_ID } from '../consts/app.consts';
 
 @Component({
   selector: 'app-cart-action-buttons',
@@ -30,8 +30,8 @@ export class CartActionButtonsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscription = this.cartItemsSharedService.cartContent$
-            .subscribe(result => {
-                this.cart = result;
+            .subscribe(cart => {
+                this.cart = cart;
                 this.initUserId();
                 this.initMenuItemQuantity();
             });
@@ -54,11 +54,11 @@ export class CartActionButtonsComponent implements OnInit, OnDestroy {
 
     removeItemFromCart() {
         this.cartItemService.delete(this.menuItemId, this.cart.id)
-            .subscribe((result: Cart) => {
-                if (!result && !this.userId)
+            .subscribe((cart: Cart) => {
+                if (!cart && !this.userId)
                     localStorage.removeItem(CART_ID);
 
-                this.cart = result;
+                this.cart = cart;
                 this.shareCartItemAction(false);
             }, () => { });
     }
@@ -76,8 +76,8 @@ export class CartActionButtonsComponent implements OnInit, OnDestroy {
         let cart: SaveCart = { menuItemId: this.menuItemId };
 
         this.cartService.create(cart)
-            .subscribe((result: Cart) => {
-                this.cart = result;
+            .subscribe((cart: Cart) => {
+                this.cart = cart;
 
                 if (!this.userId) 
                     localStorage.setItem(CART_ID, this.cart.id.toString());
@@ -88,8 +88,8 @@ export class CartActionButtonsComponent implements OnInit, OnDestroy {
 
     private addNewItemToCart() {
         this.cartItemService.createOrUpdate(this.menuItemId, this.cart.id)
-            .subscribe((result: Cart) => {
-                this.cart = result; 
+            .subscribe((cart: Cart) => {
+                this.cart = cart; 
                 this.shareCartItemAction(true);
             }, () => {});
     }

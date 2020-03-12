@@ -45,7 +45,11 @@
     <ng-container matColumnDef="deleting">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
-        <button mat-raised-button color="warn" type="button" class="my-4" (click)="openConfirmingDialog(element.id)">
+        <button mat-raised-button
+                color="warn"
+                type="button"
+                class="my-4"
+                (click)="openConfirmingDialog(element.id)">
           Usuń
         </button>
       </td>

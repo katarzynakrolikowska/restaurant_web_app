@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Dish } from '../models/dish';
 
 @Component({
@@ -7,8 +7,8 @@ import { Dish } from '../models/dish';
   styleUrls: ['./dishes-list.component.css']
 })
 export class DishesListComponent {
-    @Input() dishes: Array<Dish>;
-    @Output() onDishClick = new EventEmitter();
+    @Input('dishes') dishes: Array<Dish>;
+    @Output('onDishClick') onDishClick = new EventEmitter();
 
     constructor() { }
    

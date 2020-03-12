@@ -1,6 +1,6 @@
 import { Dish } from "./dish";
 
-export interface MainMenuItem {
+export interface MenuItem {
     id?: number;
     dishes: Array<Dish>,
     price: number;

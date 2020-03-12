@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
@@ -23,7 +20,8 @@ namespace JagWebApp.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DishesController(IDishRepository dishRepository, 
+        public DishesController(
+            IDishRepository dishRepository, 
             IDishCategoryRepository categoryRepository, 
             IPhotoRepository photoRepository,
             IUnitOfWork unitOfWork, 
@@ -62,7 +60,7 @@ namespace JagWebApp.Controllers
         public async Task<IActionResult> CreateDish(SaveDishResource saveDishResource)
         {
             if (!await _categoryRepository.CategoryExists(saveDishResource.CategoryId))
-                return BadRequest("Niepoprawne dane");
+                return BadRequest();
 
             var dish = _mapper.Map<SaveDishResource, Dish>(saveDishResource);
 
@@ -76,9 +74,6 @@ namespace JagWebApp.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDish(int id, SaveDishResource saveDishResource)
         {
-            if (id != saveDishResource.Id)
-                return BadRequest();
-
             var dish = await _dishRepository.GetDish(id);
 
             if (dish == null)

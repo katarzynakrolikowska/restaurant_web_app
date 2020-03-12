@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { EmailValidators } from '../validators/email.validaor';
-import { User } from '../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../services/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -20,10 +19,6 @@ import {
 })
 export class EditEmailFormComponent implements OnInit {
     form: FormGroup;
-    user: User = {
-        id: this.authService.getUserId(),
-        email: this.authService.getUserEmail()
-    }
 
     constructor(
         private authService: AuthService,
@@ -35,7 +30,7 @@ export class EditEmailFormComponent implements OnInit {
     ngOnInit() {
         this.form = new FormGroup({
             email: new FormControl(
-                this.user.email,
+                this.authService.getUserEmail(),
                 [Validators.required, Validators.email],
                 [EmailValidators.shouldBeUnique(this.authService)]
             ),
@@ -54,15 +49,20 @@ export class EditEmailFormComponent implements OnInit {
     }
 
     saveEmail() {
-        if (this.form.valid) {
-            this.spinner.show();
+        if (this.form.invalid)
+            return;
 
-            this.user.email = this.email.value;
-            this.userService.saveEmail(this.user)
-                .subscribe(() => {
+        this.spinner.show();
+
+        var patchUser = [
+            { op: "replace", path: "/email", value: this.email.value },
+            { op: "replace", path: "/userName", value: this.email.value },
+        ];
+
+        this.userService.saveEmail(patchUser)
+            .subscribe(() => {
                 this.spinner.hide();
                 this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
             });
-        }
     }
 }

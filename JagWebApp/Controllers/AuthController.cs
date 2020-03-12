@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
@@ -55,6 +51,8 @@ namespace JagWebApp.Controllers
         public async Task<IActionResult> Login(UserForLoginResource userForLoginResource)
         {
             var user = await _userManager.FindByEmailAsync(userForLoginResource.Email);
+            if (user == null)
+                return Unauthorized();
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginResource.Password, false);
 

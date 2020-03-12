@@ -2,14 +2,15 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { MenuButton } from '../models/menu-button';
 
 @Component({
-  selector: 'app-menu-buttons',
-  templateUrl: './menu-buttons.component.html',
-  styleUrls: ['./menu-buttons.component.css']
+  selector: 'app-toolbar-icon-buttons',
+  templateUrl: './toolbar-icon-buttons.component.html',
+  styleUrls: ['./toolbar-icon-buttons.component.css']
 })
-export class MenuButtonsComponent implements OnInit {
+export class ToolbarIconButtonsComponent implements OnInit {
     isMobile: boolean;
-    @Input() buttons: Array<MenuButton>;
-    @Output() onButtonClick = new EventEmitter();
+
+    @Input('buttons') buttons: Array<MenuButton>;
+    @Output('onButtonClick') onButtonClick = new EventEmitter();
 
     constructor() { }
 

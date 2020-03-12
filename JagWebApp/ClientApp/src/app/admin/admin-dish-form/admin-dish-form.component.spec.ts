@@ -39,7 +39,6 @@ describe('AdminDishFormComponent', () => {
             providers: [
                 { provide: 'BASE_URL', useValue: baseURL },
                 { provide: ActivatedRoute, useValue: activatedRouteStub }
-                
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })
@@ -98,15 +97,6 @@ describe('AdminDishFormComponent', () => {
         expect(amountControl.invalid).toBeTruthy();
     });
 
-    xit('should call the server to save dish after submit if form is valid', () => {
-        let spy = spyOn(dishService, 'createDish').and.returnValue(empty());
-        setControls();
-
-        component.onSave();
-
-        expect(spy).toHaveBeenCalled();
-    });
-
     it('should NOT call the server to save dish after submit if form is invalid', () => {
         let spy = spyOn(dishService, 'createDish').and.returnValue(empty());
 
@@ -120,9 +110,4 @@ describe('AdminDishFormComponent', () => {
 
         expect(spyUpdateDish).toHaveBeenCalled();
     });
-
-    function setControls() {
-        nameControl.setValue('a');
-        categoryControl.setValue(1);
-    }
 });
