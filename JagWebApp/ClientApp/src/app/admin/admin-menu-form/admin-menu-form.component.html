@@ -3,8 +3,8 @@
   <mat-toolbar class="mb-3 col-12">
     Dodaj pozycję do Menu
   </mat-toolbar>
-  <div class="col-12 col-md-10 col-lg-6">
-    <form [formGroup]="form" (ngSubmit)="onSave()" class="p-4">
+  <div class="col-12 col-md-10 col-lg-6 px-md-0">
+    <form [formGroup]="form" (ngSubmit)="onSave()">
       <div class="mb-2">
         <mat-form-field appearance="outline" class="position-block">
           <mat-label>Danie</mat-label>
@@ -12,7 +12,7 @@
                  matInput placeholder="Danie"
                  formControlName="dish"
                  [matAutocomplete]="autoGroup"
-                 (keyup)="filterDishes()"/>
+                 (keyup)="filterDishes()" />
           <mat-error *ngIf="dish.invalid">{{ getDishErrorMessage() }}</mat-error>
           <mat-autocomplete #autoGroup="matAutocomplete"
                             [displayWith]="getSelectedDishName"

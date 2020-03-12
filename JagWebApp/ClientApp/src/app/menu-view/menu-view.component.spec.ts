@@ -15,6 +15,7 @@ describe('MenuViewComponent', () => {
     let component: MenuViewComponent;
     let fixture: ComponentFixture<MenuViewComponent>;
     let menuService: MenuService;
+    let element: HTMLElement = document.createElement('div');
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -36,6 +37,7 @@ describe('MenuViewComponent', () => {
         menuService = TestBed.get(MenuService);
         spyOn(menuService, 'getMenuItems').and
             .returnValue(of([menuItemStubWithOneDish, menuItemStubWithTwoDishes]));
+        spyOn(document, "getElementById").and.returnValue(element);
         fixture.detectChanges();
     });
 

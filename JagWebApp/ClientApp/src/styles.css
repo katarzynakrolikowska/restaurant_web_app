@@ -127,3 +127,18 @@ button:focus {
   left: 0;
   right: 0;
 }
+
+@media (max-width: 767px) {
+  .mat-tab-body-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .mat-tab-body-content {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 15px;
+  }
+}
