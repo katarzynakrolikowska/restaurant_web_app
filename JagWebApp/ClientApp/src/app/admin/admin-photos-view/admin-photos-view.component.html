@@ -6,7 +6,8 @@
   <div class="col-12 col-md-10 col-lg-6 px-md-0">
     <mat-form-field appearance="outline" class="position-block">
       <mat-label>Dodaj zdjęcie</mat-label>
-      <ngx-mat-file-input #removableInput placeholder="Photo" (change)="uploadPhoto()" #fileInput></ngx-mat-file-input>
+      <ngx-mat-file-input #removableInput placeholder="Photo" (change)="uploadPhoto()" #fileInput>
+      </ngx-mat-file-input>
       <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
         <mat-icon>clear</mat-icon>
       </button>

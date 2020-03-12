@@ -49,7 +49,12 @@ namespace JagWebApp.Persistence
             var fileName = await _fileService.SaveFile(file, ROOT_NAME); 
             var thumbnailName = await _fileService.SaveFile(file, ROOT_NAME, dimensions); 
 
-            var photo = new Photo { Name = fileName, ThumbnailName = thumbnailName };
+            var photo = new Photo 
+            { 
+                Name = fileName, 
+                ThumbnailName = thumbnailName, 
+                IsMain = dish.Photos.Count == 0 
+            };
             dish.Photos.Add(photo);
 
             return photo;
