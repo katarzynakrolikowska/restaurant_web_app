@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { CartService } from '../services/cart.service';
 import { cartStubWithOneMenuItem, cartSubWithDifferentItems } from '../test/stubs/cart.stub';
 import { CART_ID } from '../consts/app.consts';
+import { SignalRService } from '../services/signal-r.service';
 
 
 describe('NavCartButtonComponent', () => {
@@ -16,6 +17,7 @@ describe('NavCartButtonComponent', () => {
     let cartItemSharedService: CartItemsSharedService;
     let cartService: CartService;
     let spy;
+    let signalRService: SignalRService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -38,6 +40,8 @@ describe('NavCartButtonComponent', () => {
         spy = spyOn(cartService, 'getCart').and.returnValue(of(cartStubWithOneMenuItem));
 
         component.userId = null;
+        signalRService = TestBed.get(SignalRService);
+        mockSignalRService();
 
         fixture.detectChanges();
     });
@@ -102,4 +106,13 @@ describe('NavCartButtonComponent', () => {
         expect(component.cartItemsQuantity).toBe(0);
         expect(component.cart).toBeNull();
     });
+
+    function mockSignalRService() {
+        (signalRService as any).startConnection = () => { };
+        (signalRService as any).addTransferUpdatedItemListener = () => { };
+        (signalRService as any).addTransferDeletedItemListener = () => { };
+
+        component.subscription = signalRService.onUpdatedItemReceived.subscribe();
+        component.subscription.add(signalRService.onDeletedItemReceived.subscribe());
+    }
 });

@@ -4,6 +4,7 @@ import { CartItemsSharedService } from '../services/cart-items-shared.service';
 import { Subscription } from 'rxjs';
 import { CartService } from '../services/cart.service';
 import { CART_ID } from '../consts/app.consts';
+import { Dish } from '../models/dish';
 
 @Component({
     selector: 'app-cart-view',
@@ -15,7 +16,9 @@ export class CartViewComponent implements OnInit, OnDestroy {
     cart: Cart;
     subscription: Subscription;
 
-    constructor(private cartService: CartService, private cartItemsSharedService: CartItemsSharedService) { }
+    constructor(
+        private cartService: CartService,
+        private cartItemsSharedService: CartItemsSharedService) { }
 
     ngOnInit() {
         this.subscription = this.cartItemsSharedService.cartContent$
@@ -32,6 +35,11 @@ export class CartViewComponent implements OnInit, OnDestroy {
         this.cart.items.forEach(item => value += item.menuItem.price * item.amount);
         return value;
     }
+
+    getPhotoName(dish: Dish) {
+        return dish.mainPhoto ? dish.mainPhoto.thumbnailName : 'default.png';
+    }
+
 
     clearCart() {
         this.cartService.delete(this.cart.id)

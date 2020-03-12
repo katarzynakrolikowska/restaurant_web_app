@@ -40,12 +40,11 @@ describe('MenuViewComponent', () => {
             .returnValue(of([menuItemStubWithOneDish, menuItemStubWithTwoDishes]));
         spyOn(document, "getElementById").and.returnValue(element);
         signalRService = TestBed.get(SignalRService);
+        mockSignalRService();
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        mockSignalRService();
-        fixture.detectChanges();
-
         expect(component).toBeTruthy();
     });
 
@@ -55,8 +54,6 @@ describe('MenuViewComponent', () => {
     });
 
     it('should filter menu items to all items when toggleCategory is called with CATEGORY_ALL_MENU_ITEMS_ID', () => {
-        mockSignalRService();
-        fixture.detectChanges();
         component.toggleCategory(ALL_MENU_ITEMS_CATEGORY_ID);
 
         expect(component.filteredMenuItems.length).toBe(1);
@@ -72,5 +69,8 @@ describe('MenuViewComponent', () => {
         (signalRService as any).startConnection = () => { };
         (signalRService as any).addTransferUpdatedItemListener = () => { };
         (signalRService as any).addTransferDeletedItemListener = () => { };
+
+        component.subscription = signalRService.onUpdatedItemReceived.subscribe();
+        component.subscription.add(signalRService.onDeletedItemReceived.subscribe());
     }
 });

@@ -9,7 +9,7 @@
       <div class="col-12 col-md-7 my-1 my-md-auto">
         <div *ngFor="let dish of cartItem.menuItem.dishes">
           <div class="mb-2">
-            <img [src]="'/uploads/' + dish.mainPhoto.thumbnailName"
+            <img [src]="'/uploads/' + getPhotoName(dish)"
                  class="img-circle mr-3">
             <span>{{ dish.name }}</span>
           </div>

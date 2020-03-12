@@ -39,4 +39,8 @@ export class SignalRService {
             this.onDeletedItemReceived.emit(data);
         });
     }
+
+    isConnected() {
+        return this.hubConnection && this.hubConnection.state === 'Connected';
+    }
 }
