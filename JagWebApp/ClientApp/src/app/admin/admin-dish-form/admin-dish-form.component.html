@@ -1,34 +1,37 @@
 
-
-  <form [formGroup]="form" (ngSubmit)="onSave()">
-    <h4>{{ title }}</h4>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Nazwa</mat-label>
-        <textarea matInput formControlName="name" placeholder="Nazwa"></textarea>
-        <mat-error *ngIf="name.invalid">{{getNameErrorMessage()}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Kategoria</mat-label>
-        <mat-select formControlName="categoryId">
-          <mat-option *ngFor="let category of categories" [value]="category.id">
-            {{category.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="category.invalid">{{getCategoryErrorMessage()}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Ilość sztuk w porcji</mat-label>
-        <input matInput formControlName="amount" placeholder="Ilość sztuk w porcji" type="number">
-        <mat-error *ngIf="amount.invalid">{{getAmountErrorMessage()}}</mat-error>
-      </mat-form-field>
-    </p>
-
-    <button mat-raised-button color="primary" type="submit" class="my-4">Zapisz</button>
-  </form>
-
+<div class="row">
+  <mat-toolbar class="mb-3 col-12">
+    {{ title }}
+  </mat-toolbar>
+  <div class="col-12 col-md-10 col-lg-6 px-md-0">
+    <form [formGroup]="form" (ngSubmit)="onSave()">
+      <div>
+        <mat-form-field appearance="outline" class="position-block">
+          <mat-label>Nazwa</mat-label>
+          <input matInput formControlName="name" placeholder="Nazwa">
+          <mat-error *ngIf="name.invalid">{{ getNameErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="position-block">
+          <mat-label>Kategoria</mat-label>
+          <mat-select formControlName="categoryId">
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="category.invalid">{{ getCategoryErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="position-block">
+          <mat-label>Ilość sztuk w porcji</mat-label>
+          <input matInput formControlName="amount" placeholder="Ilość sztuk w porcji" type="number">
+          <mat-error *ngIf="amount.invalid">{{ getAmountErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button color="primary" type="submit" class="my-4">Zapisz</button>
+    </form>
+  </div>
+</div>
 

@@ -18,8 +18,14 @@ code {
   border-color: #1861ac;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .container-img {
   display: flex;
@@ -111,4 +117,62 @@ button:focus {
 .nav-mat-button {
   min-width: 48px !important;
   padding: 0 0 !important;
+}
+
+.sidenav-container {
+  background-color: #fff;
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.mat-tab-body-content {
+  overflow: hidden !important
+}
+
+.mat-tab-body.mat-tab-body-active {
+  overflow-y: hidden !important;
+} 
+
+
+@media (max-width: 767px) {
+  .mat-tab-body-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .scroll-top {
+    right: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .mat-tab-body-content {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 15px;
+  }
+
+  .scroll-top {
+    right: 30px;
+  }
+}
+
+.scroll-top {
+  position: fixed;
+  bottom: 20px;
+  opacity: 0;
+  transition: all .2s ease-in-out;
+}
+
+.visible {
+  opacity: 1;
+  transition: all .2s ease-in-out;
+}
+
+.btn-scroll-top {
+  opacity: 0.8;
+  background-color: #3f51b5 !important;
 }

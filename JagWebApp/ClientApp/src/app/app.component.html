@@ -1,9 +1,42 @@
-<body>
-  <app-nav-menu></app-nav-menu>
-  <div class="container-main" style="position:relative">
-    <app-spinner></app-spinner>
-    <div class="container mt-4">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</body>
+
+<mat-sidenav-container class="sidenav-container" (backdropClick)="close()">
+  <mat-sidenav #sidenav (keydown.escape)="close()" disableClose [mode]="side">
+    <mat-nav-list>
+      <span *ngIf="isAdmin()">
+        <a *ngFor="let button of menuButtons"
+           mat-list-item
+           [routerLink]="[button.link]"
+           class="px-3"
+           (click)="close()">
+          {{ button.name }}
+        </a>
+      </span>
+      <span *ngIf="!isAdmin()">
+        <a *ngFor="let button of menuButtonsForUser"
+           mat-list-item
+           [routerLink]="[button.link]"
+           class="px-3"
+           (click)="close()">
+          {{ button.name }}
+        </a>
+      </span>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content id="sidenavContent">
+    <body>
+      <app-nav-menu [sidenav]="sidenav"></app-nav-menu>
+      <div class="container-main" style="position:relative">
+        <app-spinner></app-spinner>
+        <div class="container mt-5">
+          <router-outlet></router-outlet>
+          <div class="scroll-top" [ngClass]="{'visible': offset > 500}">
+            <button mat-mini-fab class="btn-scroll-top" (click)="scrollToTop()">
+              <mat-icon>keyboard_arrow_up</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </body>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

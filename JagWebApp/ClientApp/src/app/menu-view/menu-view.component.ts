@@ -65,6 +65,8 @@ export class MenuViewComponent implements OnInit {
         categoryId === ALL_MENU_ITEMS_CATEGORY_ID ?
             this.filteredMenuItems = this.ordinaryMenuItems :
             this.filteredMenuItems = this.ordinaryMenuItems.filter(item => item.dish.category.id === categoryId);
+
+        document.getElementById('sidenavContent').scrollTo(0, 0);
     }
 
     removeMainItem() {

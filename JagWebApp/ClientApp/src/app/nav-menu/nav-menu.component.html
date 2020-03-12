@@ -2,22 +2,18 @@
   <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">Jagienka</a>
-
       <div class="navbar-collapse collapse d-sm-inline-flex"
            [ngClass]="{ show: isExpanded }">
-        <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/menu']">Menu</a>
-          </li>
-          <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/admin/dishes']">Dania</a>
-          </li>
-        </ul>
+        <span *ngIf="isAdmin()">
+          <button *ngFor="let button of menuButtons" mat-button [routerLink]="[button.link]">
+            {{ button.name }}
+          </button>
+        </span>
+        <span *ngIf="!isAdmin()">
+          <button *ngFor="let button of menuButtonsForUser" mat-button [routerLink]="[button.link]">
+            {{ button.name }}
+          </button>
+        </span>
       </div>
       <div>
         <button *ngIf="!loggedIn(); else userProfileLink"
@@ -41,20 +37,11 @@
         <span *ngIf="!isAdmin()">
           <app-nav-cart-button [user-id]="authService.getUserId()"></app-nav-cart-button>
         </span>
+        <button mat-button class="nav-mat-button d-sm-none" (click)="sidenav.open()">
+          <mat-icon>menu</mat-icon>
+        </button>
       </div>
-
     </div>
-    <button mat-button
-            class="d-sm-none"
-            type="button"
-            data-toggle="collapse"
-            data-target=".navbar-collapse"
-            aria-label="Toggle navigation"
-            [attr.aria-expanded]="isExpanded"
-            (click)="toggle()">
-      <mat-icon *ngIf="!isExpanded">menu</mat-icon>
-      <mat-icon *ngIf="isExpanded">menu_open</mat-icon>
-    </button>
   </nav>
 </header>
 
