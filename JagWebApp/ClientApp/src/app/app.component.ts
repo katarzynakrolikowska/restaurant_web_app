@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { MatSidenav, MatSidenavContainer } from '@angular/material';
 import { AuthService } from './services/auth.service';
 import { NAV_MENU_BUTTONS } from './consts/app.consts';
 
@@ -7,14 +7,22 @@ import { NAV_MENU_BUTTONS } from './consts/app.consts';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
     @ViewChild('sidenav', { static: false }) sidenav: MatSidenav;
+    @ViewChild(MatSidenavContainer, { static: false }) sidenavContainer: MatSidenavContainer;
 
     menuButtons = NAV_MENU_BUTTONS;
     menuButtonsForUser = NAV_MENU_BUTTONS.filter(btn => btn.role !== 'admin');
-    title = 'app';
+    offset: number = 0;
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private ref: ChangeDetectorRef) { }
+
+    ngAfterViewInit() {
+        this.sidenavContainer.scrollable.elementScrolled().subscribe(() => {
+            this.offset = this.sidenavContainer.scrollable.measureScrollOffset('top');
+            this.ref.detectChanges();
+        });
+    }
 
     isAdmin() {
         if (!this.authService.loggedIn())
@@ -25,5 +33,9 @@ export class AppComponent {
 
     close() {
         this.sidenav.close();
+    }
+
+    scrollToTop() {
+        document.getElementById('sidenavContent').scrollTo({ behavior: 'smooth', top: 0 });
     }
 }

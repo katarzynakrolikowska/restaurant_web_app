@@ -1,3 +1,4 @@
+
 <mat-sidenav-container class="sidenav-container" (backdropClick)="close()">
   <mat-sidenav #sidenav (keydown.escape)="close()" disableClose [mode]="side">
     <mat-nav-list>
@@ -28,6 +29,11 @@
         <app-spinner></app-spinner>
         <div class="container mt-5">
           <router-outlet></router-outlet>
+          <div class="scroll-top" [ngClass]="{'visible': offset > 500}">
+            <button mat-mini-fab class="btn-scroll-top" (click)="scrollToTop()">
+              <mat-icon>keyboard_arrow_up</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </body>
