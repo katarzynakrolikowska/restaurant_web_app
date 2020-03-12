@@ -100,13 +100,13 @@ describe('AdminDishFormComponent', () => {
     it('should NOT call the server to save dish after submit if form is invalid', () => {
         let spy = spyOn(dishService, 'createDish').and.returnValue(empty());
 
-        component.onSave();
+        component.save();
 
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call the server to update dish if id is valid number', () => {
-        component.onSave();
+        component.save();
 
         expect(spyUpdateDish).toHaveBeenCalled();
     });

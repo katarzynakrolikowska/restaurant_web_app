@@ -18,6 +18,7 @@ namespace JagWebApp.Tests.Controllers
         private readonly Mock<IDishRepository> _dishRepo;
         private readonly Mock<IDishCategoryRepository> _categoryRepo;
         private readonly Mock<IPhotoRepository> _photoRepo;
+        private readonly Mock<IMenuRepository> _menuRepo;
         private readonly Mock<IUnitOfWork> _unitOfWork;
         private readonly IMapper _mapper;
         private readonly DishesController _controller;
@@ -28,11 +29,13 @@ namespace JagWebApp.Tests.Controllers
             _dishRepo = new Mock<IDishRepository>();
             _categoryRepo = new Mock<IDishCategoryRepository>();
             _photoRepo = new Mock<IPhotoRepository>();
+            _menuRepo = new Mock<IMenuRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
             _controller = new DishesController(
                 _dishRepo.Object,
                 _categoryRepo.Object,
                 _photoRepo.Object,
+                _menuRepo.Object,
                 _unitOfWork.Object, _mapper);
         }
 
@@ -146,55 +149,6 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void RemoveDish_WhenCalled_ReturnsIActionResult()
-        {
-            var result = _controller.RemoveDish(It.IsAny<int>());
-
-            Assert.IsType<Task<IActionResult>>(result);
-        }
-
-        [Fact]
-        public async void RemoveDish_WhenDishDoesNotExist_ReturnsNotFoundResult()
-        {
-            Dish dish = null;
-            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
-                .ReturnsAsync(dish);
-
-            var result = await _controller.RemoveDish(It.IsAny<int>()) as NotFoundResult;
-
-            Assert.Equal(404, result.StatusCode);
-        }
-
-        [Fact]
-        public async void RemoveDish_WhenDishExists_DishIsRemoved()
-        {
-            var dish = new Dish();
-            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
-                .ReturnsAsync(dish);
-            _photoRepo.Setup(pr => pr.Remove(dish.Photos));
-            _unitOfWork.Setup(u => u.CompleteAsync());
-
-            await _controller.RemoveDish(It.IsAny<int>());
-
-            _dishRepo.Verify(dr => dr.Remove(dish));
-            _photoRepo.Verify(pr => pr.Remove(dish.Photos));
-            _unitOfWork.Verify(u => u.CompleteAsync());
-        }
-
-        [Fact]
-        public async void RemoveDish_WhenDishExists_ReturnsOkResult()
-        {
-            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
-                .ReturnsAsync(new Dish());
-            _unitOfWork.Setup(u => u.CompleteAsync());
-
-            var result = await _controller.RemoveDish(It.IsAny<int>()) as OkResult;
-
-            Assert.Equal(200, result.StatusCode);
-        }
-
-
-        [Fact]
         public void UpdateDish_WhenCalled_ReturnsIActionResult()
         {
             var result = _controller.UpdateDish(It.IsAny<int>(), It.IsAny<SaveDishResource>());
@@ -226,6 +180,74 @@ namespace JagWebApp.Tests.Controllers
 
             _dishRepo.Verify(dr => dr.GetDish(It.IsAny<int>()));
             _unitOfWork.Verify(u => u.CompleteAsync());
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public void RemoveDish_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.RemoveDish(It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void RemoveDish_WhenDishDoesNotExist_ReturnsNotFoundResult()
+        {
+            Dish dish = null;
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(dish);
+
+            var result = await _controller.RemoveDish(It.IsAny<int>()) as NotFoundResult;
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void RemoveDish_WhenDishExistsInMenu_ReturnsBadRequestObjectResult()
+        {
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(new Dish());
+            _menuRepo.Setup(mr => mr.GetMenuItemWithDish(It.IsAny<int>()))
+                .ReturnsAsync(new MenuItem());
+
+            var result = await _controller.RemoveDish(It.IsAny<int>()) as BadRequestObjectResult;
+
+            Assert.Equal(400, result.StatusCode);
+            Assert.IsType<string>(result.Value);
+        }
+
+        [Fact]
+        public async void RemoveDish_WhenDishExists_DishIsRemoved()
+        {
+            var dish = new Dish();
+            MenuItem item = null;
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(dish);
+            _menuRepo.Setup(mr => mr.GetMenuItemWithDish(It.IsAny<int>()))
+                .ReturnsAsync(item);
+            _photoRepo.Setup(pr => pr.Remove(dish.Photos));
+            _unitOfWork.Setup(u => u.CompleteAsync());
+
+            await _controller.RemoveDish(It.IsAny<int>());
+
+            _dishRepo.Verify(dr => dr.Remove(dish));
+            _photoRepo.Verify(pr => pr.Remove(dish.Photos));
+            _unitOfWork.Verify(u => u.CompleteAsync());
+        }
+
+        [Fact]
+        public async void RemoveDish_WhenDishExists_ReturnsOkResult()
+        {
+            MenuItem item = null;
+            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+                .ReturnsAsync(new Dish());
+            _menuRepo.Setup(mr => mr.GetMenuItemWithDish(It.IsAny<int>()))
+                .ReturnsAsync(item);
+            _unitOfWork.Setup(u => u.CompleteAsync());
+
+            var result = await _controller.RemoveDish(It.IsAny<int>()) as OkResult;
+
             Assert.Equal(200, result.StatusCode);
         }
     }

@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { DialogConfirmComponent } from '../../dialog-confirm/dialog-confirm.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ERROR_SERVER_MESSAGE } from '../../user-messages/messages';
 
 @Component({
   selector: 'app-admin-dishes-view',
@@ -90,6 +92,11 @@ export class AdminDishesViewComponent implements OnInit {
             .subscribe(() => {
                 this.updateDishesTableAfterRemoving(id);
                 this.toastr.success("Danie zostało usunięte");
+            }, (errorResponse: HttpErrorResponse) => {
+                if (errorResponse.status === 400 && errorResponse.error.includes('Menu'))
+                    this.toastr.error(errorResponse.error);
+                else
+                    this.toastr.error(ERROR_SERVER_MESSAGE);
             });
     }
 

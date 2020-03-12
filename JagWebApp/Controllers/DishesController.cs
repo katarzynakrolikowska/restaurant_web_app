@@ -17,6 +17,7 @@ namespace JagWebApp.Controllers
         private readonly IDishRepository _dishRepository;
         private readonly IDishCategoryRepository _categoryRepository;
         private readonly IPhotoRepository _photoRepository;
+        private readonly IMenuRepository _menuRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -24,12 +25,14 @@ namespace JagWebApp.Controllers
             IDishRepository dishRepository, 
             IDishCategoryRepository categoryRepository, 
             IPhotoRepository photoRepository,
+            IMenuRepository menuRepository,
             IUnitOfWork unitOfWork, 
             IMapper mapper)
         {
             _dishRepository = dishRepository;
             _categoryRepository = categoryRepository;
             _photoRepository = photoRepository;
+            _menuRepository = menuRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -93,6 +96,10 @@ namespace JagWebApp.Controllers
 
             if (dish == null)
                 return NotFound();
+
+            var menuItem = await _menuRepository.GetMenuItemWithDish(id);
+            if (menuItem != null)
+                return BadRequest("Danie jest zapisane w Menu");
 
             var photos = dish.Photos;
 

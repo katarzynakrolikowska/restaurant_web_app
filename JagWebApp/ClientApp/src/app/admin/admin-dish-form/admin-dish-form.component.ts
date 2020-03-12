@@ -68,7 +68,7 @@ export class AdminDishFormComponent implements OnInit {
         );
     }
 
-    onSave() {
+    save() {
         if (this.form.invalid)
             return;
 

@@ -54,6 +54,13 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync(m => m.IsMain == true);
         }
 
+        public async Task<MenuItem> GetMenuItemWithDish(int dishId)
+        {
+            return await _context.MenuItems
+                .Where(m => m.Dishes.Any(mid => mid.DishId == dishId))
+                .FirstOrDefaultAsync();
+        }
+
         public void Add(MenuItem menuItem)
         {
             _context.MenuItems.Add(menuItem);
