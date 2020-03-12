@@ -250,6 +250,38 @@ namespace JagWebApp.Tests.Controllers
             Assert.Equal(200, result.StatusCode);
         }
 
+        [Fact]
+        public void Remove_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.Remove(It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartDoesNotExist_ReturnsBadRequest()
+        {
+            Cart cart = null;
+            MockGetCartFromCartRepo(cart);
+
+            var result = await _controller.Remove(It.IsAny<int>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Remove_WhenCartExists_ReturnsBadRequest()
+        {
+            var cart = new Cart();
+            MockGetCartFromCartRepo(cart);
+            MockRemoveFromCartRepo(cart);
+
+            var result = await _controller.Remove(It.IsAny<int>()) as OkResult;
+
+            _cartRepo.Verify(cr => cr.Remove(cart));
+            Assert.Equal(200, result.StatusCode);
+        }
+
         private void MockGetCartFromCartRepo(Cart cart)
         {
             _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>(), It.IsAny<bool>()))
@@ -284,6 +316,12 @@ namespace JagWebApp.Tests.Controllers
             _userManager.Setup(um => um.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
         }
+
+        private void MockRemoveFromCartRepo(Cart cart)
+        {
+            _cartRepo.Setup(cr => cr.Remove(cart));
+        }
+
 
         private void SetInitialUser(int? id)
         {

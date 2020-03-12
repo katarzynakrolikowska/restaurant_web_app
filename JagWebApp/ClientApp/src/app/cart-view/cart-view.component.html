@@ -1,0 +1,54 @@
+
+<div *ngIf="cart">
+  <h3 class="my-5">Twój koszyk</h3>
+  <div class="row my-3 mx-0">
+    <mat-divider class="col"></mat-divider>
+  </div>
+  <div *ngFor="let cartItem of cart.items">
+    <div class="row">
+      <div class="col-12 col-md-7 my-1 my-md-auto">
+        <div *ngFor="let dish of cartItem.menuItem.dishes">
+          <div class="mb-2">
+            <img [src]="'/uploads/' + dish.mainPhoto.thumbnailName"
+                 class="img-circle mr-3">
+            <span>{{ dish.name }}</span>
+          </div>
+
+        </div>
+      </div>
+
+      <app-cart-action-buttons class="col-12 col-md-3 text-center my-1 my-md-auto"
+                               [menu-item-id]="cartItem.menuItem.id"
+                               [available]="cartItem.menuItem.available">
+      </app-cart-action-buttons>
+      <div class="col-12 col-md-2 mt-2 my-1 my-md-auto text-center text-md-right">
+        {{ cartItem.menuItem.price * cartItem.amount | currency : '' : '' }} zł
+      </div>
+    </div>
+    <div class="row my-3 mx-0">
+      <mat-divider class="col"></mat-divider>
+    </div>
+  </div>
+  <div class="row mb-5">
+    <div class="col col-md-3 offset-md-9 text-center text-md-right font-weight-bolder font-size-lg no-wrap">
+      Razem: {{cartValue | currency : '' : '' }} zł
+    </div>
+  </div>
+  <div class="row mb-5">
+    <div class="col-6 col-md-3">
+      <button mat-button color="warn" class="mb-2" (click)="clearCart()">WYCZYŚĆ KOSZYK</button>
+    </div>
+    <div class="col-6 col-md-3 offset-md-6">
+      <button mat-flat-button color="primary" class="width-max">ZAMÓW</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="!cart" class="text-center pt-3">
+  <h4>Twój koszyk jest niestety pusty</h4>
+  <div>
+    <mat-icon class="my-auto">sentiment_dissatisfied</mat-icon>
+  </div>
+  <button mat-stroked-button color="primary" class="mt-4 font-size-lg py-1" [routerLink]="['/menu']">
+    KUPUJ DALEJ
+  </button>
+</div>

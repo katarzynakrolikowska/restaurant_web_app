@@ -47,6 +47,8 @@ import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view/ordin
 import { NavCartButtonComponent } from './nav-cart-button/nav-cart-button.component';
 import { CartActionButtonsComponent } from './cart-action-buttons/cart-action-buttons.component';
 import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
+import { CartViewComponent } from './cart-view/cart-view.component';
+import { NotAdminGuard } from './guards/not-admin.guard';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -84,6 +86,7 @@ export function tokenGetter() {
     OrdinaryMenuItemsViewComponent,
     CartActionButtonsComponent,
     NavCartButtonComponent,
+    CartViewComponent,
 
   ],
   imports: [
@@ -136,7 +139,13 @@ export function tokenGetter() {
               }
           ]
         },
+        {
+            path: 'cart',
+            component: CartViewComponent,
+            canActivate: [NotAdminGuard]
+        },
         { path: 'menu', component: MenuViewComponent },
+        { path: 'cart', component: CartViewComponent },
         { path: 'login', component: LoginPanelComponent },
         { path: '**', component: NotFoundComponent }
     ]),

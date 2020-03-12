@@ -8,7 +8,9 @@ import { SaveCart } from '../models/save-cart';
 })
 export class CartService { 
 
-    constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+    constructor(
+        private http: HttpClient,
+        @Inject('BASE_URL') private baseUrl: string) { }
 
     getCart(id) {
         return this.http.get(this.baseUrl + 'api/carts/' + id)
@@ -31,6 +33,10 @@ export class CartService {
 
         return this.http.put(this.baseUrl + 'api/carts/' + this.cartId, null, { headers: headers })
             .pipe(map(result => result));
+    }
+
+    delete(cartId) {
+        return this.http.delete(this.baseUrl + 'api/carts/' + cartId);
     }
 
     private get cartId() {

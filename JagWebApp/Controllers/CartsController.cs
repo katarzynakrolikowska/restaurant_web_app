@@ -120,6 +120,22 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Cart, CartResource>(newCart));
         }
 
+        //DELETE: api/carts/1
+        [AllowAnonymous]
+        [HttpDelete("{cartId}")]
+        public async Task<IActionResult> Remove(int cartId)
+        {
+            var cart = await _cartRepository.GetCart(cartId, false);
+            if (cart == null)
+                return BadRequest();
+
+            _cartRepository.Remove(cart);
+            await _unitOfWork.CompleteAsync();
+
+            return Ok();
+        }
+
+
         private int? GetLoggedInUserId()
         {
             return Core.Models.User.GetLoggedInUserId((ClaimsIdentity)User.Identity);

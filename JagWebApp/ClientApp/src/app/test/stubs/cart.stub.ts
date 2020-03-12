@@ -1,14 +1,14 @@
 import { Cart } from "../../models/cart";
 import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from "./menu-item.stub";
 
-export const cartStubWithOneItem: Cart = {
+export const cartStubWithOneMenuItem: Cart = {
     id: 1,
     items: [
         { menuItem: menuItemStubWithOneDish, amount: 1 }
     ]
 }
 
-export const cartStubWithTwoItems: Cart = {
+export const cartStubWithTwoMenuItems: Cart = {
     id: 1,
     items: [
         { menuItem: menuItemStubWithOneDish, amount: 2 }

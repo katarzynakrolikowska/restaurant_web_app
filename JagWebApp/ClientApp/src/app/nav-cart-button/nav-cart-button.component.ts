@@ -32,12 +32,16 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
                     this.shareCart();
                 });
         }
-        this.subscription = this.cartItemsSharedService.itemAddedContent$
-            .subscribe((isAdded: Boolean) =>
-                isAdded ? this.cartItemsQuantity++ : this.cartItemsQuantity--);
 
-        this.subscription.add(this.cartItemsSharedService.cartContent$
-            .subscribe((result: Cart) => this.cart = result));
+        this.subscription = this.cartItemsSharedService.cartContent$
+            .subscribe((cart: Cart) => {
+                this.cart = cart;
+                this.setCartItemsQuantity();
+            });
+
+        this.subscription.add(this.cartItemsSharedService.itemAddedContent$
+            .subscribe((isAdded: Boolean) =>
+                isAdded ? this.cartItemsQuantity++ : this.cartItemsQuantity--));
     }
 
     ngOnChanges(): void {
