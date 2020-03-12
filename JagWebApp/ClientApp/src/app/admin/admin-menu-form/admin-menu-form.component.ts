@@ -16,7 +16,7 @@ import { InputAutocompleteData } from '../../models/input-autocomplete-data';
 import { SaveMenuItem } from '../../models/save-menu-item';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MainMenuItem } from '../../models/main-menu-item';
+import { MenuItem } from '../../models/menu-item';
 import { UpdateMenuItem } from '../../models/update-menu-item';
 
 
@@ -35,8 +35,8 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     routeParam: string;
     dishesToSave: Array<Dish> = [];
 
-    @Input() mainMenuItemToUpdate: MainMenuItem;
-    @Input() isUpdating: boolean;
+    @Input('main-menu-item-to-update') mainMenuItemToUpdate: MenuItem;
+    @Input('is-updating') isUpdating: boolean;
 
     constructor(
         private dishService: DishService,
@@ -55,8 +55,8 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
         this.initForm();
         
         this.dishService.getDishes()
-            .subscribe(data => {
-                this.dishesFromService = data as Array<Dish>;
+            .subscribe(dishes => {
+                this.dishesFromService = dishes as Array<Dish>;
                 this.setDishValidators();
                 this.setDishesGroup();
 
@@ -70,7 +70,6 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
             this.dishesToSave = this.mainMenuItemToUpdate.dishes;
             this.setFormValues();
         }
-
     }
 
     filterDishes() {
@@ -141,7 +140,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
 
     private saveItem() {
         let item: SaveMenuItem = {
-            dishes: this.getDishesToSaveIds(),
+            dishes: this.getIdsOfDishesToSave(),
             price: this.price.value,
             available: this.available.value,
             isMain: this.routeParam === 'mainitem'
@@ -162,7 +161,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
 
     private updateItem() {
         let item: UpdateMenuItem = {
-            dishes: this.getDishesToSaveIds(),
+            dishes: this.getIdsOfDishesToSave(),
             price: this.price.value,
             available: this.available.value
         };
@@ -210,7 +209,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
         }
     }
 
-    private getDishesToSaveIds() {
+    private getIdsOfDishesToSave() {
         let ids: Array<number> = [];
         if (this.routeParam === 'mainitem') 
             this.dishesToSave.forEach(d => ids.push(d.id));

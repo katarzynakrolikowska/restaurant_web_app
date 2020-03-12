@@ -12,8 +12,8 @@
     </div>
     <ng-template #showMenuItems>
       <div *ngFor="let item of filteredMenuItems" class="col-md-6 col-lg-4">
-        <app-ordinary-menu-item-card [menuItem]="item"
-                                     [isAdmin]="authService.isAdmin()"
+        <app-ordinary-menu-item-card [menu-item]="item"
+                                     [is-admin]="authService.isAdmin()"
                                      (onDeleteMenuItem)="onDeleteItem.emit($event)"
                                      (onUpdateMenuItem)="onUpdateItem.emit($event)">
         </app-ordinary-menu-item-card>

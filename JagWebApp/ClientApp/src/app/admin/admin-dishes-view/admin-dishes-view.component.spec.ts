@@ -9,6 +9,7 @@ import { of, empty } from 'rxjs';
 import { Dish } from '../../models/dish';
 import { Router } from '@angular/router';
 import { AdminDishesViewComponent } from './admin-dishes-view.component';
+import { dishStub } from '../../test/stubs/dish.stub';
 
 
 describe('AdminDishesViewComponent', () => {
@@ -17,16 +18,7 @@ describe('AdminDishesViewComponent', () => {
     let fixture: ComponentFixture<AdminDishesViewComponent>;
     let dishService: DishService;
     let dialog;
-    let dish: Dish = {
-        id: 1,
-        name: 'a',
-        category: {
-            id: 1,
-            name: 'b'
-        },
-        amount: 1
-    };
-    let dishes: Array<Dish> = [dish];
+    let dishes: Array<Dish> = [dishStub];
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -86,7 +78,7 @@ describe('AdminDishesViewComponent', () => {
         expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should redirect user to edit dish page with proper id after called onEditClick', () => {
+    it('should redirect user to edit dish page after called onEditClick', () => {
         let router = TestBed.get(Router);
         let spy = spyOn(router, 'navigate');
 
@@ -94,5 +86,4 @@ describe('AdminDishesViewComponent', () => {
 
         expect(spy).toHaveBeenCalledWith(['admin/dishes/edit/1']);
     });
-
 });

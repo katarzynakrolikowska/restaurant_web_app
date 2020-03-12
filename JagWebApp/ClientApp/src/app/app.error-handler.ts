@@ -21,6 +21,5 @@ export class AppErrorHandler implements ErrorHandler {
             this.toastr = this.injector.get(ToastrService);
             this.toastr.error(ERROR_SERVER_MESSAGE);
         });
-
     }
 }

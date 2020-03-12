@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { CartItemsSharedService } from '../services/cart-items-shared.service';
 import { CartService } from '../services/cart.service';
 import { Cart } from '../models/cart';
-import { CART_ID } from '../consts/app-consts';
+import { CART_ID } from '../consts/app.consts';
 
 @Component({
   selector: 'app-nav-cart-button',

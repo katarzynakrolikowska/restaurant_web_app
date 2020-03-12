@@ -35,8 +35,8 @@ export class AdminDishesViewComponent implements OnInit {
     ngOnInit() {
         this.spinner.show();
         this.dishService.getDishes()
-            .subscribe(d => {
-                this.dishes = d;
+            .subscribe(dishes => {
+                this.dishes = dishes;
                 this.dataSource = new MatTableDataSource<Dish>(this.dishes);
 
                 this.dataSource.filterPredicate = (data, filter: string) => {
@@ -54,6 +54,7 @@ export class AdminDishesViewComponent implements OnInit {
                         default: return item[property];
                     }
                 };
+
                 this.dataSource.sort = this.sort;
                 this.dataSource.paginator = this.paginator;
 
@@ -104,13 +105,12 @@ export class AdminDishesViewComponent implements OnInit {
     private nestedFilterCheck(search, data, key) {
         if (typeof data[key] === 'object') {
             for (const k in data[key]) {
-                if (data[key][k] !== null) {
+                if (data[key][k] !== null) 
                     search = this.nestedFilterCheck(search, data[key], k);
-                }
             }
-        } else {
+        } else 
             search += data[key];
-        }
+        
         return search;
     }
 }

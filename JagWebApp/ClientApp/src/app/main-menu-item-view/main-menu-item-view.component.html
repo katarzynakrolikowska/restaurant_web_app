@@ -2,10 +2,10 @@
 <mat-toolbar class="mb-3">
   <span>Zestaw dnia</span>
   <span class="toolbar-spacer"></span>
-  <app-menu-buttons *ngIf="authService.isAdmin()"
+  <app-toolbar-icon-buttons *ngIf="authService.isAdmin()"
                     [buttons]="buttons"
                     (onButtonClick)="onButtonClick($event)">
-  </app-menu-buttons>
+  </app-toolbar-icon-buttons>
 </mat-toolbar>
 <div *ngIf="!mainMenuItem; else showMainMenuItem">
   Brak zestawu dnia
@@ -18,7 +18,7 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12 text-center font-weight-bolder font-size-bigger mb-2">
-        {{ mainMenuItem.price | currency : '' : ''  }} zł
+        {{ mainMenuItem.price | currency : '' : '' }} zł
       </div>
       <div class="col-12 text-center mb-4">
         Dostepne porcje:

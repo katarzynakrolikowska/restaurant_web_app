@@ -9,7 +9,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { cartStubWithOneItem, cartStubWithTwoItems } from '../test/stubs/cart.stub';
 import { CartActionButtonsComponent } from './cart-action-buttons.component';
 import { AuthService } from '../services/auth.service';
-import { CART_ID } from '../consts/app-consts';
+import { CART_ID } from '../consts/app.consts';
 
 
 describe('CartActionButtonsComponent', () => {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
-import { CATEGORY_ALL_MENU_ITEMS_ID, CATEGORY_MAIN_MENU_ITEM_ID } from '../consts/app-consts';
+import { ALL_MENU_ITEMS_CATEGORY_ID, MAIN_MENU_ITEM_CATEGORY_ID } from '../consts/app.consts';
 
 @Component({
   selector: 'app-categories-button-toggle-group',
@@ -10,21 +10,21 @@ import { CATEGORY_ALL_MENU_ITEMS_ID, CATEGORY_MAIN_MENU_ITEM_ID } from '../const
 })
 export class CategoriesButtonToggleGroupComponent implements OnInit {
     categories: Array<Category>;
-    @Output() onToggleCategory = new EventEmitter(); 
+    @Output('onToggleCategory') onToggleCategory = new EventEmitter(); 
 
     constructor(private categoryService: CategoryService) { }
 
     ngOnInit() {
         this.categoryService.getCategories()
-            .subscribe((result: Array<Category>) => {
-                this.categories = result.sort((a, b) => a.name.localeCompare(b.name));
+            .subscribe((categories: Array<Category>) => {
+                this.categories = categories.sort((a, b) => a.name.localeCompare(b.name));
                 let categoryAll: Category = {
-                    id: CATEGORY_ALL_MENU_ITEMS_ID,
+                    id: ALL_MENU_ITEMS_CATEGORY_ID,
                     name: 'Wszystkie dania'
                 };
 
                 let categoryMainItem: Category = {
-                    id: CATEGORY_MAIN_MENU_ITEM_ID,
+                    id: MAIN_MENU_ITEM_CATEGORY_ID,
                     name: 'Zestaw dnia'
                 };
                
@@ -38,6 +38,6 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
     }
 
     checked(id) {
-        return id === CATEGORY_ALL_MENU_ITEMS_ID;
+        return id === ALL_MENU_ITEMS_CATEGORY_ID;
     }
 }

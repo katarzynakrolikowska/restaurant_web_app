@@ -7,7 +7,7 @@ import { MenuViewComponent } from './menu-view.component';
 import { MenuService } from '../services/menu.service';
 import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from '../test/stubs/menu-item.stub';
 import { ordinaryMenuItemStub } from '../test/stubs/ordinary-menu-item.stub';
-import { CATEGORY_ALL_MENU_ITEMS_ID } from '../consts/app-consts';
+import { ALL_MENU_ITEMS_CATEGORY_ID  } from '../consts/app.consts';
 
 
 describe('MenuViewComponent', () => {
@@ -80,7 +80,7 @@ describe('MenuViewComponent', () => {
     });
 
     it('should filter menu items to all items when toggleCategory is called with CATEGORY_ALL_MENU_ITEMS_ID', () => {
-        component.toggleCategory(CATEGORY_ALL_MENU_ITEMS_ID);
+        component.toggleCategory(ALL_MENU_ITEMS_CATEGORY_ID );
 
         expect(component.filteredMenuItems.length).toBe(1);
     });

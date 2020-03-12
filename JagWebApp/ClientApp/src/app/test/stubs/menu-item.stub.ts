@@ -1,6 +1,6 @@
-import { MainMenuItem } from "../../models/main-menu-item";
+import { MenuItem } from "../../models/menu-item";
 
-export const menuItemStubWithOneDish: MainMenuItem = {
+export const menuItemStubWithOneDish: MenuItem = {
     id: 1,
     dishes: [
         {
@@ -19,7 +19,7 @@ export const menuItemStubWithOneDish: MainMenuItem = {
 };
 
 
-export const menuItemStubWithTwoDishes: MainMenuItem = {
+export const menuItemStubWithTwoDishes: MenuItem = {
     id: 2,
     dishes: [
         {

@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MenuButtonsComponent } from './menu-buttons.component';
 import { MatMenuModule, MatIconModule } from '@angular/material';
+import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons.component';
 
-describe('MenuButtonsComponent', () => {
-    let component: MenuButtonsComponent;
-    let fixture: ComponentFixture<MenuButtonsComponent>;
+describe('ToolbarIconButtonsComponent', () => {
+    let component: ToolbarIconButtonsComponent;
+    let fixture: ComponentFixture<ToolbarIconButtonsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [MenuButtonsComponent],
+            declarations: [ToolbarIconButtonsComponent],
             imports: [MatMenuModule, MatIconModule]
         })
         .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(MenuButtonsComponent);
+        fixture = TestBed.createComponent(ToolbarIconButtonsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

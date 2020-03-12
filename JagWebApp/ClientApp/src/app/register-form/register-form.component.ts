@@ -27,7 +27,7 @@ export class RegisterFormComponent implements OnInit {
     form: FormGroup;
     mismatchErrorMatcher = new MismatchErrorStateMatcher();
 
-    @Output() onNewUserRegistered = new EventEmitter();
+    @Output('onNewUserRegistered') onNewUserRegistered = new EventEmitter();
 
     constructor(
         private authService: AuthService,

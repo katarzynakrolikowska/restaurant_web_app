@@ -1,6 +1,7 @@
-import { MainMenuItem } from "./main-menu-item";
+import { MenuItem } from "./menu-item";
+
 
 export interface CartItem {
-    menuItem: MainMenuItem;
+    menuItem: MenuItem;
     amount: number;
 }

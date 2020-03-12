@@ -18,13 +18,16 @@ export class AdminPhotosViewComponent implements OnInit {
     @ViewChild('fileInput', { static: true }) fileInput: FileInputComponent;
     photos: Array<Photo>;
 
-    constructor(private photoService: PhotoService, private route: ActivatedRoute, private toastr: ToastrService) { }
+    constructor(
+        private photoService: PhotoService,
+        private route: ActivatedRoute,
+        private toastr: ToastrService) { }
 
     ngOnInit() {
         this.id = +this.route.snapshot.params['id'];
 
         this.photoService.getPhotos(this.id)
-            .subscribe(p => this.photos = p);
+            .subscribe(photos => this.photos = photos);
     }
     
     uploadPhoto() {

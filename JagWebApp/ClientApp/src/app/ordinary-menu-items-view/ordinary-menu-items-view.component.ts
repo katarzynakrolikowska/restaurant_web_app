@@ -9,10 +9,10 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./ordinary-menu-items-view.component.css']
 })
 export class OrdinaryMenuItemsViewComponent {
-    @Input() filteredMenuItems: Array<OrdinaryMenuItem> = [];
-    @Output() onDeleteItem = new EventEmitter();
-    @Output() onUpdateItem = new EventEmitter();
-        
+    @Input('filtered-menu-items') filteredMenuItems: Array<OrdinaryMenuItem> = [];
+    @Output('onDeleteItem') onDeleteItem = new EventEmitter();
+    @Output('onUpdateItem') onUpdateItem = new EventEmitter();
+
     constructor(private router: Router, private authService: AuthService) { }
 
     addDishToMenu() {

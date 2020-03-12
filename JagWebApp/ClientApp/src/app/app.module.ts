@@ -34,7 +34,6 @@ import { MainMenuItemViewComponent } from './main-menu-item-view/main-menu-item-
 import { BlankComponent } from './test/blank/blank.component';
 import { DishesListComponent } from './dishes-list/dishes-list.component';
 import { AdminMainItemEditFormComponent } from './admin/admin-main-item-edit-form/admin-main-item-edit-form.component';
-import { MenuButtonsComponent } from './menu-buttons/menu-buttons.component';
 import { MenuViewComponent } from './menu-view/menu-view.component';
 import { AdminOrdinaryItemEditDialogComponent } from './admin/admin-ordinary-item-edit-dialog/admin-ordinary-item-edit-dialog.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
@@ -47,6 +46,7 @@ import { MainMenuItemDishCardComponent } from './main-menu-item-dish-card/main-m
 import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view/ordinary-menu-items-view.component';
 import { NavCartButtonComponent } from './nav-cart-button/nav-cart-button.component';
 import { CartActionButtonsComponent } from './cart-action-buttons/cart-action-buttons.component';
+import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
@@ -80,7 +80,7 @@ export function tokenGetter() {
     BlankComponent,
     DishesListComponent,
     AdminMainItemEditFormComponent,
-    MenuButtonsComponent,
+    ToolbarIconButtonsComponent,
     OrdinaryMenuItemsViewComponent,
     CartActionButtonsComponent,
     NavCartButtonComponent,

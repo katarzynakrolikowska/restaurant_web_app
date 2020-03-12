@@ -43,28 +43,25 @@ describe('AdminMainItemEditFormComponent', () => {
     });
 
     it('should create', () => {
-        spyOnMenuServiceToReturnMenuItem();
+        spyOnMenuServiceToReturnMenuItem(of(menuItemStubWithTwoDishes));
 
         expect(component).toBeTruthy();
     });
 
     it('should init main menu item', () => {
-        spyOnMenuServiceToReturnMenuItem();
+        spyOnMenuServiceToReturnMenuItem(of(menuItemStubWithTwoDishes));
 
         expect(component.mainMenuItemToUpdate.price).toBe(1);
     });
 
     it('should NOT init main menu item when service returns error', () => {
-        spyOn(menuService, 'getMenuItem').and.returnValue(throwError(new Error('error')));
-
-        component.ngOnInit();
-        fixture.detectChanges();
+        spyOnMenuServiceToReturnMenuItem(throwError(new Error('error')));
 
         expect(component.mainMenuItemToUpdate).toBe(undefined);
     });
 
-    function spyOnMenuServiceToReturnMenuItem() {
-        spyOn(menuService, 'getMenuItem').and.returnValue(of(menuItemStubWithTwoDishes));
+    function spyOnMenuServiceToReturnMenuItem(valueToReturn) {
+        spyOn(menuService, 'getMenuItem').and.returnValue(valueToReturn);
 
         component.ngOnInit();
         fixture.detectChanges();
