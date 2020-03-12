@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { NAV_MENU_BUTTONS } from '../consts/app.consts';
 
 @Component({
   selector: 'app-nav-menu',
@@ -11,10 +12,16 @@ import { Router } from '@angular/router';
 export class NavMenuComponent {
     
     isExpanded = false;
-    menuRouterLink: string;
+    menuButtons = NAV_MENU_BUTTONS;
+    menuButtonsForUser = NAV_MENU_BUTTONS.filter(btn => btn.role !== 'admin');
 
-    constructor(private authService: AuthService, private toastr: ToastrService, private router: Router) { }
-    
+    @Input('sidenav') sidenav;
+
+    constructor(
+        private authService: AuthService,
+        private toastr: ToastrService,
+        private router: Router) { }
+
     collapse() {
         this.isExpanded = false;
     }
@@ -38,5 +45,9 @@ export class NavMenuComponent {
             return false;
 
         return this.authService.isAdmin();
+    }
+
+    close() {
+        this.sidenav.close();
     }
 }
