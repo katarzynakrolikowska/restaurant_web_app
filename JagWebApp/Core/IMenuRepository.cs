@@ -12,6 +12,8 @@ namespace JagWebApp.Core
 
         Task<MenuItem> GetMainMenuItem();
 
+        Task<MenuItem> GetMenuItemWithDish(int dishId);
+
         void Add(MenuItem menuItem);
 
         void Remove(MenuItem menuItem);

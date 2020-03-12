@@ -2,14 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatTableModule, MatDialogModule, MatButtonModule, MatDialog } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DishService } from '../../services/dish.service';
-import { of, empty } from 'rxjs';
+import { of, empty, throwError } from 'rxjs';
 import { Dish } from '../../models/dish';
 import { Router } from '@angular/router';
 import { AdminDishesViewComponent } from './admin-dishes-view.component';
 import { dishStub } from '../../test/stubs/dish.stub';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 describe('AdminDishesViewComponent', () => {
@@ -19,11 +20,18 @@ describe('AdminDishesViewComponent', () => {
     let dishService: DishService;
     let dialog;
     let dishes: Array<Dish> = [dishStub];
+    let toastr: ToastrService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AdminDishesViewComponent],
-            imports: [MatTableModule, MatDialogModule, MatButtonModule, HttpClientModule, ToastrModule.forRoot(),
+            imports: [
+                MatTableModule,
+                MatDialogModule,
+                MatButtonModule,
+                HttpClientModule,
+                ToastrModule.forRoot(),
+                BrowserAnimationsModule,
                 RouterTestingModule.withRoutes([])
             ],
             providers: [
@@ -61,7 +69,7 @@ describe('AdminDishesViewComponent', () => {
     it('should remove dish if user confirmed dialog', () => {
         dialog = TestBed.get(MatDialog);
         spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(true) });
-        let spy = spyOn(dishService, 'deleteDish').and.returnValue(empty());
+        let spy = spyOn(dishService, 'deleteDish').and.returnValue(of(Object));
 
         component.openConfirmingDialog(1);
 
@@ -71,11 +79,25 @@ describe('AdminDishesViewComponent', () => {
     it('should NOT remove dish if user not confirmed dialog', () => {
         dialog = TestBed.get(MatDialog);
         spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(false) });
-        let spy = spyOn(dishService, 'deleteDish').and.returnValue(empty());
+        let spy = spyOn(dishService, 'deleteDish').and.returnValue(of(Object));
 
         component.openConfirmingDialog(1);
 
         expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should NOT remove dish if service returns error', () => {
+        dialog = TestBed.get(MatDialog);
+        spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(true) });
+        spyOn(dishService, 'deleteDish').and.callFake(() => {
+            return throwError(new Error('a'));
+        });
+        toastr = TestBed.get(ToastrService);
+        let spy = spyOn(toastr, 'error');
+
+        component.openConfirmingDialog(1);
+
+        expect(spy).toHaveBeenCalled();
     });
 
     it('should redirect user to edit dish page after called onEditClick', () => {

@@ -101,6 +101,7 @@
     <None Remove="ClientApp\src\app\models\update-menu-item.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
     <None Remove="ClientApp\src\app\test\stubs\cart.stub.ts" />
+    <None Remove="ClientApp\src\app\test\stubs\photo.stub.ts" />
     <None Remove="ClientApp\src\app\user-messages\messages.ts" />
     <None Remove="ClientApp\src\app\validators\email.validaor.ts" />
     <None Remove="ClientApp\src\app\validators\menu-item.validator.ts" />
@@ -133,6 +134,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\test\stubs\category.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\test\stubs\menu-item.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\test\stubs\ordinary-menu-item.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\photo.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\test\stubs\update-menu-item.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\email.validaor.ts" />
