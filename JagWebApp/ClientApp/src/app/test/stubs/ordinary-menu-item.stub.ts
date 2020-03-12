@@ -13,6 +13,5 @@ export const ordinaryMenuItemStub: OrdinaryMenuItem = {
         amount: 1
     },
     price: 1,
-    limit: 1,
     available: 1
 };

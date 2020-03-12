@@ -5,7 +5,6 @@ export const menuItemStubWithOneDish: MenuItem = {
     id: 1,
     dishes: [dishStub],
     price: 1,
-    limit: 1,
     available: 1,
     isMain: false
 };
@@ -32,7 +31,6 @@ export const menuItemStubWithTwoDishes: MenuItem = {
         }
     ],
     price: 1,
-    limit: 1,
     available: 1,
     isMain: true
 };

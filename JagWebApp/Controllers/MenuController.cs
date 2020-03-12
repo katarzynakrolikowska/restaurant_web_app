@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
+using JagWebApp.Hubs;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace JagWebApp.Controllers
 {
@@ -20,17 +22,20 @@ namespace JagWebApp.Controllers
         private readonly IDishRepository _dishRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHubContext<MenuItemHub> _hub;
 
         public MenuController(
             IMenuRepository menuRepository, 
             IDishRepository dishRepository, 
-            IUnitOfWork unitOfWork, 
-            IMapper mapper)
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IHubContext<MenuItemHub> hub)
         {
             _menuRepository = menuRepository;
             _dishRepository = dishRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hub = hub;
         }
 
         //GET: api/menu
@@ -87,6 +92,11 @@ namespace JagWebApp.Controllers
             _mapper.Map(updateMenuItemResource, item);
             await _unitOfWork.CompleteAsync();
 
+            await _hub.Clients.All.SendAsync(
+               "transferUpdatedItem",
+               _mapper.Map<MenuItem, MenuItemResource>(item));
+
+
             return Ok();
         }
 
@@ -101,6 +111,10 @@ namespace JagWebApp.Controllers
 
             _menuRepository.Remove(item);
             await _unitOfWork.CompleteAsync();
+
+            await _hub.Clients.All.SendAsync(
+               "transferDeletedItem",
+               _mapper.Map<MenuItem, MenuItemResource>(item));
 
             return Ok();
         }

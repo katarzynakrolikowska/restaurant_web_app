@@ -62,7 +62,7 @@ describe('MainMenuItemViewComponent', () => {
         expect(spy).toHaveBeenCalledWith(['admin/menu/mainitem/edit/' + component.mainMenuItem.id]);
     });
 
-    it('should remove main item when onButtonClick is called with third button label and main item is defined', () => {
+    it('should remove main item when onButtonClick is called with "delete" button label and main item is defined', () => {
         component.mainMenuItem = menuItemStubWithTwoDishes;
         let spy = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
 

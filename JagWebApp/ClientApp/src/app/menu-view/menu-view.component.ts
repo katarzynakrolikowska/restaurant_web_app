@@ -5,6 +5,7 @@ import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
 import { MenuItem } from '../models/menu-item';
 import { MenuService } from '../services/menu.service';
 import { Dish } from '../models/dish';
+import { SignalRService } from '../services/signal-r.service';
 
 
 @Component({
@@ -25,38 +26,32 @@ export class MenuViewComponent implements OnInit {
 
     constructor(
         private menuService: MenuService,
-        private spinner: NgxSpinnerService) { }
+        private spinner: NgxSpinnerService,
+        private signalRService: SignalRService) { }
 
     ngOnInit() {
         this.spinner.show();
         
         this.menuService.getMenuItems()
             .subscribe((menuItems: Array<MenuItem>) => {
-                menuItems.forEach(item => {
-                    !item.isMain ? this.ordinaryMenuItems.push(this.getOrdinaryMenuItem(item)) : 
-                        this.mainMenuItem = item;
-                });
-
-                if (this.mainMenuItem) 
-                    this.sortDishesByCategoryId(this.mainMenuItem.dishes);
-
-                this.sortOrdinaryMenuItemsByCategoryId(this.ordinaryMenuItems);
-                this.filteredMenuItems = this.ordinaryMenuItems;
+                this.initMenuItems(menuItems);
                 this.spinner.hide();
             });
-    }
 
-    removeItemFromMenu(item: OrdinaryMenuItem) {
-        this.removeItemFromArray(this.ordinaryMenuItems, item.id);
-        if (item.dish.category.id === this.currentSelectedCategoryId) {
-            this.removeItemFromArray(this.filteredMenuItems, item.id);
-        }
-    }
+        this.signalRService.startConnection();
 
-    updateItem(data) {
-        let index = this.ordinaryMenuItems.findIndex(i => i.id === data.id);
-        this.ordinaryMenuItems[index].price = data.item.price;
-        this.ordinaryMenuItems[index].available = data.item.available;
+        this.signalRService.addTransferUpdatedItemListener();
+        this.signalRService.onUpdatedItemReceived
+            .subscribe((menuItem: MenuItem) =>
+                menuItem.isMain ? this.mainMenuItem = menuItem : this.updateMenuItem(menuItem));
+
+        this.signalRService.addTransferDeletedItemListener();
+        this.signalRService.onDeletedItemReceived
+            .subscribe((menuItem: MenuItem) => {
+                menuItem.isMain ?
+                    this.removeMainItem() :
+                    this.removeItemFromMenu(this.getOrdinaryMenuItem(menuItem));
+            });
     }
 
     toggleCategory(categoryId) {
@@ -64,14 +59,36 @@ export class MenuViewComponent implements OnInit {
 
         categoryId === ALL_MENU_ITEMS_CATEGORY_ID ?
             this.filteredMenuItems = this.ordinaryMenuItems :
-            this.filteredMenuItems = this.ordinaryMenuItems.filter(item => item.dish.category.id === categoryId);
+            this.filteredMenuItems = this.ordinaryMenuItems.filter(item =>
+                item.dish.category.id === categoryId);
 
         document.getElementById('sidenavContent').scrollTo(0, 0);
     }
 
-    removeMainItem() {
+    private removeMainItem() {
         this.mainMenuItem = null;
     }
+
+    private removeItemFromMenu(item: OrdinaryMenuItem) {
+        this.removeItemFromArray(this.ordinaryMenuItems, item.id);
+        if (item.dish.category.id === this.currentSelectedCategoryId) {
+            this.removeItemFromArray(this.filteredMenuItems, item.id);
+        }
+    }
+
+    private initMenuItems(menuItems: Array<MenuItem>) {
+        menuItems.forEach(item => {
+            !item.isMain ? this.ordinaryMenuItems.push(this.getOrdinaryMenuItem(item)) :
+                this.mainMenuItem = item;
+        });
+
+        if (this.mainMenuItem)
+            this.sortDishesByCategoryId(this.mainMenuItem.dishes);
+
+        this.sortOrdinaryMenuItemsByCategoryId(this.ordinaryMenuItems);
+        this.filteredMenuItems = this.ordinaryMenuItems;
+    }
+
 
     private sortDishesByCategoryId(array: Array<Dish>) {
         array.sort((a, b) => a.category.id - b.category.id);
@@ -79,6 +96,20 @@ export class MenuViewComponent implements OnInit {
 
     private sortOrdinaryMenuItemsByCategoryId(array: Array<OrdinaryMenuItem>) {
         array.sort((a, b) => a.dish.category.id - b.dish.category.id);
+    }
+
+    private updateMenuItem(menuItem: MenuItem) {
+        this.updateMenuItemInArray(menuItem, this.ordinaryMenuItems);
+
+        if (menuItem.dishes[0].category.id === this.currentSelectedCategoryId) {
+            this.updateMenuItemInArray(menuItem, this.filteredMenuItems);
+        }
+    }
+
+    private updateMenuItemInArray(menuItem: MenuItem, array: Array<OrdinaryMenuItem>) {
+        let index = array.findIndex(item => item.id === menuItem.id);
+        array[index].available = menuItem.available;
+        array[index].price = menuItem.price;
     }
 
     private removeItemFromArray(array: Array<any>, itemId) {
@@ -91,7 +122,6 @@ export class MenuViewComponent implements OnInit {
             id: item.id,
             dish: item.dishes[0],
             price: item.price,
-            limit: item.limit,
             available: item.available,
         }
         return ordinaryMenuItem;

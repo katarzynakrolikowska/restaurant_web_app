@@ -2,13 +2,16 @@
 using JagWebApp.Controllers;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
+using JagWebApp.Hubs;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,6 +23,7 @@ namespace JagWebApp.Tests.Controllers
         private readonly Mock<IDishRepository> _dishRepo;
         private readonly Mock<IUnitOfWork> _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly Mock<IHubContext<MenuItemHub>> _hub;
         private readonly MenuController _controller;
 
         public MenuControllerTests()
@@ -28,7 +32,13 @@ namespace JagWebApp.Tests.Controllers
             _menuRepo = new Mock<IMenuRepository>();
             _dishRepo = new Mock<IDishRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
-            _controller = new MenuController(_menuRepo.Object, _dishRepo.Object, _unitOfWork.Object, _mapper);
+            _hub = new Mock<IHubContext<MenuItemHub>>();
+            _controller = new MenuController(
+                _menuRepo.Object,
+                _dishRepo.Object,
+                _unitOfWork.Object,
+                _mapper,
+                _hub.Object);
         }
 
         [Fact]
@@ -135,9 +145,16 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void UpdateMenuItem_WhenMenuItemExists_ItemIsUpdated()
         {
+            var dish = new Dish
+            {
+                Id = 1,
+                Name = "a",
+                Category = new Category { Id = 1, Name = "a" },
+                Amount = 2
+            };
             var item = new MenuItem()
             {
-                Dishes = new Collection<MenuItemDish> { new MenuItemDish() { DishId = 1 } },
+                Dishes = new Collection<MenuItemDish> { new MenuItemDish { DishId = 1, Dish = dish } },
                 Price = 1,
                 Limit = 1,
                 Available = 1,
@@ -145,16 +162,17 @@ namespace JagWebApp.Tests.Controllers
             };
             var updateItem = new UpdateMenuItemResource
             {
-                Dishes = new Collection<int> { 1, 2 },
+                Dishes = new Collection<int> { 1 },
                 Price = 2,
                 Available = 2,
             };
             MockRepoToReturnMenuItem(item);
+            MockHub();
 
             await _controller.UpdateMenuItem(It.IsAny<int>(), updateItem);
 
             _unitOfWork.Verify(u => u.CompleteAsync());
-            Assert.Equal(2, item.Dishes.Count);
+            Assert.Equal(1, item.Dishes.Count);
             Assert.Equal(2, item.Price);
             Assert.Equal(2, item.Available);
             Assert.Equal(2, item.Limit);
@@ -164,6 +182,7 @@ namespace JagWebApp.Tests.Controllers
         public async void UpdateMenuItem_WhenMenuItemExists_ReturnsOkResult()
         {
             MockRepoToReturnMenuItem(new MenuItem());
+            MockHub();
 
             var result = await _controller.UpdateMenuItem(It.IsAny<int>(), new UpdateMenuItemResource()) as OkResult;
 
@@ -192,6 +211,7 @@ namespace JagWebApp.Tests.Controllers
             var item = new MenuItem();
             MockRepoToReturnMenuItem(item);
             _menuRepo.Setup(mr => mr.Remove(It.IsAny<MenuItem>()));
+            MockHub();
 
             await _controller.Remove(It.IsAny<int>());
 
@@ -203,6 +223,7 @@ namespace JagWebApp.Tests.Controllers
         public async void Remove_WhenMenuItemExists_ReturnsOkResult()
         {
             MockRepoToReturnMenuItem(new MenuItem());
+            MockHub();
 
             var result = await _controller.Remove(It.IsAny<int>()) as OkResult;
 
@@ -219,6 +240,21 @@ namespace JagWebApp.Tests.Controllers
         {
             _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
                 .ReturnsAsync(item);
+        }
+
+        private void MockHub()
+        {
+            Mock<IClientProxy> mockClientProxy = new Mock<IClientProxy>();
+            Mock<IHubClients> mockClients = new Mock<IHubClients>();
+            Mock<IGroupManager> mockGroups = new Mock<IGroupManager>();
+
+            mockClients.Setup(clients => clients.All).Returns(mockClientProxy.Object);
+
+            CancellationToken cancellationToken = default;
+            mockGroups.Object.AddToGroupAsync("1234", "DataGroup", cancellationToken);
+
+            _hub.Setup(x => x.Clients.All).Returns(mockClientProxy.Object);
+            _hub.Setup(groups => groups.Groups).Returns(mockGroups.Object);
         }
     }
 }
