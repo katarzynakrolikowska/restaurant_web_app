@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -10,8 +10,6 @@ import { AuthService } from '../services/auth.service';
 })
 export class OrdinaryMenuItemsViewComponent {
     @Input('filtered-menu-items') filteredMenuItems: Array<OrdinaryMenuItem> = [];
-    @Output('onDeleteItem') onDeleteItem = new EventEmitter();
-    @Output('onUpdateItem') onUpdateItem = new EventEmitter();
 
     constructor(private router: Router, private authService: AuthService) { }
 

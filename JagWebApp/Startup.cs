@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using JagWebApp.Hubs;
 
 namespace JagWebApp
 {
@@ -47,6 +48,8 @@ namespace JagWebApp
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
+
+            services.AddSignalR();
 
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {
@@ -134,6 +137,7 @@ namespace JagWebApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<MenuItemHub>("/menuItemHub");
             });
 
             app.UseSpa(spa =>

@@ -2,10 +2,10 @@
   <mat-card class="dish-card mb-4">
     <img *ngIf="menuItem.dish.mainPhoto; else defaultImage"
          mat-card-image src="/uploads/{{ menuItem.dish.mainPhoto.thumbnailName }}"
-         alt="">
+         alt="danie">
     <ng-template #defaultImage>
       <div class="text-center">
-        <img mat-card-image src="/uploads/default.png" alt="" class="img-default-dimensions">
+        <img mat-card-image src="/uploads/default.png" alt="danie" class="img-default-dimensions">
       </div>
     </ng-template>
     <mat-card-header>
@@ -30,7 +30,7 @@
     <mat-card-actions class="text-center mb-2">
       <span *ngIf="isAdmin; else displayAddToCartButton">
         <button mat-button color="primary" (click)="showModal(menuItem)">EDYTUJ</button>
-        <button mat-button color="warn" (click)="deleteItem(menuItem)">USUŃ</button>
+        <button mat-button color="warn" (click)="deleteItem()">USUŃ</button>
       </span>
       <ng-template #displayAddToCartButton>
         <app-cart-action-buttons [menu-item-id]="menuItem.id" [available]="menuItem.available">

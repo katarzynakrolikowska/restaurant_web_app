@@ -15,17 +15,12 @@ import { UpdateMenuItem } from '../models/update-menu-item';
 export class OrdinaryMenuItemCardComponent {
     @Input('menu-item') menuItem: OrdinaryMenuItem;
     @Input('is-admin') isAdmin: boolean;
-    @Output('onDeleteMenuItem') onDeleteMenuItem = new EventEmitter();
-    @Output('onUpdateMenuItem') onUpdateMenuItem = new EventEmitter();
 
     constructor(private menuService: MenuService, private toastr: ToastrService, public dialog: MatDialog) { }
 
-    deleteItem(item) {
-        this.menuService.deleteItem(item.id)
-            .subscribe(() => {
-                this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.onDeleteMenuItem.emit(item);
-            });
+    deleteItem() {
+        this.menuService.deleteItem(this.menuItem.id)
+            .subscribe(() => this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE));
     }
 
     showModal(menuItem: OrdinaryMenuItem) {
@@ -43,9 +38,6 @@ export class OrdinaryMenuItemCardComponent {
         let item: UpdateMenuItem = Object.assign({}, data);
         
         this.menuService.updateItem(itemId, item)
-            .subscribe(() => {
-                this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-                this.onUpdateMenuItem.emit({ item: item, id: itemId });
-            });
+            .subscribe(() => this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE));
     }
 }

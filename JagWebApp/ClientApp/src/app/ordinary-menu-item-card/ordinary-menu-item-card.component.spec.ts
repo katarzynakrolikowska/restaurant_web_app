@@ -52,20 +52,18 @@ describe('OrdinaryMenuItemCardComponent', () => {
     it('should call deleteItem from service when deleteItem is called', () => {
         let spyMenuService = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
 
-        component.deleteItem(ordinaryMenuItemStub);
+        component.deleteItem();
 
         expect(spyMenuService).toHaveBeenCalledWith(ordinaryMenuItemStub.id);
     });
 
-    it('should show success toastr and emit event when deleteItem from service returns success', () => {
+    it('should show success toastr when deleteItem from service returns success', () => {
         spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
         let spyToastr = spyOn(toastr, 'success');
-        let spyEventEmitter = spyOn(component.onDeleteMenuItem, 'emit');
 
-        component.deleteItem(ordinaryMenuItemStub);
+        component.deleteItem();
 
         expect(spyToastr).toHaveBeenCalled();
-        expect(spyEventEmitter).toHaveBeenCalledWith(ordinaryMenuItemStub);
     });
 
     it('should call updateItem from service when updateItem is called', () => {
@@ -76,15 +74,13 @@ describe('OrdinaryMenuItemCardComponent', () => {
         expect(spyMenuService).toHaveBeenCalledWith(jasmine.any(Number), updateMenuItemStub);
     });
 
-    it('should show success toastr and emit event when updateItem from service returns success', () => {
+    it('should show success toastr when updateItem from service returns success', () => {
         spyOn(menuService, 'updateItem').and.returnValue(of(Object));
         let spyToastr = spyOn(toastr, 'success');
-        let spyEventEmitter = spyOn(component.onUpdateMenuItem, 'emit');
 
         component.updateItem(jasmine.any(Number), updateMenuItemStub);
 
         expect(spyToastr).toHaveBeenCalled();
-        expect(spyEventEmitter).toHaveBeenCalledWith({ item: updateMenuItemStub, id: jasmine.any(Number)});
     });
 
     it('should open dialog when showModal is called', () => {
