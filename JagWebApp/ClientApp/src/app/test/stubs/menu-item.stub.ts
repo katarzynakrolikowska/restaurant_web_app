@@ -1,17 +1,9 @@
 import { MenuItem } from "../../models/menu-item";
+import { dishStub } from "./dish.stub";
 
 export const menuItemStubWithOneDish: MenuItem = {
     id: 1,
-    dishes: [
-        {
-            name: 'a',
-            category: {
-                id: 1,
-                name: 'b'
-            },
-            amount: 1
-        }
-    ],
+    dishes: [dishStub],
     price: 1,
     limit: 1,
     available: 1,

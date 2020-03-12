@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CartItemsSharedService } from '../services/cart-items-shared.service';
 import { of } from 'rxjs';
 import { CartService } from '../services/cart.service';
-import { cartStubWithOneItem, cartSubWithDifferentItems } from '../test/stubs/cart.stub';
+import { cartStubWithOneMenuItem, cartSubWithDifferentItems } from '../test/stubs/cart.stub';
 import { CART_ID } from '../consts/app.consts';
 
 
@@ -35,7 +35,7 @@ describe('NavCartButtonComponent', () => {
         cartItemSharedService = TestBed.get(CartItemsSharedService);
         cartService = TestBed.get(CartService);
         spyOn(localStorage, 'getItem').and.returnValue("1");
-        spy = spyOn(cartService, 'getCart').and.returnValue(of(cartStubWithOneItem));
+        spy = spyOn(cartService, 'getCart').and.returnValue(of(cartStubWithOneMenuItem));
 
         component.userId = null;
 
@@ -53,6 +53,7 @@ describe('NavCartButtonComponent', () => {
 
     it('should increase cart items count by one when cartItemSharedService share info item is added to cart', () => {
         spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(true));
+        spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(cartStubWithOneMenuItem));
 
         component.ngOnInit();
         fixture.detectChanges();
@@ -62,6 +63,7 @@ describe('NavCartButtonComponent', () => {
 
     it('should decrease cart items count by one when cartItemSharedService share info item is removed from cart', () => {
         spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(false));
+        spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(cartStubWithOneMenuItem));
 
         component.ngOnInit();
         fixture.detectChanges();
