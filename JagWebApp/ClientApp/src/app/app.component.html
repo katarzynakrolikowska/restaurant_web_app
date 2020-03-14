@@ -30,7 +30,7 @@
         <div class="container mt-5">
           <router-outlet></router-outlet>
           <div class="scroll-top" [ngClass]="{'visible': offset > 500}">
-            <button mat-mini-fab class="btn-scroll-top" (click)="scrollToTop()">
+            <button mat-mini-fab class="btn-scroll-top" (click)="scrollToTop()" [disabled]="offset <= 500">
               <mat-icon>keyboard_arrow_up</mat-icon>
             </button>
           </div>

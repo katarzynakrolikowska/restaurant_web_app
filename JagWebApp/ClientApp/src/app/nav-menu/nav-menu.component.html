@@ -1,9 +1,11 @@
 <header>
-  <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+  <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-white border-bottom box-shadow">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Jagienka</a>
-      <div class="navbar-collapse collapse d-sm-inline-flex"
-           [ngClass]="{ show: isExpanded }">
+      <a class="navbar-brand" [routerLink]="['/']">
+        <mat-icon svgIcon="doll" class="title-icon"></mat-icon>
+        Jagienka
+      </a>
+      <div class="navbar-collapse collapse d-sm-inline-flex">
         <span *ngIf="isAdmin()">
           <button *ngFor="let button of menuButtons" mat-button [routerLink]="[button.link]">
             {{ button.name }}

@@ -8,15 +8,15 @@
     <div class="row">
       <div class="col-12 col-md-7 my-1 my-md-auto">
         <div *ngFor="let dish of cartItem.menuItem.dishes">
-          <div class="mb-2">
-            <img [src]="'/uploads/' + getPhotoName(dish)"
-                 class="img-circle mr-3">
-            <span>{{ dish.name }}</span>
+          <div class="mb-2 row align-items-center">
+            <div class="col-3">
+              <img [src]="'/uploads/' + getPhotoName(dish)"
+                   class="img-circle mr-3">
+            </div>
+            <div class="col-9 pl-4 pl-md-3">{{ dish.name }}</div>
           </div>
-
         </div>
       </div>
-
       <app-cart-action-buttons class="col-12 col-md-3 text-center my-1 my-md-auto"
                                [menu-item-id]="cartItem.menuItem.id"
                                [available]="cartItem.menuItem.available">

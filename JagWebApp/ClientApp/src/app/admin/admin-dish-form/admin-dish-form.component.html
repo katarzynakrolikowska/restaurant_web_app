@@ -6,14 +6,14 @@
   <div class="col-12 col-md-10 col-lg-6 px-md-0">
     <form [formGroup]="form" (ngSubmit)="save()">
       <div>
-        <mat-form-field appearance="outline" class="position-block">
+        <mat-form-field appearance="outline" class="display-block">
           <mat-label>Nazwa</mat-label>
           <input matInput formControlName="name" placeholder="Nazwa">
           <mat-error *ngIf="name.invalid">{{ getNameErrorMessage() }}</mat-error>
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field appearance="outline" class="position-block">
+        <mat-form-field appearance="outline" class="display-block">
           <mat-label>Kategoria</mat-label>
           <mat-select formControlName="categoryId">
             <mat-option *ngFor="let category of categories" [value]="category.id">
@@ -24,7 +24,7 @@
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field appearance="outline" class="position-block">
+        <mat-form-field appearance="outline" class="display-block">
           <mat-label>Ilość sztuk w porcji</mat-label>
           <input matInput formControlName="amount" placeholder="Ilość sztuk w porcji" type="number">
           <mat-error *ngIf="amount.invalid">{{ getAmountErrorMessage() }}</mat-error>

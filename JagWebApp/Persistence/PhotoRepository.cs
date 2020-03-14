@@ -52,7 +52,7 @@ namespace JagWebApp.Persistence
             var photo = new Photo 
             { 
                 Name = fileName, 
-                ThumbnailName = thumbnailName, 
+                ThumbnailName = thumbnailName,
                 IsMain = dish.Photos.Count == 0 
             };
             dish.Photos.Add(photo);
