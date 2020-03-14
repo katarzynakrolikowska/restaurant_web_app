@@ -4,7 +4,7 @@
     Edycja zdjęcia
   </mat-toolbar>
   <div class="col-12 col-md-10 col-lg-6 px-md-0">
-    <mat-form-field appearance="outline" class="position-block">
+    <mat-form-field appearance="outline" class="display-block">
       <mat-label>Dodaj zdjęcie</mat-label>
       <ngx-mat-file-input #removableInput placeholder="Photo" (change)="uploadPhoto()" #fileInput>
       </ngx-mat-file-input>
@@ -18,7 +18,7 @@
 <div *ngIf="photos" class="row">
   <div *ngFor="let p of photos" class="text-center mr-4 col-12 col-md-4">
     <img src="/uploads/{{p.thumbnailName}}" class="img-thumbnail m-1" />
-    <div class="m-1 mb-4 position-block">
+    <div class="m-1 mb-4 display-block">
       <button mat-raised-button
               [matTooltip]="p.isMain ? 'Główne zdjęcie' : 'Ustaw jako główne zdjęcie'"
               [class.photo-main]="p.isMain"

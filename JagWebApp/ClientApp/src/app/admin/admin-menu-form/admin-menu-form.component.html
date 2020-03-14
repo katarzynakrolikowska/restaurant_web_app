@@ -6,7 +6,7 @@
   <div class="col-12 col-md-10 col-lg-6 px-md-0">
     <form [formGroup]="form" (ngSubmit)="onSave()">
       <div class="mb-2">
-        <mat-form-field appearance="outline" class="position-block">
+        <mat-form-field appearance="outline" class="display-block">
           <mat-label>Danie</mat-label>
           <input type="text"
                  matInput placeholder="Danie"
@@ -26,7 +26,7 @@
         </mat-form-field>
       </div>
       <div class="mb-2">
-        <mat-form-field appearance="outline" class="position-block">
+        <mat-form-field appearance="outline" class="display-block">
           <mat-label>Cena</mat-label>
           <input matInput
                  formControlName="price"
@@ -38,7 +38,7 @@
         </mat-form-field>
       </div>
       <div class="mb-2">
-        <mat-form-field appearance="outline" class="position-block">
+        <mat-form-field appearance="outline" class="display-block">
           <mat-label>Ilość dostępnych porcji</mat-label>
           <input matInput
                  formControlName="available"
