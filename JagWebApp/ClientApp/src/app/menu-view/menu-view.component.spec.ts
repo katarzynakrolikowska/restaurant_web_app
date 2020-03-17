@@ -1,76 +1,65 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MenuViewComponent } from './menu-view.component';
+import { of } from 'rxjs';
+import { mockSignalRService } from '../../test/mocks/signal-r.mock';
+import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from '../../test/stubs/menu-item.stub';
+import { ALL_MENU_ITEMS_CATEGORY_ID } from '../consts/app.consts';
 import { MenuService } from '../services/menu.service';
-import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from '../test/stubs/menu-item.stub';
-import { ALL_MENU_ITEMS_CATEGORY_ID  } from '../consts/app.consts';
 import { SignalRService } from '../services/signal-r.service';
+import { MenuViewComponent } from './menu-view.component';
 
 
 describe('MenuViewComponent', () => {
-    const baseURL = '';
-    let component: MenuViewComponent;
-    let fixture: ComponentFixture<MenuViewComponent>;
-    let menuService: MenuService;
-    let element: HTMLElement = document.createElement('div');
-    let signalRService: SignalRService;
+  const baseURL = '';
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [MenuViewComponent],
-            imports: [
-                HttpClientModule, RouterTestingModule.withRoutes([])
-                ],
-            providers: [
-                { provide: 'BASE_URL', useValue: baseURL },
-            ],
-            schemas: [NO_ERRORS_SCHEMA]
-        })
-        .compileComponents();
-    }));
+  let component: MenuViewComponent;
+  let fixture: ComponentFixture<MenuViewComponent>;
+  let menuService: MenuService;
+  let element: HTMLElement = document.createElement('div');
+  let signalRService: SignalRService;
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(MenuViewComponent);
-        component = fixture.componentInstance;
-        menuService = TestBed.get(MenuService);
-        spyOn(menuService, 'getMenuItems').and
-            .returnValue(of([menuItemStubWithOneDish, menuItemStubWithTwoDishes]));
-        spyOn(document, "getElementById").and.returnValue(element);
-        signalRService = TestBed.get(SignalRService);
-        mockSignalRService();
-        fixture.detectChanges();
-    });
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [MenuViewComponent],
+      imports: [HttpClientModule, RouterTestingModule.withRoutes([])],
+      providers: [{ provide: 'BASE_URL', useValue: baseURL }],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+    .compileComponents();
+  }));
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(MenuViewComponent);
+    component = fixture.componentInstance;
+    menuService = TestBed.get(MenuService);
+    spyOn(menuService, 'getMenuItems').and
+      .returnValue(of([menuItemStubWithOneDish, menuItemStubWithTwoDishes]));
+    spyOn(document, "getElementById").and.returnValue(element);
+    signalRService = TestBed.get(SignalRService);
+    mockSignalRService(signalRService, component);
+    fixture.detectChanges();
+  });
 
-    it('should init menuItems', () => {
-        expect(component.ordinaryMenuItems.length).toBe(1);
-        expect(component.mainMenuItem).toBe(menuItemStubWithTwoDishes);
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    it('should filter menu items to all items when toggleCategory is called with CATEGORY_ALL_MENU_ITEMS_ID', () => {
-        component.toggleCategory(ALL_MENU_ITEMS_CATEGORY_ID);
+  it('should init menuItems', () => {
+    expect(component.ordinaryMenuItems.length).toBe(1);
+    expect(component.mainMenuItem).toBe(menuItemStubWithTwoDishes);
+  });
 
-        expect(component.filteredMenuItems.length).toBe(1);
-    });
+  it('should filter menu items to all items when toggleCategory is called with CATEGORY_ALL_MENU_ITEMS_ID', () => {
+    component.toggleCategory(ALL_MENU_ITEMS_CATEGORY_ID);
 
-    it('should filter menu items when toggleCategory is called with category id', () => {
-        component.toggleCategory(2);
+    expect(component.filteredMenuItems.length).toBe(1);
+  });
 
-        expect(component.filteredMenuItems.length).toBe(0);
-    });
+  it('should filter menu items when toggleCategory is called with category id', () => {
+    component.toggleCategory(2);
 
-    function mockSignalRService() {
-        (signalRService as any).startConnection = () => { };
-        (signalRService as any).addTransferUpdatedItemListener = () => { };
-        (signalRService as any).addTransferDeletedItemListener = () => { };
-
-        component.subscription = signalRService.onUpdatedItemReceived.subscribe();
-        component.subscription.add(signalRService.onDeletedItemReceived.subscribe());
-    }
+    expect(component.filteredMenuItems.length).toBe(0);
+  });
 });

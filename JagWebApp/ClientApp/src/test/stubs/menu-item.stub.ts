@@ -1,4 +1,4 @@
-import { MenuItem } from "../../models/menu-item";
+import { MenuItem } from "../../app/models/menu-item";
 import { dishStub } from "./dish.stub";
 
 export const menuItemStubWithOneDish: MenuItem = {

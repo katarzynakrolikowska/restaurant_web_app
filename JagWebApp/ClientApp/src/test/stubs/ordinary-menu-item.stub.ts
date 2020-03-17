@@ -1,4 +1,4 @@
-import { OrdinaryMenuItem } from "../../models/ordinary-menu-item";
+import { OrdinaryMenuItem } from "../../app/models/ordinary-menu-item";
 
 
 export const ordinaryMenuItemStub: OrdinaryMenuItem = {

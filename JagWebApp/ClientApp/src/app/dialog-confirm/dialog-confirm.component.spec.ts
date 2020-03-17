@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DialogConfirmComponent } from './dialog-confirm.component';
+
 
 xdescribe('DialogCofnirmComponent', () => {
   let component: DialogConfirmComponent;
