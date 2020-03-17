@@ -1,118 +1,109 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NavCartButtonComponent } from './nav-cart-button.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { CartItemsSharedService } from '../services/cart-items-shared.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { CartService } from '../services/cart.service';
-import { cartStubWithOneMenuItem, cartSubWithDifferentItems } from '../test/stubs/cart.stub';
+import { mockSignalRService } from '../../test/mocks/signal-r.mock';
+import { cartStubWithOneMenuItem, cartSubWithDifferentItems } from '../../test/stubs/cart.stub';
 import { CART_ID } from '../consts/app.consts';
+import { CartItemsSharedService } from '../services/cart-items-shared.service';
+import { CartService } from '../services/cart.service';
 import { SignalRService } from '../services/signal-r.service';
+import { NavCartButtonComponent } from './nav-cart-button.component';
 
 
 describe('NavCartButtonComponent', () => {
-    const baseURL = '';
-    let component: NavCartButtonComponent;
-    let fixture: ComponentFixture<NavCartButtonComponent>;
-    let cartItemSharedService: CartItemsSharedService;
-    let cartService: CartService;
-    let spy;
-    let signalRService: SignalRService;
+  const baseURL = '';
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [NavCartButtonComponent],
-            imports: [HttpClientModule],
-            providers: [
-                { provide: 'BASE_URL', useValue: baseURL }
-            ],
-            schemas: [NO_ERRORS_SCHEMA]
-        })
-        .compileComponents();
-    }));
+  let component: NavCartButtonComponent;
+  let fixture: ComponentFixture<NavCartButtonComponent>;
+  let cartItemSharedService: CartItemsSharedService;
+  let cartService: CartService;
+  let spy;
+  let signalRService: SignalRService;
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(NavCartButtonComponent);
-        component = fixture.componentInstance;
-        cartItemSharedService = TestBed.get(CartItemsSharedService);
-        cartService = TestBed.get(CartService);
-        spyOn(localStorage, 'getItem').and.returnValue("1");
-        spy = spyOn(cartService, 'getCart').and.returnValue(of(cartStubWithOneMenuItem));
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [NavCartButtonComponent],
+      imports: [HttpClientModule],
+      providers: [{ provide: 'BASE_URL', useValue: baseURL }],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+    .compileComponents();
+  }));
 
-        component.userId = null;
-        signalRService = TestBed.get(SignalRService);
-        mockSignalRService();
+  beforeEach(() => {
+    fixture = TestBed.createComponent(NavCartButtonComponent);
+    component = fixture.componentInstance;
+    cartItemSharedService = TestBed.get(CartItemsSharedService);
+    cartService = TestBed.get(CartService);
+    spyOn(localStorage, 'getItem').and.returnValue("1");
+    spy = spyOn(cartService, 'getCart').and.returnValue(of(cartStubWithOneMenuItem));
 
-        fixture.detectChanges();
-    });
+    component.userId = null;
+    signalRService = TestBed.get(SignalRService);
+    mockSignalRService(signalRService, component);
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+    fixture.detectChanges();
+  });
 
-    it('should init cart if cart exists', () => {
-        expect(spy).toHaveBeenCalled();
-        expect(component.cartItemsQuantity).toBe(1);
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    it('should increase cart items count by one when cartItemSharedService share info item is added to cart', () => {
-        spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(true));
-        spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(cartStubWithOneMenuItem));
+  it('should init cart if cart exists', () => {
+    expect(spy).toHaveBeenCalled();
+    expect(component.cartItemsQuantity).toBe(1);
+  });
 
-        component.ngOnInit();
-        fixture.detectChanges();
+  it('should increase cart items count by one when cartItemSharedService share info item is added to cart', () => {
+    spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(true));
+    spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(cartStubWithOneMenuItem));
 
-        expect(component.cartItemsQuantity).toBe(2);
-    });
+    component.ngOnInit();
+    fixture.detectChanges();
 
-    it('should decrease cart items count by one when cartItemSharedService share info item is removed from cart', () => {
-        spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(false));
-        spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(cartStubWithOneMenuItem));
+    expect(component.cartItemsQuantity).toBe(2);
+  });
 
-        component.ngOnInit();
-        fixture.detectChanges();
+  it('should decrease cart items count by one when cartItemSharedService share info item is removed from cart', () => {
+    spyOnProperty(cartItemSharedService, 'itemAddedContent$').and.returnValue(of(false));
+    spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(cartStubWithOneMenuItem));
 
-        expect(component.cartItemsQuantity).toBe(0);
-    });
+    component.ngOnInit();
+    fixture.detectChanges();
 
-    it('should update user cart when user log in and cart is not empty', () => {
-        component.userId = 1;
-        let spy = spyOn(cartService, 'update').and.returnValue(of(cartSubWithDifferentItems));
-        let spyLocalStorage = spyOn(localStorage, 'removeItem');
+    expect(component.cartItemsQuantity).toBe(0);
+  });
 
-        component.ngOnChanges();
+  it('should update user cart when user log in and cart is not empty', () => {
+    component.userId = 1;
+    let spy = spyOn(cartService, 'update').and.returnValue(of(cartSubWithDifferentItems));
+    let spyLocalStorage = spyOn(localStorage, 'removeItem');
 
-        expect(spy).toHaveBeenCalled();
-        expect(spyLocalStorage).toHaveBeenCalledWith(CART_ID);
-        expect(component.cartItemsQuantity).toBe(2);
-    });
+    component.ngOnChanges();
 
-    it('should init cart to user cart when user log in and cart is empty', () => {
-        component.userId = 1;
-        component.cartItemsQuantity = 0;
-        let spy = spyOn(cartService, 'getUserCart').and.returnValue(of(cartSubWithDifferentItems));
+    expect(spy).toHaveBeenCalled();
+    expect(spyLocalStorage).toHaveBeenCalledWith(CART_ID);
+    expect(component.cartItemsQuantity).toBe(2);
+  });
 
-        component.ngOnChanges();
+  it('should init cart to user cart when user log in and cart is empty', () => {
+    component.userId = 1;
+    component.cartItemsQuantity = 0;
+    let spy = spyOn(cartService, 'getUserCart').and.returnValue(of(cartSubWithDifferentItems));
 
-        expect(spy).toHaveBeenCalledWith(component.userId);
-        expect(component.cartItemsQuantity).toBe(2);
-    });
+    component.ngOnChanges();
 
-    it('should clear cart when user log out', () => {
-        component.userId = null;
+    expect(spy).toHaveBeenCalledWith(component.userId);
+    expect(component.cartItemsQuantity).toBe(2);
+  });
 
-        component.ngOnChanges();
+  it('should clear cart when user log out', () => {
+    component.userId = null;
 
-        expect(component.cartItemsQuantity).toBe(0);
-        expect(component.cart).toBeNull();
-    });
+    component.ngOnChanges();
 
-    function mockSignalRService() {
-        (signalRService as any).startConnection = () => { };
-        (signalRService as any).addTransferUpdatedItemListener = () => { };
-        (signalRService as any).addTransferDeletedItemListener = () => { };
-
-        component.subscription = signalRService.onUpdatedItemReceived.subscribe();
-        component.subscription.add(signalRService.onDeletedItemReceived.subscribe());
-    }
+    expect(component.cartItemsQuantity).toBe(0);
+    expect(component.cart).toBeNull();
+  });
 });

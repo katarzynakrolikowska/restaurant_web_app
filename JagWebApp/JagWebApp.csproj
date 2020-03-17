@@ -100,8 +100,9 @@
     <None Remove="ClientApp\src\app\models\save-menu-item.ts" />
     <None Remove="ClientApp\src\app\models\update-menu-item.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
-    <None Remove="ClientApp\src\app\test\stubs\cart.stub.ts" />
-    <None Remove="ClientApp\src\app\test\stubs\photo.stub.ts" />
+    <None Remove="ClientApp\src\test\mocks\signal-r.mock.ts" />
+    <None Remove="ClientApp\src\test\stubs\cart.stub.ts" />
+    <None Remove="ClientApp\src\test\stubs\photo.stub.ts" />
     <None Remove="ClientApp\src\app\user-messages\messages.ts" />
     <None Remove="ClientApp\src\app\validators\email.validaor.ts" />
     <None Remove="ClientApp\src\app\validators\menu-item.validator.ts" />
@@ -111,7 +112,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\app-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.error-handler.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\consts\app-consts.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\helpers\error-state-matcher.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\helpers\custom-mat-paginator-intl.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\mat-component.module.ts" />
@@ -121,7 +121,6 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\change-password-view.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\dish.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\input-autocomplete-data.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\main-menu-item.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\menu-button.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\ordinary-menu-item.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\photo.ts" />
@@ -129,13 +128,14 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\save-menu-item.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\update-menu-item.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\activated-route.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\cart.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\category.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\menu-item.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\ordinary-menu-item.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\photo.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\test\stubs\update-menu-item.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\mocks\signal-r.mock.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\activated-route.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\cart.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\category.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\menu-item.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\ordinary-menu-item.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\photo.stub.ts" />
+    <TypeScriptCompile Include="ClientApp\src\test\stubs\update-menu-item.stub.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\email.validaor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\validators\menu-item.validator.ts" />

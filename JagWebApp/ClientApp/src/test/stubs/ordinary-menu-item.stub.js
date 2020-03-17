@@ -11,7 +11,6 @@ exports.ordinaryMenuItemStub = {
         amount: 1
     },
     price: 1,
-    limit: 1,
     available: 1
 };
 //# sourceMappingURL=ordinary-menu-item.stub.js.map

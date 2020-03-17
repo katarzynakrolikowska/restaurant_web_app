@@ -1,15 +1,13 @@
 ﻿using JagWebApp.Controllers;
-using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
-using Microsoft.AspNetCore.Http;
+using JagWebApp.Tests.Mocks;
+using JagWebApp.Tests.Stubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,17 +15,15 @@ namespace JagWebApp.Tests.Controllers
 {
     public class UserControllerTests
     {
-        private User _user;
         private readonly Mock<UserManager<User>> _userManager;
-        private readonly Mock<ITokenRepository> _tokenRepo;
         private readonly UserController _controller;
 
         public UserControllerTests()
         {
-            var mockUserStore = new Mock<IUserStore<User>>();
-            _userManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
-            _tokenRepo = new Mock<ITokenRepository>();
-            _controller = new UserController(_userManager.Object, _tokenRepo.Object);
+            var tokenRepo = TokenRepositoryMock.TokenRepoMock;
+
+            _userManager = UserManagerMock.UserManager;
+            _controller = new UserController(_userManager.Object, tokenRepo.Object);
         }
 
         [Fact]
@@ -41,7 +37,7 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangeEmail_WhenUserIsLoggedOut_ReturnsBadRequestResult()
         {
-            SetInitialUser(null);
+            UserStub.SetUser(null, _controller);
 
             var result = await _controller
                 .ChangeEmail(new JsonPatchDocument<User>()) as BadRequestResult;
@@ -52,7 +48,7 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangeEmail_WhenInputIsNull_ReturnsBadRequestResult()
         {
-            SetInitialUser(1);
+            UserStub.SetUser(1, _controller);
 
             var result = await _controller
                 .ChangeEmail(null) as BadRequestResult;
@@ -64,9 +60,9 @@ namespace JagWebApp.Tests.Controllers
         public async void ChangeEmail_WhenUpdatingFailed_ReturnsBadRequestResult()
         {
             var identityError = new IdentityError() { Code = "400", Description = "a" };
-            SetInitialUser(1);
-            MockFindByIdAsyncOfUserManager(new User());
-            MockUpdateAsyncOfUserManager(IdentityResult.Failed(identityError));
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockUpdateAsync(IdentityResult.Failed(identityError));
 
             var result = await _controller.ChangeEmail(new JsonPatchDocument<User>()) as ObjectResult;
             var errors = result.Value as List<IdentityError>;
@@ -78,9 +74,9 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangeEmail_WhenUserIsLoggedInAndInputIsValid_UpdateMethodIsCalled()
         {
-            SetInitialUser(1);
-            MockFindByIdAsyncOfUserManager(new User());
-            MockUpdateAsyncOfUserManager(IdentityResult.Success);
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockUpdateAsync(IdentityResult.Success);
 
             await _controller.ChangeEmail(new JsonPatchDocument<User>());
 
@@ -91,10 +87,10 @@ namespace JagWebApp.Tests.Controllers
         public async void ChangeEmail_WhenUserExistsAndIsValid_ReturnsToken()
         {
             var tokenObj = new { token = "a" };
-            SetInitialUser(1);
-            MockFindByIdAsyncOfUserManager(new User());
-            MockUpdateAsyncOfUserManager(IdentityResult.Success);
-            MockGenerateTokenFromTokenRepo("a");
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockUpdateAsync(IdentityResult.Success);
+            TokenRepositoryMock.MockGenerateToken("a");
 
             var result = await _controller
                 .ChangeEmail(new JsonPatchDocument<User>()) as OkObjectResult;
@@ -114,7 +110,7 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangePassword_WhenUserIsLoggedOut_ReturnsBadRequestResultResult()
         {
-            SetInitialUser(null);
+            UserStub.SetUser(null, _controller);
 
             var result = await _controller
                 .ChangePassword(new ChangePasswordViewModelResource()) as BadRequestResult;
@@ -126,10 +122,9 @@ namespace JagWebApp.Tests.Controllers
         public async void ChangePassword_WhenUpdatingFailed_ReturnsBadRequestResult()
         {
             var identityError = new IdentityError() { Code = "400", Description = "a" };
-            SetInitialUser(1);
-            MockFindByIdAsyncOfUserManager(new User());
-            MockChangePasswordAsyncOfUserManager(IdentityResult.Failed(identityError));
-
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockChangePasswordAsync(IdentityResult.Failed(identityError));
 
             var result = await _controller
                 .ChangePassword(new ChangePasswordViewModelResource()) as BadRequestObjectResult;
@@ -148,9 +143,9 @@ namespace JagWebApp.Tests.Controllers
                 NewPassword = "b"
             };
             var user = new User();
-            SetInitialUser(1);
-            MockFindByIdAsyncOfUserManager(user);
-            MockChangePasswordAsyncOfUserManager(IdentityResult.Success);
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(user);
+            UserManagerMock.MockChangePasswordAsync(IdentityResult.Success);
 
             await _controller.ChangePassword(viewModel);
 
@@ -160,58 +155,14 @@ namespace JagWebApp.Tests.Controllers
         [Fact]
         public async void ChangePassword_WhenUserIsLoggedInAndUpdatingIsSuccessful_ReturnsOkActionResult()
         {
-            SetInitialUser(1);
-            MockFindByIdAsyncOfUserManager(new User());
-            MockChangePasswordAsyncOfUserManager(IdentityResult.Success);
-
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockChangePasswordAsync(IdentityResult.Success);
 
             var result = await _controller
                 .ChangePassword(new ChangePasswordViewModelResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
-        }
-
-        private void MockUpdateAsyncOfUserManager(IdentityResult result)
-        {
-            _userManager.Setup(um => um.UpdateAsync(It.IsAny<User>()))
-                .ReturnsAsync(result);
-        }
-
-        private void MockFindByIdAsyncOfUserManager(User user)
-        {
-            _userManager.Setup(um => um.FindByIdAsync(It.IsAny<string>()))
-                .ReturnsAsync(user);
-        }
-
-        private void MockGenerateTokenFromTokenRepo(string token)
-        {
-            _tokenRepo.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
-               .ReturnsAsync(token);
-        }
-
-        private void MockChangePasswordAsyncOfUserManager(IdentityResult result)
-        {
-            _userManager
-               .Setup(um => um.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(result);
-        }
-
-        private void SetInitialUser(int? id)
-        {
-            var identity = new GenericIdentity("", "");
-            var nameIdentifierClaim = new Claim(ClaimTypes.NameIdentifier, id.ToString());
-            identity.AddClaim(nameIdentifierClaim);
-
-            var fakeUser = new GenericPrincipal(identity, roles: new string[] { });
-            var context = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    User = fakeUser
-                }
-            };
-
-            _controller.ControllerContext = context;
         }
     }
 }

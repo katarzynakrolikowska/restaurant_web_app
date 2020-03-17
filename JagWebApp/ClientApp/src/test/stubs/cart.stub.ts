@@ -1,5 +1,5 @@
-import { Cart } from "../../models/cart";
 import { menuItemStubWithOneDish, menuItemStubWithTwoDishes } from "./menu-item.stub";
+import { Cart } from "../../app/models/cart";
 
 export const cartStubWithOneMenuItem: Cart = {
     id: 1,

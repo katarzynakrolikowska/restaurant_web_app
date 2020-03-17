@@ -1,4 +1,4 @@
-import { Category } from "../../models/category";
+import { Category } from "../../app/models/category";
 
 export const categoryStub: Category = {
     id: 1,
