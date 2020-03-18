@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ChangeDetectorRef, OnInit } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material';
 import { AuthService } from './services/auth.service';
 import { NAV_MENU_BUTTONS } from './consts/app.consts';
@@ -7,7 +7,7 @@ import { NAV_MENU_BUTTONS } from './consts/app.consts';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit {
     @ViewChild('sidenav', { static: false }) sidenav: MatSidenav;
     @ViewChild(MatSidenavContainer, { static: false }) sidenavContainer: MatSidenavContainer;
 
@@ -16,6 +16,12 @@ export class AppComponent implements AfterViewInit {
     offset: number = 0;
 
     constructor(private authService: AuthService, private ref: ChangeDetectorRef) { }
+
+    ngOnInit(): void {
+        let token = localStorage.getItem('token');
+        if (!this.authService.loggedIn() && token)
+            localStorage.removeItem('token');
+    }
 
     ngAfterViewInit() {
         this.sidenavContainer.scrollable.elementScrolled().subscribe(() => {

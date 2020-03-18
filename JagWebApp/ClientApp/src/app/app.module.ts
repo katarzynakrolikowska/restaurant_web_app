@@ -31,7 +31,6 @@ import { MatPaginatorIntl } from '@angular/material';
 import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group/categories-button-toggle-group.component';
 import { MainMenuItemViewComponent } from './main-menu-item-view/main-menu-item-view.component';
-import { BlankComponent } from './test/blank/blank.component';
 import { DishesListComponent } from './dishes-list/dishes-list.component';
 import { AdminMainItemEditFormComponent } from './admin/admin-main-item-edit-form/admin-main-item-edit-form.component';
 import { MenuViewComponent } from './menu-view/menu-view.component';
@@ -49,6 +48,7 @@ import { CartActionButtonsComponent } from './cart-action-buttons/cart-action-bu
 import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
 import { CartViewComponent } from './cart-view/cart-view.component';
 import { NotAdminGuard } from './guards/not-admin.guard';
+import { BlankComponent } from 'src/test/blank/blank.component';
 
 export function tokenGetter() {
     return localStorage.getItem("token");
