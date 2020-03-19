@@ -7,8 +7,7 @@ import { Dish } from '../models/dish';
     styleUrls: ['./main-menu-item-dish-card.component.css']
 })
 export class MainMenuItemDishCardComponent {
+  @Input('dish') dish: Dish;
 
-    @Input('dish') dish: Dish;
-
-    constructor() { }
+  constructor() { }
 }

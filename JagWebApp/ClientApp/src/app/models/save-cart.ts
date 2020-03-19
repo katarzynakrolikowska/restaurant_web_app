@@ -1,4 +1,4 @@
 
 export interface SaveCart {
-    menuItemId: number;
+  menuItemId: number;
 }

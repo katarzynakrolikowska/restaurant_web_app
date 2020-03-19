@@ -1,45 +1,47 @@
-import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { SaveCart } from '../models/save-cart';
+import { CART_ID } from './../consts/app.consts';
+import { Cart } from './../models/cart';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService { 
 
-    constructor(
-        private http: HttpClient,
-        @Inject('BASE_URL') private baseUrl: string) { }
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string) { }
 
-    getCart(id) {
-        return this.http.get(this.baseUrl + 'api/carts/' + id)
-            .pipe(map(result => result));
-    }
+  getCart(id) {
+    return this.http.get(this.baseUrl + 'api/carts/' + id)
+      .pipe(map((result: Cart) => result));
+  }
 
-    getUserCart(userId) {
-        return this.http.get(this.baseUrl + 'api/carts/user/' + userId)
-            .pipe(map(result => result));
-    }
+  getUserCart(userId) {
+    return this.http.get(this.baseUrl + 'api/carts/user/' + userId)
+      .pipe(map((result: Cart) => result));
+  }
 
-    create(cart: SaveCart) {
-        return this.http.post(this.baseUrl + 'api/carts', cart)
-            .pipe(map(result => result));
-    }
+  create(cart: SaveCart) {
+    return this.http.post(this.baseUrl + 'api/carts', cart)
+      .pipe(map((result: Cart) => result));
+  }
 
-    update() {
-        let headers = new HttpHeaders();
-        headers = headers.append('content-type', 'application/json');
+  update() {
+    let headers = new HttpHeaders();
+    headers = headers.append('content-type', 'application/json');
 
-        return this.http.put(this.baseUrl + 'api/carts/' + this.cartId, null, { headers: headers })
-            .pipe(map(result => result));
-    }
+    return this.http.put(this.baseUrl + 'api/carts/' + this.cartId, null, { headers: headers })
+      .pipe(map((result: Cart) => result));
+  }
 
-    delete(cartId) {
-        return this.http.delete(this.baseUrl + 'api/carts/' + cartId);
-    }
+  delete(cartId) {
+    return this.http.delete(this.baseUrl + 'api/carts/' + cartId);
+  }
 
-    private get cartId() {
-        return localStorage.getItem('cartId');
-    }
+  private get cartId() {
+    return localStorage.getItem(CART_ID);
+  }
 }

@@ -17,7 +17,7 @@
 </div>
 <div *ngIf="photos" class="row">
   <div *ngFor="let p of photos" class="text-center mr-4 col-12 col-md-4">
-    <img src="/uploads/{{p.thumbnailName}}" class="img-thumbnail m-1" />
+    <img src="/uploads/{{ p.thumbnailName }}" class="img-thumbnail m-1" />
     <div class="m-1 mb-4 display-block">
       <button mat-raised-button
               [matTooltip]="p.isMain ? 'Główne zdjęcie' : 'Ustaw jako główne zdjęcie'"

@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Dish } from '../models/dish';
 
 @Component({
@@ -7,15 +7,15 @@ import { Dish } from '../models/dish';
   styleUrls: ['./dishes-list.component.css']
 })
 export class DishesListComponent {
-    @Input('dishes') dishes: Array<Dish>;
-    @Output('onDishClick') onDishClick = new EventEmitter();
+  @Input('dishes') dishes: Array<Dish>;
+  @Output('onDishClick') onDishClick = new EventEmitter();
 
-    constructor() { }
+  constructor() { }
    
-    removeFromList(dishId) {
-        let index = this.dishes.findIndex(d => d.id === dishId);
-        this.dishes.splice(index, 1);
+  removeFromList(dishId) {
+    let index = this.dishes.findIndex(d => d.id === dishId);
+    this.dishes.splice(index, 1);
 
-        this.onDishClick.emit(this.dishes);
-    }
+    this.onDishClick.emit(this.dishes);
+  }
 }

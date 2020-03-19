@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
 import { Router } from '@angular/router';
+import { OrdinaryMenuItem } from '../models/ordinary-menu-item';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -9,11 +9,11 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./ordinary-menu-items-view.component.css']
 })
 export class OrdinaryMenuItemsViewComponent {
-    @Input('filtered-menu-items') filteredMenuItems: Array<OrdinaryMenuItem> = [];
+  @Input('filtered-menu-items') filteredMenuItems: Array<OrdinaryMenuItem> = [];
 
-    constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
-    addDishToMenu() {
-        this.router.navigate(['admin/menu/item/new']);
-    }
+  addDishToMenu() {
+    this.router.navigate(['admin/menu/item/new']);
+  }
 }

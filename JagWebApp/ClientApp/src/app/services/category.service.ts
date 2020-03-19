@@ -1,5 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 
@@ -8,10 +8,10 @@ import { map } from 'rxjs/operators';
 })
 export class CategoryService {
 
-    constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-    getCategories() {
-        return this.http.get(this.baseUrl + 'api/dishCategories')
-            .pipe(map((response: any) => response));
-    }
+  getCategories() {
+    return this.http.get(this.baseUrl + 'api/dishCategories')
+      .pipe(map((response: any) => response));
+  }
 }

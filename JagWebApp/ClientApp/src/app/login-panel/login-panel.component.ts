@@ -6,11 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./login-panel.component.css']
 })
 export class LoginPanelComponent {
-    step = 0;
+  step = 0;
 
-    constructor() { }
+  constructor() { }
 
-    setStep(index: number) {
-        this.step = index;
-    }
+  setStep(index: number) {
+    this.step = index;
+  }
 }

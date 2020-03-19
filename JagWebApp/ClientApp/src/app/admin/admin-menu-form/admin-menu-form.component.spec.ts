@@ -136,7 +136,7 @@ describe('AdminMenuFormComponent', () => {
     let spy = spyOn(menuService, 'create').and.returnValue(of(Object));
     setFormsControl();
 
-    component.onSave();
+    component.save();
 
     expect(spy).toHaveBeenCalled();
   });
@@ -146,7 +146,7 @@ describe('AdminMenuFormComponent', () => {
     let spy = spyOn(toastr, 'error');
     setFormsControl();
 
-    component.onSave();
+    component.save();
 
     expect(spy).toHaveBeenCalled();
   });
@@ -156,7 +156,7 @@ describe('AdminMenuFormComponent', () => {
     let spy = spyOn(menuService, 'updateItem').and.returnValue(of(Object));
     setFormsControl();
 
-    component.onSave();
+    component.save();
 
     expect(spy).toHaveBeenCalled();
   });
