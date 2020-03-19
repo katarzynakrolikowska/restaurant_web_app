@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using JagWebApp.Hubs;
+using JagWebApp.Core.Models.Helpers;
 
 namespace JagWebApp
 {

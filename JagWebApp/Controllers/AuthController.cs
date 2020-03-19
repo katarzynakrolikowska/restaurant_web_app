@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace JagWebApp.Controllers
 {
     [Route("api/[controller]")]
@@ -73,9 +72,7 @@ namespace JagWebApp.Controllers
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            var result = user != null ? true : false;
-
-            return Ok(result);
+            return Ok(user != null);
         }
     }
 }

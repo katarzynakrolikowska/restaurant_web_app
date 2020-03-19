@@ -2,6 +2,7 @@
 using JagWebApp.Controllers;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Helpers;
 using JagWebApp.Resources;
 using JagWebApp.Tests.Mocks;
 using Microsoft.AspNetCore.Http;

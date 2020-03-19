@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace JagWebApp.Core.Models
+namespace JagWebApp.Core.Models.Helpers
 {
     public class PhotoSettings
     {

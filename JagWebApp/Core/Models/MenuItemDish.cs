@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JagWebApp.Core.Models
+﻿namespace JagWebApp.Core.Models
 {
     public class MenuItemDish
     {
