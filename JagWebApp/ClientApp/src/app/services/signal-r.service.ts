@@ -1,46 +1,46 @@
-import { Injectable, EventEmitter, Inject } from '@angular/core';
+import { EventEmitter, Inject, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { MenuItem } from '../models/menu-item';
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class SignalRService {
-    private hubConnection: signalR.HubConnection
-    data: MenuItem;
-    onUpdatedItemReceived = new EventEmitter();
-    onDeletedItemReceived = new EventEmitter();
+  private hubConnection: signalR.HubConnection
+  data: MenuItem;
+  onUpdatedItemReceived = new EventEmitter();
+  onDeletedItemReceived = new EventEmitter();
 
-    constructor(@Inject('BASE_URL') private baseUrl: string) { }
+  constructor(@Inject('BASE_URL') private baseUrl: string) { }
 
-    startConnection = () => {
-        this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(this.baseUrl + 'menuItemHub')
-            .build();
+  startConnection = () => {
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl(this.baseUrl + 'menuItemHub')
+      .build();
 
-        this.hubConnection
-            .start()
-            .then(() => console.log('Connection started'))
-            .catch(err => {
-                console.log('Error while starting connection: ' + err);
-                setTimeout(this.startConnection, 5000);
-            })
-    }
+    this.hubConnection
+      .start()
+      .then(() => console.log('Connection started'))
+      .catch(err => {
+        console.log('Error while starting connection: ' + err);
+        setTimeout(this.startConnection, 5000);
+      })
+  }
 
-    addTransferUpdatedItemListener = () => {
-        this.hubConnection.on('transferUpdatedItem', (data: MenuItem) => {
-            this.onUpdatedItemReceived.emit(data);
-        });
-    }
+  addTransferUpdatedItemListener = () => {
+    this.hubConnection.on('transferUpdatedItem', (data: MenuItem) => {
+      this.onUpdatedItemReceived.emit(data);
+    });
+  }
 
-    addTransferDeletedItemListener = () => {
-        this.hubConnection.on('transferDeletedItem', (data: MenuItem) => {
-            this.onDeletedItemReceived.emit(data);
-        });
-    }
+  addTransferDeletedItemListener = () => {
+    this.hubConnection.on('transferDeletedItem', (data: MenuItem) => {
+      this.onDeletedItemReceived.emit(data);
+    });
+  }
 
-    isConnected() {
-        return this.hubConnection && this.hubConnection.state === 'Connected';
-    }
+  isConnected() {
+    return this.hubConnection && this.hubConnection.state === 'Connected';
+  }
 }

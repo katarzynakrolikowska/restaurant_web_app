@@ -77,7 +77,7 @@ describe('LoginFormComponent', () => {
 
   it('should set errorLogin to false after successful login', () => {
     component.errorLogin = true;
-    spyOn(authService, 'login').and.returnValue(of({}));
+    spyOn(authService, 'login').and.returnValue(of(Object));
     setControls();
 
     component.login();
@@ -88,7 +88,7 @@ describe('LoginFormComponent', () => {
   it('should redirect user to home page after successful login', () => {
     let router = TestBed.get(Router);
     let spy = spyOn(router, 'navigate');
-    spyOn(authService, 'login').and.returnValue(of({}));
+    spyOn(authService, 'login').and.returnValue(of(Object));
     setControls();
 
     component.login();

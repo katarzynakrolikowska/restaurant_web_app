@@ -1,22 +1,21 @@
-
-  <div class="row justify-content-center bg-lightgray">
-    <mat-toolbar class="mb-3">
-      <span>Również w ofercie</span>
-      <span class="toolbar-spacer"></span>
-      <button *ngIf="authService.isAdmin()" mat-mini-fab class="mx-2" (click)="addDishToMenu()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </mat-toolbar>
-    <div *ngIf="filteredMenuItems.length === 0; else showMenuItems">
-      Brak zapisanych dań
-    </div>
-    <ng-template #showMenuItems>
-      <div *ngFor="let item of filteredMenuItems" class="col-md-6 col-lg-4">
-        <app-ordinary-menu-item-card [menu-item]="item"
-                                     [is-admin]="authService.isAdmin()">
-        </app-ordinary-menu-item-card>
-      </div>
-    </ng-template>
-
-    <ng-template #noItems>Brak zapisanych dań.</ng-template>
+<div class="row justify-content-center bg-lightgray">
+  <mat-toolbar class="mb-3">
+    <span>Również w ofercie</span>
+    <span class="toolbar-spacer"></span>
+    <button *ngIf="authService.isAdmin()" mat-mini-fab class="mx-2" (click)="addDishToMenu()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div *ngIf="filteredMenuItems.length === 0; else showMenuItems">
+    Brak zapisanych dań
   </div>
+  <ng-template #showMenuItems>
+    <div *ngFor="let item of filteredMenuItems" class="col-md-6 col-lg-4">
+      <app-ordinary-menu-item-card [menu-item]="item"
+                                    [is-admin]="authService.isAdmin()">
+      </app-ordinary-menu-item-card>
+    </div>
+  </ng-template>
+
+  <ng-template #noItems>Brak zapisanych dań.</ng-template>
+</div>
