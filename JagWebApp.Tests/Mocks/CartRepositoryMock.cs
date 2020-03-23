@@ -45,6 +45,11 @@ namespace JagWebApp.Tests.Mocks
             _cartRepo.Setup(cr => cr.AddCartItemsToAnotherCart(cart, anotherCart));
         }
 
+        public void MockUpdateCartItemAmountContainsMenuItem(MenuItem item)
+        {
+            _cartRepo.Setup(cr => cr.UpdateCartItemAmountWithMenuItem(item));
+        }
+
         public void VerifyAdd()
         {
             _cartRepo.Verify(cr => cr.Add(It.IsAny<Cart>()));
@@ -58,6 +63,11 @@ namespace JagWebApp.Tests.Mocks
         public void VerifyAddCartItemsToAnotherCart(Cart cart, Cart anotherCart)
         {
             _cartRepo.Verify(cr => cr.AddCartItemsToAnotherCart(cart, anotherCart));
+        }
+
+        public void VerifyUpdateCartItemAmountContainsMenuItem(MenuItem item)
+        {
+            _cartRepo.Verify(cr => cr.UpdateCartItemAmountWithMenuItem(item));
         }
     }
 }

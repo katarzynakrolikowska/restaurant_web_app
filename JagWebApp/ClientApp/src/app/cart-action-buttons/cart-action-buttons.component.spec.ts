@@ -3,11 +3,10 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { cartStubWithOneMenuItem, cartStubWithTwoMenuItems } from '../../test/stubs/cart.stub';
-import { CART_ID } from '../consts/app.consts';
 import { AuthService } from '../services/auth.service';
 import { CartItemsSharedService } from '../services/cart-items-shared.service';
-import { CartItemsService } from '../services/cart-items.service';
 import { CartService } from '../services/cart.service';
+import { cartSubWithDifferentItems } from './../../test/stubs/cart.stub';
 import { CartActionButtonsComponent } from './cart-action-buttons.component';
 
 
@@ -17,7 +16,6 @@ describe('CartActionButtonsComponent', () => {
   let fixture: ComponentFixture<CartActionButtonsComponent>;
   let cartService: CartService;
   let cartItemSharedService: CartItemsSharedService;
-  let cartItemService: CartItemsService;
   let authService: AuthService;
 
   beforeEach(async(() => {
@@ -35,7 +33,6 @@ describe('CartActionButtonsComponent', () => {
     component = fixture.componentInstance;
     cartService = TestBed.get(CartService);
     cartItemSharedService = TestBed.get(CartItemsSharedService);
-    cartItemService = TestBed.get(CartItemsService);
     authService = TestBed.get(AuthService);
     component.subscription = cartItemSharedService.cartContent$.subscribe();
   });
@@ -45,7 +42,7 @@ describe('CartActionButtonsComponent', () => {
   });
 
   it('should create cart if cart does not exist and ', () => {
-    setUpInitialCart(null);
+    setUpInitialCart(null, 1);
     let spyCartService = spyOn(cartService, 'create').and.returnValue(of(cartStubWithOneMenuItem));
     let spyCartItemSharedService = spyOn(cartItemSharedService, 'shareCartItemAdded');
 
@@ -57,47 +54,61 @@ describe('CartActionButtonsComponent', () => {
     expect(spyCartItemSharedService).toHaveBeenCalledWith(true);
   });
 
-  it('should create cart item if cart exists', () => {
-    setUpInitialCart(cartStubWithOneMenuItem);
-    let spyCartItemService = spyOn(cartItemService, 'createOrUpdate').and.returnValue(of(cartStubWithTwoMenuItems));
+  it('should increase amount of menu item by one if addItemToCart is called and cart contains menu item', () => {
+    setUpInitialCart(cartStubWithOneMenuItem, 1);
+    let spyCartService = spyOn(cartService, 'update').and.returnValue(of(cartStubWithTwoMenuItems));
     let spyCartItemSharedService = spyOn(cartItemSharedService, 'shareCartItemAdded');
 
     fixture.detectChanges();
     component.addItemToCart();
 
     expect(component.menuItemQuantity).toBe(2);
-    expect(spyCartItemService).toHaveBeenCalledWith(component.menuItemId, component.cart.id);
+    expect(spyCartService).toHaveBeenCalled();
     expect(spyCartItemSharedService).toHaveBeenCalledWith(true);
   });
 
-  it('should remove item from cart when removeItemFromCart is called', () => {
-    setUpInitialCart(cartStubWithTwoMenuItems);
-    let spyCartItemService = spyOn(cartItemService, 'delete').and.returnValue(of(cartStubWithOneMenuItem));
+  it('should add new menu item to cart if addItemToCart is called and cart does not contain that menu item', () => {
+    setUpInitialCart(cartStubWithOneMenuItem, 2);
+    let spyCartService = spyOn(cartService, 'update').and.returnValue(of(cartSubWithDifferentItems));
+    let spyCartItemSharedService = spyOn(cartItemSharedService, 'shareCartItemAdded');
+
+    fixture.detectChanges();
+    component.addItemToCart();
+
+    expect(component.cart.items.length).toBe(2);
+    expect(spyCartService).toHaveBeenCalled();
+    expect(spyCartItemSharedService).toHaveBeenCalledWith(true);
+  });
+
+  it('should decrease amount of menu item by one if removeItemFromCart is called and menuItemQuantity is greater than one', () => {
+    setUpInitialCart(cartStubWithTwoMenuItems, 1);
+    let spyCartService = spyOn(cartService, 'update').and.returnValue(of(cartStubWithOneMenuItem));
     let spyCartItemSharedService = spyOn(cartItemSharedService, 'shareCartItemAdded');
 
     fixture.detectChanges();
     component.removeItemFromCart();
 
     expect(component.menuItemQuantity).toBe(1);
-    expect(spyCartItemService).toHaveBeenCalledWith(component.menuItemId, cartStubWithOneMenuItem.id);
+    expect(spyCartService).toHaveBeenCalled();
     expect(spyCartItemSharedService).toHaveBeenCalledWith(false);
   });
 
-  it('should remove cart when cartItemService returns null', () => {
-    setUpInitialCart(cartStubWithOneMenuItem);
-    spyOn(cartItemService, 'delete').and.returnValue(of(null));
-    spyOn(cartItemSharedService, 'shareCartItemAdded');
-    let spy = spyOn(localStorage, 'removeItem');
+  it('should remove item from cart if removeItemFromCart is called and menuItemQuantity is equal to one', () => {
+    setUpInitialCart(cartSubWithDifferentItems, 1);
+    let spyCartService = spyOn(cartService, 'update').and.returnValue(of(cartStubWithOneMenuItem));
+    let spyCartItemSharedService = spyOn(cartItemSharedService, 'shareCartItemAdded');
 
     fixture.detectChanges();
     component.removeItemFromCart();
 
     expect(component.menuItemQuantity).toBe(0);
-    expect(spy).toHaveBeenCalledWith(CART_ID);
+    expect(component.cart.items.length).toBe(1);
+    expect(spyCartService).toHaveBeenCalled();
+    expect(spyCartItemSharedService).toHaveBeenCalledWith(false);
   });
 
-  function setUpInitialCart(initialCart) {
-    component.menuItemId = 1;
+  function setUpInitialCart(initialCart, menuItemId) {
+    component.menuItemId = menuItemId;
     spyOnProperty(cartItemSharedService, 'cartContent$').and.returnValue(of(initialCart));
     spyOn(authService, 'getUserId').and.returnValue(null);
   }

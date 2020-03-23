@@ -1,5 +1,4 @@
 ﻿using DataAnnotationsExtensions;
-using System.ComponentModel.DataAnnotations;
 
 namespace JagWebApp.Core.Models
 {
@@ -7,7 +6,6 @@ namespace JagWebApp.Core.Models
     {
         public int Id { get; set; }
 
-        [Required]
         public MenuItem MenuItem { get; set; }
 
         public int MenuItemId { get; set; }

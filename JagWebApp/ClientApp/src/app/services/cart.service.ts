@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { SaveCart } from '../models/save-cart';
 import { CART_ID } from './../consts/app.consts';
@@ -8,11 +8,17 @@ import { Cart } from './../models/cart';
 @Injectable({
   providedIn: 'root'
 })
-export class CartService { 
+export class CartService implements OnInit { 
+  headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) { }
+
+  ngOnInit(): void {
+    this.headers = new HttpHeaders();
+    this.headers = this.headers.append('content-type', 'application/json');
+  }
 
   getCart(id) {
     return this.http.get(this.baseUrl + 'api/carts/' + id)
@@ -29,11 +35,13 @@ export class CartService {
       .pipe(map((result: Cart) => result));
   }
 
-  update() {
-    let headers = new HttpHeaders();
-    headers = headers.append('content-type', 'application/json');
+  updateCartAfterLogIn() {
+    return this.http.put(this.baseUrl + 'api/carts/' + this.cartId, null, { headers: this.headers })
+      .pipe(map((result: Cart) => result));
+  }
 
-    return this.http.put(this.baseUrl + 'api/carts/' + this.cartId, null, { headers: headers })
+  update(patchCart, cartId) {
+    return this.http.patch(this.baseUrl + 'api/carts/' + cartId, patchCart, { headers: this.headers })
       .pipe(map((result: Cart) => result));
   }
 

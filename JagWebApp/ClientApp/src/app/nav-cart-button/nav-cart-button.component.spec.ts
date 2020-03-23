@@ -77,7 +77,7 @@ describe('NavCartButtonComponent', () => {
 
   it('should update user cart when user log in and cart is not empty', () => {
     component.userId = 1;
-    let spy = spyOn(cartService, 'update').and.returnValue(of(cartSubWithDifferentItems));
+    let spy = spyOn(cartService, 'updateCartAfterLogIn').and.returnValue(of(cartSubWithDifferentItems));
     let spyLocalStorage = spyOn(localStorage, 'removeItem');
 
     component.ngOnChanges();

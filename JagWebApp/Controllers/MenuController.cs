@@ -18,6 +18,7 @@ namespace JagWebApp.Controllers
         private readonly IMenuRepository _menuRepository;
         private readonly IDishRepository _dishRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICartRepository _cartRepository;
         private readonly IMapper _mapper;
         private readonly IHubContext<MenuItemHub> _hub;
 
@@ -25,12 +26,14 @@ namespace JagWebApp.Controllers
             IMenuRepository menuRepository, 
             IDishRepository dishRepository, 
             IUnitOfWork unitOfWork,
+            ICartRepository cartRepository,
             IMapper mapper,
             IHubContext<MenuItemHub> hub)
         {
             _menuRepository = menuRepository;
             _dishRepository = dishRepository;
             _unitOfWork = unitOfWork;
+            _cartRepository = cartRepository;
             _mapper = mapper;
             _hub = hub;
         }
@@ -87,12 +90,10 @@ namespace JagWebApp.Controllers
                 return BadRequest();
 
             _mapper.Map(updateMenuItemResource, item);
+            await _cartRepository.UpdateCartItemAmountWithMenuItem(item);
             await _unitOfWork.CompleteAsync();
 
-            await _hub.Clients.All.SendAsync(
-               "transferUpdatedItem",
-               _mapper.Map<MenuItem, MenuItemResource>(item));
-
+            await _hub.Clients.All.SendAsync("transferUpdatedItem", _mapper.Map<MenuItem, MenuItemResource>(item));
 
             return Ok();
         }
@@ -109,9 +110,7 @@ namespace JagWebApp.Controllers
             _menuRepository.Remove(item);
             await _unitOfWork.CompleteAsync();
 
-            await _hub.Clients.All.SendAsync(
-               "transferDeletedItem",
-               _mapper.Map<MenuItem, MenuItemResource>(item));
+            await _hub.Clients.All.SendAsync("transferDeletedItem",  _mapper.Map<MenuItem, MenuItemResource>(item));
 
             return Ok();
         }

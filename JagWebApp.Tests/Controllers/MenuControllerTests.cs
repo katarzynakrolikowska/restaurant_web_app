@@ -20,20 +20,23 @@ namespace JagWebApp.Tests.Controllers
         private readonly DishRepositoryMock _dishRepositoryMock;
         private readonly MenuRepositoryMock _menuRepositoryMock;
         private readonly UnitOfWorkMock _unitOfWorkMock;
+        private readonly CartRepositoryMock _cartRepositoryMock;
 
         public MenuControllerTests()
         {
             var menuRepo = new Mock<IMenuRepository>();
             var dishRepo = new Mock<IDishRepository>();
             var unitOfWork = new Mock<IUnitOfWork>();
+            var cartRepo = new Mock<ICartRepository>();
             var mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
             var hub = HubContextMock.Hub;
 
-            _controller = new MenuController(menuRepo.Object, dishRepo.Object, unitOfWork.Object, mapper, hub.Object);
+            _controller = new MenuController(menuRepo.Object, dishRepo.Object, unitOfWork.Object, cartRepo.Object, mapper, hub.Object);
 
             _dishRepositoryMock = new DishRepositoryMock(dishRepo);
             _menuRepositoryMock = new MenuRepositoryMock(menuRepo);
             _unitOfWorkMock = new UnitOfWorkMock(unitOfWork);
+            _cartRepositoryMock = new CartRepositoryMock(cartRepo);
         }
 
         [Fact]
@@ -145,10 +148,12 @@ namespace JagWebApp.Tests.Controllers
             var updateItem = UpdateMenuItemStub.GetUpdateMenuItem();
             _menuRepositoryMock.MockGetMenuItem(item);
             _unitOfWorkMock.MockCompleteAsync();
+            _cartRepositoryMock.MockUpdateCartItemAmountContainsMenuItem(item);
             HubContextMock.MockHub();
 
             await _controller.UpdateMenuItem(1, updateItem);
 
+            _cartRepositoryMock.VerifyUpdateCartItemAmountContainsMenuItem(item);
             _unitOfWorkMock.VerifyCompleteAsync();
             Assert.Equal(1, item.Dishes.Count);
             Assert.Equal(2, item.Price);

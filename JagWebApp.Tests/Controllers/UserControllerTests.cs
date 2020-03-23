@@ -39,8 +39,7 @@ namespace JagWebApp.Tests.Controllers
         {
             UserStub.SetUser(null, _controller);
 
-            var result = await _controller
-                .ChangeEmail(new JsonPatchDocument<User>()) as BadRequestResult;
+            var result = await _controller.ChangeEmail(new JsonPatchDocument<User>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -50,8 +49,7 @@ namespace JagWebApp.Tests.Controllers
         {
             UserStub.SetUser(1, _controller);
 
-            var result = await _controller
-                .ChangeEmail(null) as BadRequestResult;
+            var result = await _controller.ChangeEmail(null) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -112,8 +110,7 @@ namespace JagWebApp.Tests.Controllers
         {
             UserStub.SetUser(null, _controller);
 
-            var result = await _controller
-                .ChangePassword(new ChangePasswordViewModelResource()) as BadRequestResult;
+            var result = await _controller.ChangePassword(new ChangePasswordViewModelResource()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
@@ -126,8 +123,7 @@ namespace JagWebApp.Tests.Controllers
             UserManagerMock.MockFindByIdAsync(new User());
             UserManagerMock.MockChangePasswordAsync(IdentityResult.Failed(identityError));
 
-            var result = await _controller
-                .ChangePassword(new ChangePasswordViewModelResource()) as BadRequestObjectResult;
+            var result = await _controller.ChangePassword(new ChangePasswordViewModelResource()) as BadRequestObjectResult;
             var errors = result.Value as List<IdentityError>;
 
             Assert.Equal(400, result.StatusCode);
