@@ -6,7 +6,9 @@ using JagWebApp.Resources;
 using JagWebApp.Tests.Mocks;
 using JagWebApp.Tests.Stubs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
@@ -247,6 +249,51 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
+        public void UpdateCart_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.UpdateCart(It.IsAny<int>(), It.IsAny<JsonPatchDocument<UpdateCartResource>>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public void UpdateCart_WhenPatchCartIsNull_ReturnsBadRequest()
+        {
+            var result = _controller.UpdateCart(It.IsAny<int>(), null);
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void UpdateCart_WhenCartDoesNotExist_ReturnsBadRequest()
+        {
+            Cart cart = null;
+            _cartRepositoryMock.MockGetCart(cart);
+
+            var result = await _controller.UpdateCart(It.IsAny<int>(), It.IsAny<JsonPatchDocument<UpdateCartResource>>()) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void UpdateCart_WhenCartAfterUpdatingIsValid_ReturnsOkObjectResult()
+        {
+            var cart = new Cart();
+            var patchCart = new JsonPatchDocument<UpdateCartResource>();
+            _cartRepositoryMock.MockGetCart(cart);
+            var objectValidator = new Mock<IObjectModelValidator>();
+            objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
+                                              It.IsAny<ValidationStateDictionary>(),
+                                              It.IsAny<string>(),
+                                              It.IsAny<object>()));
+            _controller.ObjectValidator = objectValidator.Object;
+
+            var result = await _controller.UpdateCart(It.IsAny<int>(), patchCart) as OkObjectResult;
+
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
         public void Remove_WhenCalled_ReturnsIActionResult()
         {
             var result = _controller.Remove(It.IsAny<int>());
@@ -266,7 +313,7 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void Remove_WhenCartExists_ReturnsBadRequest()
+        public async void Remove_WhenCartExists_ReturnsOkResult()
         {
             var cart = new Cart();
             _cartRepositoryMock.MockGetCart(cart);

@@ -6,6 +6,7 @@ using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
@@ -120,6 +121,32 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<Cart, CartResource>(newCart));
         }
 
+        //PATCH: api/carts/1
+        [AllowAnonymous]
+        [HttpPatch("{cartId}")]
+        public async Task<IActionResult> UpdateCart(int cartId, [FromBody] JsonPatchDocument<UpdateCartResource> patchCart)
+        {
+            if (patchCart == null)
+                return BadRequest();
+
+            var cart = await _cartRepository.GetCart(cartId);
+            if (cart == null)
+                return BadRequest();
+
+            var updateCartResource = _mapper.Map<UpdateCartResource>(cart);
+            
+            patchCart.ApplyTo(updateCartResource, ModelState);
+
+            var isValid = TryValidateModel(updateCartResource);
+            if (!isValid)
+                return BadRequest(ModelState);
+
+            _mapper.Map(updateCartResource, cart);
+            await _unitOfWork.CompleteAsync();
+
+            return Ok(_mapper.Map<Cart, CartResource>(await _cartRepository.GetCart(cartId)));
+        }
+
         //DELETE: api/carts/1
         [AllowAnonymous]
         [HttpDelete("{cartId}")]
@@ -134,7 +161,6 @@ namespace JagWebApp.Controllers
 
             return Ok();
         }
-
 
         private int? GetLoggedInUserId()
         {

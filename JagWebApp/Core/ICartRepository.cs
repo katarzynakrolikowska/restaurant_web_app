@@ -16,6 +16,8 @@ namespace JagWebApp.Core
 
         void AddCartItemsToAnotherCart(Cart cart, Cart anotherCart);
 
+        Task UpdateCartItemAmountWithMenuItem(MenuItem item);
+
         void Remove(Cart cart);
     }
 }

@@ -58,6 +58,8 @@ namespace JagWebApp
                         new CartItem { MenuItemId = scr.MenuItemId, Amount = 1 }
                     };
                 });
+            CreateMap<UpdateCartResource, Cart>();
+            CreateMap<UpdateCartItemResource, CartItem>();
 
 
             CreateMap<Dish, DishResource>()
@@ -91,6 +93,9 @@ namespace JagWebApp
 
             CreateMap<Cart, CartResource>();
             CreateMap<CartItem, CartItemResource>();
+            CreateMap<Cart, UpdateCartResource>();
+            CreateMap<CartItem, UpdateCartItemResource>()
+                .ForMember(ucir => ucir.Available, opt => opt.MapFrom(ci => ci.MenuItem.Available));
         }
     }
 }

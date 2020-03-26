@@ -44,7 +44,7 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(): void {
     if (this.userId && this.cartItemsQuantity > 0) {
-      this.cartService.update()
+      this.cartService.updateCartAfterLogIn()
         .subscribe(cart => {
           this.cart = cart
           this.setCartItemsQuantity();
