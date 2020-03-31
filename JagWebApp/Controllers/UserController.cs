@@ -1,11 +1,13 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JagWebApp.Controllers
 {
@@ -15,36 +17,71 @@ namespace JagWebApp.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ITokenRepository _tokenRepository;
+        private readonly IAddressRepository _addressRepsitory;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public UserController(
             UserManager<User> userManager, 
-            ITokenRepository tokenRepository)
+            ITokenRepository tokenRepository, 
+            IAddressRepository addressRepsitory,
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
+            _addressRepsitory = addressRepsitory;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        //PATCH: api/user/email
-        [HttpPatch("email")]
-        public async Task<IActionResult> ChangeEmail([FromBody] JsonPatchDocument<User> patchUser)
+        //GET: api/user
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
         {
             var id = GetLoggedInUserId();
-            if (id == null)
-                return BadRequest();
+
+            var user = await _userManager.Users
+                .Include(u => u.Address)
+                .SingleOrDefaultAsync(u => u.Id == id);
+            
+            return Ok(_mapper.Map<UserCustomerResource>(user));
+        }
+
+        //PATCH: api/user
+        [HttpPatch]
+        public async Task<IActionResult> Update([FromBody] JsonPatchDocument<UpdateUserResource> patchUser)
+        {
+            var id = GetLoggedInUserId();
 
             if (patchUser == null)
                 return BadRequest();
 
             var userToModify = await _userManager.FindByIdAsync(id.ToString());
+            var updateUserResource = _mapper.Map<UpdateUserResource>(userToModify);
 
-            patchUser.ApplyTo(userToModify, ModelState);
-            if (!ModelState.IsValid)
+            if (patchUser.Operations[0].path != "/Email" && await _userManager.IsInRoleAsync(userToModify, "Admin"))
+                return BadRequest();
+
+            var addressId = userToModify.AddressId;
+
+            patchUser.ApplyTo(updateUserResource, ModelState);
+
+            var isValid = TryValidateModel(updateUserResource);
+            if (!isValid)
                 return BadRequest(ModelState);
 
+            _mapper.Map(updateUserResource, userToModify);
             var result = await _userManager.UpdateAsync(userToModify);
 
-            if (result.Succeeded)
+            if (result.Succeeded && patchUser.Operations[0].path == "/Email")
                 return Ok(new { token = _tokenRepository.GenerateToken(userToModify).Result });
+            else if (result.Succeeded)
+            {
+                await _addressRepsitory.Remove(addressId);
+                await _unitOfWork.CompleteAsync();
+                return Ok();
+            }
 
             return BadRequest(result.Errors);
         }
@@ -54,8 +91,6 @@ namespace JagWebApp.Controllers
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModelResource viewModel)
         {
             var id = GetLoggedInUserId();
-            if (id == null)
-                return BadRequest();
 
             var userToModify = await _userManager.FindByIdAsync(id.ToString());
 

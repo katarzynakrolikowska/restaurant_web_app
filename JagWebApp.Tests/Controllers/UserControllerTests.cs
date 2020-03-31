@@ -1,4 +1,6 @@
-﻿using JagWebApp.Controllers;
+﻿using AutoMapper;
+using JagWebApp.Controllers;
+using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
 using JagWebApp.Tests.Mocks;
@@ -6,6 +8,7 @@ using JagWebApp.Tests.Stubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,53 +19,65 @@ namespace JagWebApp.Tests.Controllers
     public class UserControllerTests
     {
         private readonly Mock<UserManager<User>> _userManager;
+        private readonly AddressRepositoryMock _addressRepositoryMock;
         private readonly UserController _controller;
 
         public UserControllerTests()
         {
             var tokenRepo = TokenRepositoryMock.TokenRepoMock;
-
+            var addressRepo = new Mock<IAddressRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
             _userManager = UserManagerMock.UserManager;
-            _controller = new UserController(_userManager.Object, tokenRepo.Object);
+
+            _controller = new UserController(_userManager.Object, tokenRepo.Object, addressRepo.Object, unitOfWork.Object, mapper);
+
+            _addressRepositoryMock = new AddressRepositoryMock(addressRepo);
         }
 
         [Fact]
-        public void ChangeEmail_WhenCalled_ReturnsIActionResult()
+        public void Update_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.ChangeEmail(It.IsAny<JsonPatchDocument<User>>());
+            var result = _controller.Update(It.IsAny<JsonPatchDocument<UpdateUserResource>>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void ChangeEmail_WhenUserIsLoggedOut_ReturnsBadRequestResult()
-        {
-            UserStub.SetUser(null, _controller);
-
-            var result = await _controller.ChangeEmail(new JsonPatchDocument<User>()) as BadRequestResult;
-
-            Assert.Equal(400, result.StatusCode);
-        }
-
-        [Fact]
-        public async void ChangeEmail_WhenInputIsNull_ReturnsBadRequestResult()
+        public async void Update_WhenInputIsNull_ReturnsBadRequestResult()
         {
             UserStub.SetUser(1, _controller);
 
-            var result = await _controller.ChangeEmail(null) as BadRequestResult;
+            var result = await _controller.Update(null) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void ChangeEmail_WhenUpdatingFailed_ReturnsBadRequestResult()
+        public async void Update_WhenDeliveryDataIsUpdatingAndUserIsAdmin_ReturnsBadRequestResult()
         {
-            var identityError = new IdentityError() { Code = "400", Description = "a" };
+            var patchUser = new JsonPatchDocument<UpdateUserResource>().Replace(u => u.PhoneNumber, It.IsAny<string>());
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockFindByIdAsync(new User());
-            UserManagerMock.MockUpdateAsync(IdentityResult.Failed(identityError));
+            UserManagerMock.MockIsInAdminRoleAsync(true);
 
-            var result = await _controller.ChangeEmail(new JsonPatchDocument<User>()) as ObjectResult;
+            var result = await _controller.Update(patchUser) as BadRequestResult;
+
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Update_WhenUpdatingFailed_ReturnsBadRequestResult()
+        {
+            var identityError = new IdentityError() { Code = "400", Description = "a" };
+            var patchUser = new JsonPatchDocument<UpdateUserResource>().Replace(u => u.PhoneNumber, It.IsAny<string>());
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockIsInAdminRoleAsync(false);
+            UserManagerMock.MockUpdateAsync(IdentityResult.Failed(identityError));
+            SetObjectValidator();
+
+            var result = await _controller.Update(patchUser) as ObjectResult;
             var errors = result.Value as List<IdentityError>;
 
             Assert.Equal(400, result.StatusCode);
@@ -70,30 +85,51 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void ChangeEmail_WhenUserIsLoggedInAndInputIsValid_UpdateMethodIsCalled()
+        public async void Update_WhenInputIsValid_UpdateMethodIsCalled()
         {
+            var patchUser = new JsonPatchDocument<UpdateUserResource>().Replace(u => u.PhoneNumber, It.IsAny<string>());
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockIsInAdminRoleAsync(false);
             UserManagerMock.MockUpdateAsync(IdentityResult.Success);
+            SetObjectValidator();
 
-            await _controller.ChangeEmail(new JsonPatchDocument<User>());
+            await _controller.Update(patchUser);
 
             _userManager.Verify(um => um.UpdateAsync(It.IsAny<User>()));
         }
 
         [Fact]
-        public async void ChangeEmail_WhenUserExistsAndIsValid_ReturnsToken()
+        public async void Update_WhenEmailIsUpdating_ReturnsToken()
         {
             var tokenObj = new { token = "a" };
+            var patchUser = new JsonPatchDocument<UpdateUserResource>().Replace(u => u.Email, It.IsAny<string>());
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockIsInAdminRoleAsync(false);
             UserManagerMock.MockUpdateAsync(IdentityResult.Success);
             TokenRepositoryMock.MockGenerateToken("a");
+            SetObjectValidator();
 
-            var result = await _controller
-                .ChangeEmail(new JsonPatchDocument<User>()) as OkObjectResult;
+            var result = await _controller.Update(patchUser) as OkObjectResult;
 
             Assert.Equal(tokenObj.ToString(), result.Value.ToString());
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Update_WhenDeliveryDataIsUpdating_ReturnsOkResult()
+        {
+            var patchUser = new JsonPatchDocument<UpdateUserResource>().Replace(u => u.PhoneNumber, It.IsAny<string>());
+            UserStub.SetUser(1, _controller);
+            UserManagerMock.MockFindByIdAsync(new User());
+            UserManagerMock.MockIsInAdminRoleAsync(false);
+            UserManagerMock.MockUpdateAsync(IdentityResult.Success);
+            _addressRepositoryMock.MockRemove();
+            SetObjectValidator();
+
+            var result = await _controller.Update(patchUser) as OkResult;
+
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -103,16 +139,6 @@ namespace JagWebApp.Tests.Controllers
             var result = _controller.ChangePassword(It.IsAny<ChangePasswordViewModelResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
-        }
-
-        [Fact]
-        public async void ChangePassword_WhenUserIsLoggedOut_ReturnsBadRequestResultResult()
-        {
-            UserStub.SetUser(null, _controller);
-
-            var result = await _controller.ChangePassword(new ChangePasswordViewModelResource()) as BadRequestResult;
-
-            Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
@@ -159,6 +185,17 @@ namespace JagWebApp.Tests.Controllers
                 .ChangePassword(new ChangePasswordViewModelResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
+        }
+
+        private void SetObjectValidator()
+        {
+            var objectValidator = new Mock<IObjectModelValidator>();
+            objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
+                                              It.IsAny<ValidationStateDictionary>(),
+                                              It.IsAny<string>(),
+                                              It.IsAny<object>()));
+
+            _controller.ObjectValidator = objectValidator.Object;
         }
     }
 }

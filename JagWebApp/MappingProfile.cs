@@ -60,6 +60,9 @@ namespace JagWebApp
                 });
             CreateMap<UpdateCartResource, Cart>();
             CreateMap<UpdateCartItemResource, CartItem>();
+            CreateMap<UpdateUserResource, User>();
+            CreateMap<AddressResource, Address>();
+
 
 
             CreateMap<Dish, DishResource>()
@@ -96,6 +99,9 @@ namespace JagWebApp
             CreateMap<Cart, UpdateCartResource>();
             CreateMap<CartItem, UpdateCartItemResource>()
                 .ForMember(ucir => ucir.Available, opt => opt.MapFrom(ci => ci.MenuItem.Available));
+            CreateMap<Address, AddressResource>();
+            CreateMap<User, UserCustomerResource>();
+            CreateMap<User, UpdateUserResource>();
         }
     }
 }

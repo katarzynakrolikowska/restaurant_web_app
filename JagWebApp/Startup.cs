@@ -48,6 +48,7 @@ namespace JagWebApp
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             services.AddSignalR();
 

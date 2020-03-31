@@ -9,6 +9,10 @@ namespace JagWebApp.Core.Models
     {
         public ICollection<UserRole> UserRoles { get; set; }
 
+        public virtual Address Address { get; set; }
+
+        public int? AddressId { get; set; }
+
         public static int? GetLoggedInUserId(ClaimsIdentity claimsIdentity)
         {
             try

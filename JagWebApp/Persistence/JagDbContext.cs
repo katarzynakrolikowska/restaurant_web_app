@@ -26,6 +26,8 @@ namespace JagWebApp.Persistance
 
         public DbSet<CartItem> CartItems { get; set; }
 
+        public DbSet<Address> Addresses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

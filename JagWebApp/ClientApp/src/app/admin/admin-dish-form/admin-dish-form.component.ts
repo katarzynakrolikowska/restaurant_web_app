@@ -22,12 +22,12 @@ import { DishService } from '../../services/dish.service';
   styleUrls: ['./admin-dish-form.component.css']
 })
 export class AdminDishFormComponent implements OnInit {
-
-  @Input('title') title: string = 'Nowe danie';
   form: FormGroup;
   categories: Array<Category>;
   dish: Dish;
   id;
+
+  @Input('title') title: string = 'Nowe danie';
 
   constructor(
     private categoryService: CategoryService,

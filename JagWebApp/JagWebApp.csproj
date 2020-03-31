@@ -78,6 +78,12 @@
     <Compile Remove="Migrations\20200219120352_AddCartIdToUser.Designer.cs" />
     <Compile Remove="Migrations\20200219120621_AddCartIdToUser.cs" />
     <Compile Remove="Migrations\20200219120621_AddCartIdToUser.Designer.cs" />
+    <Compile Remove="Migrations\20200330091851_AddCustomersTable.cs" />
+    <Compile Remove="Migrations\20200330091851_AddCustomersTable.Designer.cs" />
+    <Compile Remove="Migrations\20200330092046_AddCustomers.cs" />
+    <Compile Remove="Migrations\20200330092046_AddCustomers.Designer.cs" />
+    <Compile Remove="Migrations\20200330152229_AddAddressToUser.cs" />
+    <Compile Remove="Migrations\20200330152229_AddAddressToUser.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

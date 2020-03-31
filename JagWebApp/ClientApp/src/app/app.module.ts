@@ -49,6 +49,8 @@ import { RegisterFormComponent } from './register-form/register-form.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
 import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
+import { OrderAddressFormComponent } from './order-address-form/order-address-form.component';
+import { OrderAddressAddViewComponent } from './order-address-add-view/order-address-add-view.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -87,6 +89,8 @@ export function tokenGetter() {
     CartActionButtonsComponent,
     NavCartButtonComponent,
     CartViewComponent,
+    OrderAddressFormComponent,
+    OrderAddressAddViewComponent,
 
   ],
   imports: [
@@ -135,6 +139,11 @@ export function tokenGetter() {
           {
             path: 'user/data',
             component: UserDataTabsComponent
+          },
+          {
+            path: 'user/data/address/new',
+            component: OrderAddressAddViewComponent,
+            canActivate: [NotAdminGuard]
           }]
       },
       {
