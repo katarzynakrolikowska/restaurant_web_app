@@ -19,6 +19,42 @@ namespace JagWebApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("JagWebApp.Core.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Postcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("JagWebApp.Core.Models.Cart", b =>
                 {
                     b.Property<int>("Id")
@@ -234,6 +270,9 @@ namespace JagWebApp.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -279,6 +318,8 @@ namespace JagWebApp.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -445,6 +486,13 @@ namespace JagWebApp.Migrations
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("JagWebApp.Core.Models.User", b =>
+                {
+                    b.HasOne("JagWebApp.Core.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
                 });
 
             modelBuilder.Entity("JagWebApp.Core.Models.UserRole", b =>

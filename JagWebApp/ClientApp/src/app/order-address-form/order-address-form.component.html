@@ -1,0 +1,54 @@
+<div class="row mt-3">
+  <div class="col-12 col-md-10 col-lg-6">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <h5 class="mt-1">Odbiorca</h5>
+      <div>
+        <mat-form-field appearance="outline" class="display-block">
+          <mat-label>Imię i nazwisko odbiorcy/Nazwa firmy</mat-label>
+          <input matInput formControlName="customerName" placeholder="Imię i nazwisko odbiorcy/Nazwa firmy">
+          <mat-error *ngIf="customerName.invalid">{{ getCustomerNameErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="display-block">
+          <mat-label>Numer telefonu</mat-label>
+          <input matInput formControlName="phone" placeholder="111222333">
+          <mat-icon matSuffix matTooltip="Numer telefonu powinien składać się z 9 cyfr">info</mat-icon>
+          <mat-error *ngIf="phone.invalid">{{ getPhoneErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <h5 class="mt-4">Adres</h5>
+      <div class="row">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Ulica</mat-label>
+          <input matInput formControlName="street" placeholder="Ulica">
+          <mat-error *ngIf="street.invalid">{{ getStreetErrorMessage() }}</mat-error>
+        </mat-form-field>
+      
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Numer domu/mieszkania</mat-label>
+          <input matInput formControlName="houseNumber" placeholder="Numer domu/mieszkania">
+          <mat-error *ngIf="houseNumber.invalid">{{ getHouseNumberErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Kod pocztowy</mat-label>
+          <input matInput formControlName="postcode" placeholder="22-400">
+          <mat-error *ngIf="postcode.invalid">{{ getPostcodeErrorMessage() }}</mat-error>
+        </mat-form-field>
+      
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Miejscowość</mat-label>
+          <input matInput formControlName="city" placeholder="Miejscowość">
+          <mat-error *ngIf="city.invalid">{{ getCityErrorMessage() }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <div class="col col-md-6">
+          <button mat-raised-button color="primary" type="submit" class="width-max mt-3">Zapisz</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

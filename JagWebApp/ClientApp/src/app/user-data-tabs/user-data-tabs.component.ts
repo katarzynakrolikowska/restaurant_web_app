@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './../services/auth.service';
 
 @Component({
   selector: 'app-user-data-tabs',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
 })
 export class UserDataTabsComponent {
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 }
