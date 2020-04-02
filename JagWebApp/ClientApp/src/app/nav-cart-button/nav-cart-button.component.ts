@@ -96,15 +96,11 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.subscription.add(this.signalRService.onUpdatedItemReceived
-      .subscribe((item: MenuItem) => {
+      .subscribe((items: MenuItem[]) => {
         if (!this.cart)
           return;
 
-        let index = this.cart.items.findIndex(ci => ci.menuItem.id === item.id);
-        if (index < 0)
-          return;
-
-        this.cart.items[index].menuItem = item;
+        items.forEach(mi => this.updateCart(mi))
         this.shareCart();
       }));
 
@@ -126,6 +122,16 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
           this.setCartItemsQuantity();
         }
       }));
+  }
+
+  private updateCart(item: MenuItem) {
+    let index = this.cart.items.findIndex(ci => ci.menuItem.id === item.id);
+    if (index < 0)
+      return;
+
+    this.cart.items[index].menuItem = item;
+    if (this.cart.items[index].amount === 0)
+      this.cart.items.splice(index, 1);
   }
 
   private removeCart() {

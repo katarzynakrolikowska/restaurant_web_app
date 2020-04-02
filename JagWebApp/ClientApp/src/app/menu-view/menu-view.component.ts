@@ -84,8 +84,8 @@ export class MenuViewComponent implements OnInit, OnDestroy {
     }
 
     this.subscription = this.signalRService.onUpdatedItemReceived
-      .subscribe((menuItem: MenuItem) =>
-        menuItem.isMain ? this.mainMenuItem = menuItem : this.updateMenuItem(menuItem));
+      .subscribe((menuItems: MenuItem[]) =>
+        menuItems.forEach(mi => mi.isMain ? this.mainMenuItem = mi : this.updateMenuItem(mi)));
 
     this.subscription.add(this.signalRService.onDeletedItemReceived
       .subscribe((menuItem: MenuItem) => 

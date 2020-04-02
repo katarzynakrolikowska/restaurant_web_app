@@ -1,8 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { ERROR_SERVER_MESSAGE } from '../consts/user-messages.consts';
 import { Cart } from '../models/cart';
 import { Order } from '../models/order';
 import { CartItemsSharedService } from '../services/cart-items-shared.service';
@@ -12,6 +15,7 @@ import { CartItem } from './../models/cart-item';
 import { Customer } from './../models/customer';
 import { OrderService } from './../services/order.service';
 import { UserService } from './../services/user.service';
+import { SaveOrder } from '../models/save-order';
 
 @Component({
   selector: 'app-order-stepper',
@@ -29,7 +33,8 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
     private cartItemsSharedService: CartItemsSharedService, 
     private router: Router,
     private orderService: OrderService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    public toastr: ToastrService) { }
 
   ngOnInit() {
     this.userService.getUser()
@@ -74,16 +79,27 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
     if (this.form.invalid)
       return;
 
-    let order: Order = { info: this.form.get('additionalInfo').value }
+    let order: SaveOrder = { info: this.form.get('additionalInfo').value }
 
     this.orderService.create(order)
-      .subscribe(id => this.showDialog(id));
+      .subscribe(order => {
+        this.showDialog(order);
+        this.cartItemsSharedService.shareCart(null);
+      }, (errorRespone: HttpErrorResponse) => {
+        if (errorRespone.status === 404){
+          this.toastr.error('Wygląda na to, że produkty z Twojego koszyka zostały już wyprzedane :(');
+          this.cart = null;
+          this.cartItemsSharedService.shareCart(null);
+        }
+        else
+          this.toastr.error(ERROR_SERVER_MESSAGE);
+      });
   }
 
-  private showDialog(orderId){
+  private showDialog(order: Order){
     const dialogRef = this.dialog.open(
       DialogOrderAcceptedComponent,
-      { data: orderId });
+      { data: order });
 
     dialogRef.afterClosed().subscribe(() => {
       this.router.navigate(['/menu']);

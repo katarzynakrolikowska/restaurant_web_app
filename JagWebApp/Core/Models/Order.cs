@@ -14,7 +14,7 @@ namespace JagWebApp.Core.Models
         public User User { get; set; }
 
         [Required]
-        public Collection<OrderedItem> OrderedItems { get; set; }
+        public Collection<OrderedItem> Items { get; set; }
 
         public decimal Total { get; set; }
 
@@ -23,7 +23,7 @@ namespace JagWebApp.Core.Models
 
         public Order()
         {
-            OrderedItems = new Collection<OrderedItem>();
+            Items = new Collection<OrderedItem>();
         }
     }
 }

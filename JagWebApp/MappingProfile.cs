@@ -103,10 +103,13 @@ namespace JagWebApp
             CreateMap<Address, AddressResource>();
             CreateMap<User, UserCustomerResource>();
             CreateMap<User, UpdateUserResource>();
+            CreateMap<Order, OrderResource>();
+            CreateMap<OrderedItem, OrderedItemResource>();
 
 
             CreateMap<Cart, Order>()
                 .ForMember(o => o.Id, opt => opt.Ignore())
+                .ForMember(o => o.Items, opt => opt.Ignore())
                 .ForMember(o => o.Total, opt => opt.Ignore())
                 .AfterMap((c, o) =>
                 {
@@ -114,7 +117,7 @@ namespace JagWebApp
                     foreach (var item in c.Items)
                     {
                         sum += item.MenuItem.Price * item.Amount;
-                        o.OrderedItems.Add(new OrderedItem
+                        o.Items.Add(new OrderedItem
                         {
                             Name = item.MenuItem.Dishes.Count == 1 ? item.MenuItem.Dishes.ElementAt(0).Dish.Name : "Zestaw dnia",
                             Amount = item.Amount,

@@ -139,7 +139,7 @@ namespace JagWebApp.Controllers
 
             var isValid = TryValidateModel(updateCartResource);
             if (!isValid)
-                return BadRequest(ModelState);
+                return BadRequest(updateCartResource);
 
             _mapper.Map(updateCartResource, cart);
             await _unitOfWork.CompleteAsync();

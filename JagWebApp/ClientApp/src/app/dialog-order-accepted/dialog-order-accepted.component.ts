@@ -1,3 +1,4 @@
+import { Order } from './../models/order';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
@@ -7,9 +8,9 @@ import { MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./dialog-order-accepted.component.css']
 })
 export class DialogOrderAcceptedComponent {
-  orderId;
+  order: Order;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: string) {
-    this.orderId = data;
+  constructor(@Inject(MAT_DIALOG_DATA) public data) {
+    this.order = data;
   }
 }

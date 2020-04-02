@@ -8,7 +8,6 @@ import { MenuItem } from '../models/menu-item';
 })
 export class SignalRService {
   private hubConnection: signalR.HubConnection
-  data: MenuItem;
   onUpdatedItemReceived = new EventEmitter();
   onDeletedItemReceived = new EventEmitter();
 
@@ -29,7 +28,7 @@ export class SignalRService {
   }
 
   addTransferUpdatedItemListener = () => {
-    this.hubConnection.on('transferUpdatedItem', (data: MenuItem) => {
+    this.hubConnection.on('transferUpdatedItem', (data: MenuItem[]) => {
       this.onUpdatedItemReceived.emit(data);
     });
   }

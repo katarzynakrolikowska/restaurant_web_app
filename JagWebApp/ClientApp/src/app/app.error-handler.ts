@@ -19,6 +19,7 @@ export class AppErrorHandler implements ErrorHandler {
       this.spinner.hide();
       console.log(error);
       this.toastr = this.injector.get(ToastrService);
+      
       this.toastr.error(ERROR_SERVER_MESSAGE);
     });
   }

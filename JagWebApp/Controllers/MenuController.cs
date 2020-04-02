@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
@@ -93,7 +94,9 @@ namespace JagWebApp.Controllers
             await _cartRepository.UpdateCartItemAmountWithMenuItem(item);
             await _unitOfWork.CompleteAsync();
 
-            await _hub.Clients.All.SendAsync("transferUpdatedItem", _mapper.Map<MenuItem, MenuItemResource>(item));
+            await _hub.Clients.All.SendAsync(
+                "transferUpdatedItem",
+                _mapper.Map<IEnumerable<MenuItem>, IEnumerable<MenuItemResource>>(new Collection<MenuItem>() { item }));
 
             return Ok();
         }

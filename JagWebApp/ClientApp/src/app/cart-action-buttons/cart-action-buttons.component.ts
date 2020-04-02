@@ -1,6 +1,5 @@
-import { MenuItem } from './../models/menu-item';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CART_ID } from '../consts/app.consts';
 import { Cart } from '../models/cart';
@@ -121,7 +120,7 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
 
       if (!cart && !this.userId)
           localStorage.removeItem(CART_ID);
-    }, (error:HttpErrorResponse) => { console.log(error)});
+    }, (error:HttpErrorResponse) => { console.log(error) });
   }
 
   private shareCartItemAction(isAdded: boolean) {
@@ -132,8 +131,10 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private initMenuItemQuantity() {
-    if (!this.cart)
+    if (!this.cart) {
+      this.menuItemQuantity = 0;
       return;
+    }
 
     let item = this.cart.items.find(ci => ci.menuItem.id === this.menuItemId);
     if (item)
