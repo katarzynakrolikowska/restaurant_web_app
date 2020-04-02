@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 
 @Component({
@@ -6,7 +7,12 @@ import { AuthService } from './../services/auth.service';
   templateUrl: './user-data-tabs.component.html',
   styleUrls: ['./user-data-tabs.component.css']
 })
-export class UserDataTabsComponent {
+export class UserDataTabsComponent implements OnInit {
+  selected: number;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => this.selected = params.selected)
+  }
 }

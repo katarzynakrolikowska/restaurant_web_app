@@ -1,0 +1,19 @@
+<h1 mat-dialog-title class="text-center mb-1">Wszystko przebiegło pomyślnie!</h1>
+<h1 class="text-center">
+  <mat-icon>sentiment_very_satisfied</mat-icon><mat-icon>sentiment_very_satisfied</mat-icon>
+</h1>
+<div mat-dialog-content>
+  <p>Dziękujemy za zamówienie :)</p>
+  <p>
+    Produkty z Twojego koszyka są dla Ciebie zarezerwowane :)
+    Możesz je sprawdzić w zakładce 
+    <span class="font-italic">Moje zamówienia</span>.
+  </p>
+  <p>Twój numer zamówienia to {{ orderId }}.</p>
+  <p>Zachęcamy do ponownego skorzystania z naszej oferty :)</p>
+</div>
+<div mat-dialog-actions class="mb-0">
+  <span class="ml-auto">
+    <button mat-flat-button color="accent" [mat-dialog-close]="false" cdkFocusInitial>OK</button>
+  </span>
+</div>

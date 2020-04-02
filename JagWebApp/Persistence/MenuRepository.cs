@@ -69,5 +69,15 @@ namespace JagWebApp.Persistence
         {
             _context.MenuItems.Remove(menuItem);
         }
+
+        public async Task UpdateAvailability(ICollection<CartItem> cartItems)
+        {
+            foreach (var cartItem in cartItems)
+            {
+                var menuItem = await GetMenuItem(cartItem.MenuItemId);
+                if (menuItem.Available - cartItem.Amount >= 0)
+                    menuItem.Available -= cartItem.Amount;
+            }
+        }
     }
 }

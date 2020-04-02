@@ -28,6 +28,10 @@ namespace JagWebApp.Persistance
 
         public DbSet<Address> Addresses { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderedItem> OrderedItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

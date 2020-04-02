@@ -112,7 +112,8 @@ namespace JagWebApp.Persistence
 
         public async Task UpdateCartItemAmountWithMenuItem(MenuItem item)
         {
-            await _context.CartItems.Where(ci => ci.MenuItemId == item.Id && ci.Amount > item.Available)
+            await _context.CartItems
+                .Where(ci => ci.MenuItemId == item.Id && ci.Amount > item.Available)
                 .ForEachAsync(ci => ci.Amount = item.Available);
         }
 
