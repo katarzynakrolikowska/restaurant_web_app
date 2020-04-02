@@ -112,13 +112,34 @@ namespace JagWebApp.Persistence
 
         public async Task UpdateCartItemAmountWithMenuItem(MenuItem item)
         {
-            await _context.CartItems.Where(ci => ci.MenuItemId == item.Id && ci.Amount > item.Available)
-                .ForEachAsync(ci => ci.Amount = item.Available);
+            var carts = await GetCarts();
+
+            foreach (var cart in carts)
+            {
+                var cartItems = cart.Items
+                    .Where(ci => ci.MenuItemId == item.Id && ci.Amount > item.Available)
+                    .ToList();
+
+                cartItems.ForEach(ci =>
+                {
+                    if (item.Available > 0)
+                        ci.Amount = item.Available;
+                    else if (item.Available == 0 && cart.Items.Count == 1)
+                        Remove(cart);
+                    else
+                        RemoveCartItem(ci);
+                });
+            }
         }
 
         public void Remove(Cart cart)
         {
             _context.Carts.Remove(cart);
+        }
+
+        private void RemoveCartItem(CartItem item)
+        {
+            _context.CartItems.Remove(item);
         }
     }
 }

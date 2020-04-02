@@ -84,6 +84,10 @@
     <Compile Remove="Migrations\20200330092046_AddCustomers.Designer.cs" />
     <Compile Remove="Migrations\20200330152229_AddAddressToUser.cs" />
     <Compile Remove="Migrations\20200330152229_AddAddressToUser.Designer.cs" />
+    <Compile Remove="Migrations\20200401094621_AddOrders.cs" />
+    <Compile Remove="Migrations\20200401094621_AddOrders.Designer.cs" />
+    <Compile Remove="Migrations\20200401094839_AddOrders.cs" />
+    <Compile Remove="Migrations\20200401094839_AddOrders.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

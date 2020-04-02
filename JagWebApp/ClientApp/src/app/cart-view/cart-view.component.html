@@ -1,4 +1,3 @@
-
 <div *ngIf="cart">
   <h3 class="my-5">Twój koszyk</h3>
   <div class="row my-3 mx-0">
@@ -31,7 +30,7 @@
   </div>
   <div class="row mb-5">
     <div class="col col-md-3 offset-md-9 text-center text-md-right font-weight-bolder font-size-lg no-wrap">
-      Razem: {{cartValue | currency : '' : '' }} zł
+      Razem: {{ cartValue | currency : '' : '' }} zł
     </div>
   </div>
   <div class="row mb-5">
@@ -39,7 +38,9 @@
       <button mat-button color="warn" class="mb-2" (click)="clearCart()">WYCZYŚĆ KOSZYK</button>
     </div>
     <div class="col-6 col-md-3 offset-md-6">
-      <button mat-flat-button color="primary" class="width-max">ZAMÓW</button>
+      <button mat-flat-button color="primary" class="width-max" [routerLink]="['/checkout']">
+        DO KASY
+      </button>
     </div>
   </div>
 </div>

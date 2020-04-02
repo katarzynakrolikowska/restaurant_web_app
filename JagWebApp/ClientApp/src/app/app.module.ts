@@ -51,6 +51,8 @@ import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon
 import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
 import { OrderAddressFormComponent } from './order-address-form/order-address-form.component';
 import { OrderAddressAddViewComponent } from './order-address-add-view/order-address-add-view.component';
+import { OrderStepperComponent } from './order-stepper/order-stepper.component';
+import { DialogOrderAcceptedComponent } from './dialog-order-accepted/dialog-order-accepted.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -91,6 +93,8 @@ export function tokenGetter() {
     CartViewComponent,
     OrderAddressFormComponent,
     OrderAddressAddViewComponent,
+    OrderStepperComponent,
+    DialogOrderAcceptedComponent,
 
   ],
   imports: [
@@ -144,6 +148,11 @@ export function tokenGetter() {
             path: 'user/data/address/new',
             component: OrderAddressAddViewComponent,
             canActivate: [NotAdminGuard]
+          },
+          {
+            path: 'checkout',
+            component: OrderStepperComponent,
+            canActivate: [NotAdminGuard]
           }]
       },
       {
@@ -172,7 +181,11 @@ export function tokenGetter() {
     NgxSpinnerModule
 
     ],
-    entryComponents: [DialogConfirmComponent, AdminOrdinaryItemEditDialogComponent],
+    entryComponents: [
+      DialogConfirmComponent, 
+      AdminOrdinaryItemEditDialogComponent, 
+      DialogOrderAcceptedComponent
+    ],
     providers: [
       { provide: ErrorHandler, useClass: AppErrorHandler },
       { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }

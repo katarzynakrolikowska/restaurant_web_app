@@ -17,5 +17,7 @@ namespace JagWebApp.Core
         void Add(MenuItem menuItem);
 
         void Remove(MenuItem menuItem);
+
+        Task<IEnumerable<MenuItem>> UpdateAvailability(IEnumerable<CartItem> cartItems);
     }
 }

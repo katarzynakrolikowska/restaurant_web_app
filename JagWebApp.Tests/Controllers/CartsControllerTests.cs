@@ -77,17 +77,6 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void GetUserCart_WhenUserDoesNotExist_ReturnsBadRequest()
-        {
-            User user = null;
-            UserManagerMock.MockFindByIdAsync(user);
-
-            var result = await _controller.GetUserCart(It.IsAny<int>()) as BadRequestResult;
-
-            Assert.Equal(400, result.StatusCode);
-        }
-
-        [Fact]
         public void Create_WhenCalled_ReturnsIActionResult()
         {
             var result = _controller.Create(It.IsAny<SaveCartResource>());

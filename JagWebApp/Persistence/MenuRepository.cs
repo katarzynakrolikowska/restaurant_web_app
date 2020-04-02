@@ -3,6 +3,7 @@ using JagWebApp.Core.Models;
 using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -68,6 +69,23 @@ namespace JagWebApp.Persistence
         public void Remove(MenuItem menuItem)
         {
             _context.MenuItems.Remove(menuItem);
+        }
+
+        public async Task<IEnumerable<MenuItem>> UpdateAvailability(IEnumerable<CartItem> cartItems)
+        {
+            var updatedMenuItems = new Collection<MenuItem>();
+
+            foreach (var cartItem in cartItems)
+            {
+                var menuItem = await GetMenuItem(cartItem.MenuItemId);
+                if (menuItem.Available - cartItem.Amount >= 0)
+                {
+                    menuItem.Available -= cartItem.Amount;
+                    updatedMenuItems.Add(menuItem);
+                }
+            }
+
+            return updatedMenuItems;
         }
     }
 }

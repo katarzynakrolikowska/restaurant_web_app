@@ -1,0 +1,17 @@
+.mat-form-field-infix {
+  width: auto !important;
+}
+
+@media (min-width: 576px) {
+  p {
+    font-size: 17px;
+  }
+
+  .step-header {
+    font-size: 20px;
+  }
+}
+
+p {
+  margin-bottom: 5px;
+}

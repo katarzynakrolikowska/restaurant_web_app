@@ -2,6 +2,7 @@
 using JagWebApp.Core.Models;
 using Moq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace JagWebApp.Tests.Mocks
 {
@@ -48,6 +49,11 @@ namespace JagWebApp.Tests.Mocks
             _menuRepo.Setup(mr => mr.Remove(It.IsAny<MenuItem>()));
         }
 
+        public void MockUpdateAvailability()
+        {
+            _menuRepo.Setup(mr => mr.UpdateAvailability(It.IsAny<Collection<CartItem>>()));
+        }
+
         public void VerifyGetMenuItems()
         {
             _menuRepo.Verify(mr => mr.GetMenuItems());
@@ -61,6 +67,11 @@ namespace JagWebApp.Tests.Mocks
         public void VerifyRemove(MenuItem item)
         {
             _menuRepo.Verify(mr => mr.Remove(item));
+        }
+
+        public void VerifyUpdateAvailability()
+        {
+            _menuRepo.Verify(mr => mr.UpdateAvailability(It.IsAny<Collection<CartItem>>()));
         }
     }
 }
