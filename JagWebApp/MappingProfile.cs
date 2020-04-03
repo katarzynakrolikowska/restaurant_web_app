@@ -105,6 +105,7 @@ namespace JagWebApp
             CreateMap<User, UpdateUserResource>();
             CreateMap<Order, OrderResource>();
             CreateMap<OrderedItem, OrderedItemResource>();
+            CreateMap<Order, OrderAdminViewResource>();
 
 
             CreateMap<Cart, Order>()

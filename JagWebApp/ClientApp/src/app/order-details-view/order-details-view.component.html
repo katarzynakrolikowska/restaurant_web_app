@@ -1,15 +1,26 @@
+
+
 <div *ngIf="order$ | async; let order" class=" row font-size-md">
-  <div class="col col-md-6">
-    <h4 class="mb-3 mt-4"> Zamówienie numer {{ order.id }}</h4>
-  <h5>Produkty</h5>
-  <ul class="list-group list-group-flush mb-3">
-    <li *ngFor="let item of order.items" class="list-group-item font-size-sm">
-      {{ item.name }} - {{ item.amount }} x {{ item.price | currency : '' : '' }} zł
-    </li>
-  </ul>
-  <p>Wartość zamówienia: {{ order.total | currency : '' : '' }} zł</p>
-  <p>Data: {{ order.date | date: 'dd.MM.yy HH:mm' }}</p>
-  <p>Uwagi: {{ order.info === '' ? "brak" : order.info }}</p>
+  <h3 class="mb-3 mt-4 col-12"> Zamówienie numer {{ order.id }}</h3>
+  <div class="col-12 col-md-6">
+    <h4>Produkty</h4>
+    <ul class="list-group list-group-flush mb-3">
+      <li *ngFor="let item of order.items" class="list-group-item font-size-sm">
+        {{ item.name }} - {{ item.amount }} x {{ item.price | currency : '' : '' }} zł
+      </li>
+    </ul>
+    <p>Wartość zamówienia: {{ order.total | currency : '' : '' }} zł</p>
+    <p>Data: {{ order.date | date: 'dd.MM.yy HH:mm' }}</p>
+    <p>Uwagi: {{ order.info === '' ? "brak" : order.info }}</p>
+  </div>
+  <div *ngIf="authService.isAdmin()" class="col-12 col-md-6">
+    <h4>Klient</h4>
+    <p>Adres email: {{ order.user.email }}</p>
+    <h4>Adres dostawy</h4>
+    <div>{{ order.user.address.customerName }}</div>
+    <div>{{ order.user.address.street }} {{ order.user.address.houseNumber }}</div>
+    <div>{{ order.user.address.postcode }} {{ order.user.address.city }}</div>
+    <div>tel. {{ order.user.phoneNumber }}</div>
   </div>
 </div>
-<a mat-raised-button [routerLink]="['/user/orders']" class="mt-3">COFNIJ</a>
+<a mat-raised-button [routerLink]="authService.isAdmin() ? ['/admin/orders'] : ['/user/orders']" class="mt-3">COFNIJ</a>

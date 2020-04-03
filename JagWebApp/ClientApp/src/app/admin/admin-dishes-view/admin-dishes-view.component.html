@@ -1,14 +1,14 @@
-  <div class="row justify-content-between">
-    <div class="col-6 col-md-4">
-      <button mat-raised-button routerLink="/admin/dishes/new">Nowe danie</button>
-    </div>
-    <div class="col-6 col-md-4">
-      <mat-form-field class="input-search-dish">
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Szukaj">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-    </div>
+<div class="row justify-content-between">
+  <div class="col-6 col-md-4">
+    <button mat-raised-button routerLink="/admin/dishes/new">Nowe danie</button>
   </div>
+  <div class="col-6 col-md-4">
+    <mat-form-field class="input-search-dish">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Szukaj">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+</div>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>

@@ -11,9 +11,15 @@ export class OrderService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  getOrder(id: number) {
+  getUserOrder(id: number) {
     return this.http.get(this.baseUrl + 'api/orders/' + id)
       .pipe(map((order: Order) => order))
+  }
+
+  getOrders() {
+    return this.http.get(this.baseUrl + 'api/orders/')
+    .pipe(map((orders: Array<Order>) => 
+      orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())));
   }
 
   getUserOrders() {

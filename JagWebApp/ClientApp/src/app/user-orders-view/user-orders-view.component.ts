@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Order } from '../models/order';
 import { OrderService } from './../services/order.service';
@@ -20,7 +19,6 @@ export class UserOrdersViewComponent implements OnInit {
   
   constructor(
     private orderService: OrderService,
-    private router: Router,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
@@ -41,9 +39,5 @@ export class UserOrdersViewComponent implements OnInit {
 
         this.spinner.hide();
       });
-  }
-
-  showDetails(id: number) {
-    this.router.navigate(['/user/orders/' + id]);
   }
 }

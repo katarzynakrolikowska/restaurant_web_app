@@ -6,7 +6,11 @@ namespace JagWebApp.Core
 {
     public interface IOrderRepository
     {
+        Task<IEnumerable<Order>> GetOrders();
+
         Task<IEnumerable<Order>> GetUserOrders(int userId);
+
+        Task<Order> GetOrder(int id);
 
         Task<Order> GetUserOrder(int id, int userId);
 

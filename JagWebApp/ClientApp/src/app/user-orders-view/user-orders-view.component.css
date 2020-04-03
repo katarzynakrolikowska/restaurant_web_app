@@ -2,6 +2,10 @@ table {
   width: 100%;
 }
 
+.input-search-dish {
+  display: block;
+}
+
 .table-button {
   min-width: 24px;
 }

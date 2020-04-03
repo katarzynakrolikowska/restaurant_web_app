@@ -17,12 +17,31 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
+        public async Task<IEnumerable<Order>> GetOrders()
+        {
+            return await _context.Orders
+                .Include(o => o.Items)
+                .Include(o => o.User)
+                    .ThenInclude(u => u.Address)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Order>> GetUserOrders(int userId)
         {
             return await _context.Orders
                 .Where(o => o.UserId == userId)
                 .Include(o => o.Items)
                 .ToListAsync();
+        }
+
+        public async Task<Order> GetOrder(int id)
+        {
+            return await _context.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.Items)
+                .Include(o => o.User)
+                    .ThenInclude(u => u.Address)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<Order> GetUserOrder(int id, int userId)
