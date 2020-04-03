@@ -25,7 +25,8 @@
           <mat-icon>person</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item [routerLink]="['/login']">Zaloguj się</button>
+          <button mat-menu-item [routerLink]="['/login']">Logowanie</button>
+          <button mat-menu-item [routerLink]="['/login']">Rejestracja</button>
         </mat-menu>
         <ng-template #userProfileLink>
           <button mat-button class="nav-mat-button" [matMenuTriggerFor]="menu">
@@ -33,6 +34,7 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item [routerLink]="['/user/data']">Twoje dane</button>
+            <button *ngIf="!isAdmin()" mat-menu-item [routerLink]="['/user/orders']">Twoje zamówienia</button>
             <button mat-menu-item (click)="logout()">Wyloguj się</button>
           </mat-menu>
         </ng-template>

@@ -44,6 +44,34 @@ namespace JagWebApp.Controllers
             _hub = hub;
         }
 
+        //GET: api/orders/user
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserOrders()
+        {
+            var id = GetLoggedInUserId();
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+                return BadRequest();
+
+            var orders = await _orderRepository.GetUserOrders((int)id);
+
+            return Ok(_mapper.Map<IEnumerable<OrderResource>>(orders));
+        }
+
+        //GET: api/orders/1
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserOrder(int id)
+        {
+            var userId = GetLoggedInUserId();
+
+            var order = await _orderRepository.GetUserOrder(id, (int)userId);
+            if (order == null)
+                return BadRequest();
+
+            return Ok(_mapper.Map<OrderResource>(order));
+        }
+
         //POST: api/orders
         [HttpPost]
         public async Task<IActionResult> Create(SaveOrderResource saveOrder)

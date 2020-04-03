@@ -53,6 +53,9 @@ import { OrderAddressFormComponent } from './order-address-form/order-address-fo
 import { OrderAddressAddViewComponent } from './order-address-add-view/order-address-add-view.component';
 import { OrderStepperComponent } from './order-stepper/order-stepper.component';
 import { DialogOrderAcceptedComponent } from './dialog-order-accepted/dialog-order-accepted.component';
+import { AdminOrdersViewComponent } from './admin/admin-orders-view/admin-orders-view.component';
+import { UserOrdersViewComponent } from './user-orders-view/user-orders-view.component';
+import { OrderDetailsViewComponent } from './order-details-view/order-details-view.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -95,6 +98,9 @@ export function tokenGetter() {
     OrderAddressAddViewComponent,
     OrderStepperComponent,
     DialogOrderAcceptedComponent,
+    AdminOrdersViewComponent,
+    UserOrdersViewComponent,
+    OrderDetailsViewComponent,
 
   ],
   imports: [
@@ -141,8 +147,9 @@ export function tokenGetter() {
             canActivate: [AdminGuard]
           },
           {
-            path: 'user/data',
-            component: UserDataTabsComponent
+            path: 'admin/orders',
+            component: AdminOrdersViewComponent,
+            canActivate: [AdminGuard]
           },
           {
             path: 'user/data/address/new',
@@ -150,8 +157,22 @@ export function tokenGetter() {
             canActivate: [NotAdminGuard]
           },
           {
+            path: 'user/data',
+            component: UserDataTabsComponent
+          },
+          {
             path: 'checkout',
             component: OrderStepperComponent,
+            canActivate: [NotAdminGuard]
+          },
+          {
+            path: 'user/orders/:id',
+            component: OrderDetailsViewComponent,
+            canActivate: [NotAdminGuard]
+          },
+          {
+            path: 'user/orders',
+            component: UserOrdersViewComponent,
             canActivate: [NotAdminGuard]
           }]
       },
