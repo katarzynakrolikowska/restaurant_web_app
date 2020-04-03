@@ -29,6 +29,8 @@ namespace JagWebApp.Tests.Controllers
             var menuRepo = new Mock<IMenuRepository>();
             var unitOfWork = new Mock<IUnitOfWork>();
             var mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
+            var hub = HubContextMock.Hub;
+
 
             _controller = new OrdersController(
                 userManager.Object,
@@ -36,7 +38,8 @@ namespace JagWebApp.Tests.Controllers
                 cartRepo.Object,
                 menuRepo.Object,
                 unitOfWork.Object,
-                mapper);
+                mapper,
+                hub.Object);
 
             _orderRepositoryMock = new OrderRepositoryMock(orderRepo);
             _cartRepositoryMock = new CartRepositoryMock(cartRepo);

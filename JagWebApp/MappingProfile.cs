@@ -87,7 +87,6 @@ namespace JagWebApp
                         new PhotoResource
                         {
                             Id = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true).Id,
-                            Name = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true).Name,
                             ThumbnailName = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true).ThumbnailName,
                             IsMain = true
                         } : 
