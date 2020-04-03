@@ -3,12 +3,12 @@ using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Hubs;
 using JagWebApp.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -42,6 +42,47 @@ namespace JagWebApp.Controllers
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _hub = hub;
+        }
+
+        //GET: api/orders
+        [HttpGet()]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetOrders()
+        {
+            var orders = await _orderRepository.GetOrders();
+
+            return Ok(_mapper.Map<IEnumerable<OrderAdminViewResource>>(orders));
+        }
+
+        //GET: api/orders/user
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserOrders()
+        {
+            var id = GetLoggedInUserId();
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+                return BadRequest();
+
+            var orders = await _orderRepository.GetUserOrders((int)id);
+
+            return Ok(_mapper.Map<IEnumerable<OrderResource>>(orders));
+        }
+
+        //GET: api/orders/1
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserOrder(int id)
+        {
+            var userId = GetLoggedInUserId();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+            var order = isAdmin ? await _orderRepository.GetOrder(id) : await _orderRepository.GetUserOrder(id, (int)userId);
+
+            if (order == null)
+                return BadRequest();
+            
+            return Ok(GetMappedOrder(order, isAdmin));
         }
 
         //POST: api/orders
@@ -88,6 +129,14 @@ namespace JagWebApp.Controllers
         {
             foreach (var item in menuItems)
                 await _cartRepository.UpdateCartItemAmountWithMenuItem(item);
+        }
+
+        private object GetMappedOrder(Order order, bool isAdmin)
+        {
+            if (isAdmin)
+                return _mapper.Map<OrderAdminViewResource>(order);
+            else
+                return _mapper.Map<OrderResource>(order);
         }
     }
 }

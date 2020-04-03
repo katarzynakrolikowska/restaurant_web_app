@@ -17,6 +17,7 @@ import { AdminDishTabsComponent } from './admin/admin-dish-tabs/admin-dish-tabs.
 import { AdminDishesViewComponent } from './admin/admin-dishes-view/admin-dishes-view.component';
 import { AdminMainItemEditFormComponent } from './admin/admin-main-item-edit-form/admin-main-item-edit-form.component';
 import { AdminMenuFormComponent } from './admin/admin-menu-form/admin-menu-form.component';
+import { AdminOrdersViewComponent } from './admin/admin-orders-view/admin-orders-view.component';
 import { AdminOrdinaryItemEditDialogComponent } from './admin/admin-ordinary-item-edit-dialog/admin-ordinary-item-edit-dialog.component';
 import { AdminPhotosViewComponent } from './admin/admin-photos-view/admin-photos-view.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +27,7 @@ import { CartActionButtonsComponent } from './cart-action-buttons/cart-action-bu
 import { CartViewComponent } from './cart-view/cart-view.component';
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group/categories-button-toggle-group.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { DialogOrderAcceptedComponent } from './dialog-order-accepted/dialog-order-accepted.component';
 import { DishesListComponent } from './dishes-list/dishes-list.component';
 import { EditEmailFormComponent } from './edit-email-form/edit-email-form.component';
 import { EditPasswordFormComponent } from './edit-password-form/edit-password-form.component';
@@ -43,16 +45,17 @@ import { MenuViewComponent } from './menu-view/menu-view.component';
 import { NavCartButtonComponent } from './nav-cart-button/nav-cart-button.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { OrderAddressAddViewComponent } from './order-address-add-view/order-address-add-view.component';
+import { OrderAddressFormComponent } from './order-address-form/order-address-form.component';
+import { OrderDetailsViewComponent } from './order-details-view/order-details-view.component';
+import { OrderStepperComponent } from './order-stepper/order-stepper.component';
 import { OrdinaryMenuItemCardComponent } from './ordinary-menu-item-card/ordinary-menu-item-card.component';
 import { OrdinaryMenuItemsViewComponent } from './ordinary-menu-items-view/ordinary-menu-items-view.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
 import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
-import { OrderAddressFormComponent } from './order-address-form/order-address-form.component';
-import { OrderAddressAddViewComponent } from './order-address-add-view/order-address-add-view.component';
-import { OrderStepperComponent } from './order-stepper/order-stepper.component';
-import { DialogOrderAcceptedComponent } from './dialog-order-accepted/dialog-order-accepted.component';
+import { UserOrdersViewComponent } from './user-orders-view/user-orders-view.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -95,6 +98,9 @@ export function tokenGetter() {
     OrderAddressAddViewComponent,
     OrderStepperComponent,
     DialogOrderAcceptedComponent,
+    AdminOrdersViewComponent,
+    UserOrdersViewComponent,
+    OrderDetailsViewComponent,
 
   ],
   imports: [
@@ -141,8 +147,14 @@ export function tokenGetter() {
             canActivate: [AdminGuard]
           },
           {
-            path: 'user/data',
-            component: UserDataTabsComponent
+            path: 'admin/orders/:id',
+            component: OrderDetailsViewComponent,
+            canActivate: [AdminGuard]
+          },
+          {
+            path: 'admin/orders',
+            component: AdminOrdersViewComponent,
+            canActivate: [AdminGuard]
           },
           {
             path: 'user/data/address/new',
@@ -150,8 +162,22 @@ export function tokenGetter() {
             canActivate: [NotAdminGuard]
           },
           {
+            path: 'user/data',
+            component: UserDataTabsComponent
+          },
+          {
             path: 'checkout',
             component: OrderStepperComponent,
+            canActivate: [NotAdminGuard]
+          },
+          {
+            path: 'user/orders/:id',
+            component: OrderDetailsViewComponent,
+            canActivate: [NotAdminGuard]
+          },
+          {
+            path: 'user/orders',
+            component: UserOrdersViewComponent,
             canActivate: [NotAdminGuard]
           }]
       },
