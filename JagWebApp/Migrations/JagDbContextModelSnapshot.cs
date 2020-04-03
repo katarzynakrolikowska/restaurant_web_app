@@ -268,11 +268,6 @@ namespace JagWebApp.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
                     b.Property<string>("ThumbnailName")
                         .IsRequired()
                         .HasColumnType("nvarchar(255)")

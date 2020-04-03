@@ -45,12 +45,10 @@ namespace JagWebApp.Persistence
         public async Task<Photo> SavePhoto(Dish dish, IFormFile file)
         {
             var dimensions = new ImageDimensions() { Height = 150, Width = 200 };
-            var fileName = await _fileService.SaveFile(file, ROOT_NAME); 
             var thumbnailName = await _fileService.SaveFile(file, ROOT_NAME, dimensions); 
 
             var photo = new Photo 
             { 
-                Name = fileName, 
                 ThumbnailName = thumbnailName,
                 IsMain = dish.Photos.Count == 0 
             };
@@ -62,7 +60,6 @@ namespace JagWebApp.Persistence
         public void Remove(Photo photo)
         {
             _context.Photos.Remove(photo);
-            _fileService.RemoveFile(photo.Name, ROOT_NAME);
             _fileService.RemoveFile(photo.ThumbnailName, ROOT_NAME);
         }
 
@@ -70,7 +67,6 @@ namespace JagWebApp.Persistence
         {
             photos.ToList().ForEach(p =>
             {
-                _fileService.RemoveFile(p.Name, ROOT_NAME);
                 _fileService.RemoveFile(p.ThumbnailName, ROOT_NAME);
             });
             

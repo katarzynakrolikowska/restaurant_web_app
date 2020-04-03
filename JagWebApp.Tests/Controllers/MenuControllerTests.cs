@@ -31,7 +31,13 @@ namespace JagWebApp.Tests.Controllers
             var mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
             var hub = HubContextMock.Hub;
 
-            _controller = new MenuController(menuRepo.Object, dishRepo.Object, unitOfWork.Object, cartRepo.Object, mapper, hub.Object);
+            _controller = new MenuController(
+                menuRepo.Object, 
+                dishRepo.Object, 
+                unitOfWork.Object, 
+                cartRepo.Object, 
+                mapper, 
+                hub.Object);
 
             _dishRepositoryMock = new DishRepositoryMock(dishRepo);
             _menuRepositoryMock = new MenuRepositoryMock(menuRepo);

@@ -8,10 +8,6 @@ namespace JagWebApp.Core.Models
 
         [Required]
         [StringLength(255)]
-        public string Name { get; set; }
-
-        [Required]
-        [StringLength(255)]
         public string ThumbnailName { get; set; }
 
         public int DishId { get; set; }
