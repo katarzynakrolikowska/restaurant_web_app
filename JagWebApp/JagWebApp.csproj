@@ -88,6 +88,12 @@
     <Compile Remove="Migrations\20200401094621_AddOrders.Designer.cs" />
     <Compile Remove="Migrations\20200401094839_AddOrders.cs" />
     <Compile Remove="Migrations\20200401094839_AddOrders.Designer.cs" />
+    <Compile Remove="Migrations\20200404065242_AddStatusOfOrder.cs" />
+    <Compile Remove="Migrations\20200404065242_AddStatusOfOrder.Designer.cs" />
+    <Compile Remove="Migrations\20200404065344_AddStatusOfOrder.cs" />
+    <Compile Remove="Migrations\20200404065344_AddStatusOfOrder.Designer.cs" />
+    <Compile Remove="Migrations\20200404113437_RemoveRequiredItems.cs" />
+    <Compile Remove="Migrations\20200404113437_RemoveRequiredItems.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

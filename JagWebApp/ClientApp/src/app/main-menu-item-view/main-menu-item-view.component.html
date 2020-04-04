@@ -22,9 +22,11 @@
       <div class="col-12 text-center mb-4">
         Dostepne porcje:
         <span *ngIf="mainMenuItem.available > 0; else noProducts">{{ mainMenuItem.available }}</span>
-        <ng-template #noProducts>
-          brak
-        </ng-template>
+        <ng-template #noProducts>brak</ng-template>
+      </div>
+      <div *ngIf="authService.isAdmin()" class="col-12 text-center mb-4">
+        Zamówione porcje:
+        {{ mainMenuItem.ordered }}
       </div>
       <div *ngIf="!authService.isAdmin()" class="col-12 text-center mb-3">
         <app-cart-action-buttons [menu-item-id]="mainMenuItem.id" [available]="mainMenuItem.available">

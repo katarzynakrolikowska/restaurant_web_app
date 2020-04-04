@@ -1,3 +1,4 @@
+import { Status } from './status';
 import { Customer } from './customer';
 import { OrderedItem } from "./orderd-item";
 
@@ -7,5 +8,6 @@ export interface Order {
   date: Date,
   items: Array<OrderedItem>,
   total: number,
-  info?: string;  
+  info?: string;
+  status: Status;
 }

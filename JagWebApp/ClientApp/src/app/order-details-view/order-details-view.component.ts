@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Order } from '../models/order';
 import { AuthService } from './../services/auth.service';
 import { OrderService } from './../services/order.service';
@@ -12,14 +12,15 @@ import { OrderService } from './../services/order.service';
 })
 export class OrderDetailsViewComponent implements OnInit {
   id: number;
-  order$: Observable<Order>;
+  order: Order;
   routerLink: string;
   
   constructor(
     private orderService: OrderService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private spinner: NgxSpinnerService) {
     this.routerLink = authService.isAdmin() ? '/admin/orders' : '/user/orders';
 
     this.id = +this.route.snapshot.params['id'];
@@ -30,10 +31,21 @@ export class OrderDetailsViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.order$ = this.orderService.getUserOrder(this.id);
-    this.order$
+    this.spinner.show();
+    this.orderService.getUserOrder(this.id)
       .subscribe(
-        () => {},
-        (() => this.router.navigate([this.routerLink])));
+        order => this.order = order,
+        (() => this.router.navigate([this.routerLink])),
+        () => this.spinner.hide()
+      );
+  }
+
+  changeStatus() {
+    let patchDoc = [
+      { op: "replace", path: "/statusId", value: "2" }
+    ];
+
+    this.orderService.updateStatus(patchDoc, this.id)
+      .subscribe(() => this.router.navigate(['/admin/orders']));
   }
 }

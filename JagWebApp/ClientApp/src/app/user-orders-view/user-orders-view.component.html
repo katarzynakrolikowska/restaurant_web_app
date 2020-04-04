@@ -1,4 +1,4 @@
-<h4 class="text-center mb-4">Twoje zamówienia</h4>
+<h4 class="text-center mb-4">Moje zamówienia</h4>
 <div *ngIf="orders.length === 0">
   <h6 class="text-center mb-4">Nie masz jeszcze żadnych zamówień</h6>
   <div>
@@ -26,7 +26,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Wartość </th>
       <td mat-cell *matCellDef="let element"> {{ element.total | currency : '' : '' }} zł </td>
     </ng-container>
-
+    
     <ng-container matColumnDef="more">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element"> 

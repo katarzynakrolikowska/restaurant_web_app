@@ -32,4 +32,8 @@ export class OrderService {
     return this.http.post(this.baseUrl + 'api/orders', order)
       .pipe(map((order: Order) => order));
   }
+
+  updateStatus(patchDoc, orderId: number) {
+    return this.http.patch(this.baseUrl + 'api/orders/' + orderId, patchDoc);
+  }
 }

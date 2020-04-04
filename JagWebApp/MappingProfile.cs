@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JagWebApp.Core.Models;
 using JagWebApp.Resources;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -9,6 +8,7 @@ namespace JagWebApp
 {
     public class MappingProfile : Profile
     {
+        private const int STATUS_ORDER_COMPLETED = 2;
         public MappingProfile()
         {
             CreateMap<UserForRegisterResource, User>()
@@ -18,7 +18,6 @@ namespace JagWebApp
             CreateMap<SaveDishResource, Dish>();
             CreateMap<CategoryResource, Category>();
             CreateMap<SaveMenuItemResource, MenuItem>()
-                .ForMember(mi => mi.Limit, opt => opt.MapFrom(mir => mir.Available))
                 .ForMember(mi => mi.Dishes, opt => opt.Ignore())
                 .AfterMap((mir, mi) =>
                 {
@@ -27,13 +26,9 @@ namespace JagWebApp
                 });
 
             CreateMap<UpdateMenuItemResource, MenuItem>()
-                .ForMember(mi => mi.Limit, opt => opt.Ignore())
-                .ForMember(mi => mi.Available, opt => opt.Ignore())
                 .ForMember(mi => mi.Dishes, opt => opt.Ignore())
                 .AfterMap((mir, mi) =>
                 {
-                    mi.Limit = mi.Limit + mir.Available - mi.Available;
-                    mi.Available = mir.Available;
 
                     if (mi.IsMain)
                     {
@@ -63,6 +58,17 @@ namespace JagWebApp
             CreateMap<UpdateCartItemResource, CartItem>();
             CreateMap<UpdateUserResource, User>();
             CreateMap<AddressResource, Address>();
+            CreateMap<UpdateOrderResource, Order>()
+                .ForMember(o => o.MenuItems, opt => opt.Ignore())
+                .AfterMap((uor, o) =>
+                {
+                    if (uor.StatusId == STATUS_ORDER_COMPLETED)
+                    {
+                        o.MenuItems.Where(omi => omi.OrderId == uor.Id)
+                        .ToList()
+                        .ForEach(omi => o.MenuItems.Remove(omi));
+                    }
+                });
 
 
 
@@ -83,16 +89,22 @@ namespace JagWebApp
                             Id = itemDish.Dish.Category.Id,
                             Name = itemDish.Dish.Category.Name
                         },
-                        MainPhoto = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true) != null ? 
+                        MainPhoto = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true) != null ?
                         new PhotoResource
                         {
                             Id = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true).Id,
                             ThumbnailName = itemDish.Dish.Photos.SingleOrDefault(p => p.IsMain == true).ThumbnailName,
                             IsMain = true
-                        } : 
+                        } :
                         null
                     }
-                )));
+                )))
+                .ForMember(mir => mir.Ordered, opt => opt.Ignore())
+                .AfterMap((mi, mir) =>
+                {
+                    if (mi.Orders != null)
+                        mir.Ordered = mi.Orders.Where(omi => omi.Order.StatusId == 1).Sum(omi => omi.Amount);
+                });
 
             CreateMap<Cart, CartResource>();
             CreateMap<CartItem, CartItemResource>();
@@ -105,6 +117,8 @@ namespace JagWebApp
             CreateMap<Order, OrderResource>();
             CreateMap<OrderedItem, OrderedItemResource>();
             CreateMap<Order, OrderAdminViewResource>();
+            CreateMap<Order, UpdateOrderResource>();
+            CreateMap<Status, StatusResource>();
 
 
             CreateMap<Cart, Order>()
@@ -122,6 +136,11 @@ namespace JagWebApp
                             Name = item.MenuItem.Dishes.Count == 1 ? item.MenuItem.Dishes.ElementAt(0).Dish.Name : "Zestaw dnia",
                             Amount = item.Amount,
                             Price = item.MenuItem.Price
+                        });
+                        o.MenuItems.Add(new OrderMenuItem
+                        {
+                            MenuItemId = item.MenuItemId,
+                            Amount = item.Amount
                         });
                     }
 

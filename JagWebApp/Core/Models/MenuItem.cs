@@ -12,8 +12,7 @@ namespace JagWebApp.Core.Models
 
         public decimal Price { get; set; }
 
-        [Min(0)]
-        public int Limit { get; set; }
+        public Collection<OrderMenuItem> Orders { get; set; }
 
         [Min(0)]
         public int Available { get; set; }

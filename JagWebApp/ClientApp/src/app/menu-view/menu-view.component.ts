@@ -126,6 +126,7 @@ export class MenuViewComponent implements OnInit, OnDestroy {
       dish: item.dishes[0],
       price: item.price,
       available: item.available,
+      ordered: item.ordered
     }
    }
 }

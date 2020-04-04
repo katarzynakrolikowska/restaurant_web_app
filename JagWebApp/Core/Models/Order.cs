@@ -15,17 +15,24 @@ namespace JagWebApp.Core.Models
         [Required]
         public User User { get; set; }
 
-        [Required]
         public Collection<OrderedItem> Items { get; set; }
+
+        public Collection<OrderMenuItem> MenuItems { get; set; }
 
         public decimal Total { get; set; }
 
         [MaxLength(255)]
         public string Info { get; set; }
 
+        [Required]
+        public Status Status { get; set; }
+
+        public int StatusId { get; set; }
+
         public Order()
         {
             Items = new Collection<OrderedItem>();
+            MenuItems = new Collection<OrderMenuItem>();
         }
     }
 }

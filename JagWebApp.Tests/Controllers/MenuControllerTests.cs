@@ -164,7 +164,6 @@ namespace JagWebApp.Tests.Controllers
             Assert.Equal(1, item.Dishes.Count);
             Assert.Equal(2, item.Price);
             Assert.Equal(2, item.Available);
-            Assert.Equal(2, item.Limit);
         }
 
         [Fact]

@@ -173,7 +173,7 @@ namespace JagWebApp.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Limit")
+                    b.Property<int>("Ordered")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -213,6 +213,11 @@ namespace JagWebApp.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
@@ -221,9 +226,29 @@ namespace JagWebApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StatusId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("JagWebApp.Core.Models.OrderMenuItem", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "MenuItemId");
+
+                    b.HasIndex("MenuItemId");
+
+                    b.ToTable("OrderMenuItem");
                 });
 
             modelBuilder.Entity("JagWebApp.Core.Models.OrderedItem", b =>
@@ -307,6 +332,34 @@ namespace JagWebApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("JagWebApp.Core.Models.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "W trakcie realizacji"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Zrealizowane"
+                        });
                 });
 
             modelBuilder.Entity("JagWebApp.Core.Models.User", b =>
@@ -530,9 +583,30 @@ namespace JagWebApp.Migrations
 
             modelBuilder.Entity("JagWebApp.Core.Models.Order", b =>
                 {
+                    b.HasOne("JagWebApp.Core.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("JagWebApp.Core.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("JagWebApp.Core.Models.OrderMenuItem", b =>
+                {
+                    b.HasOne("JagWebApp.Core.Models.MenuItem", "MenuItem")
+                        .WithMany()
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JagWebApp.Core.Models.Order", "Order")
+                        .WithMany("MenuItems")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

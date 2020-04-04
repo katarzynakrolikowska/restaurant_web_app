@@ -5,4 +5,5 @@ export interface OrdinaryMenuItem {
   dish: Dish,
   price: number;
   available: number;
+  ordered?: number;
 }

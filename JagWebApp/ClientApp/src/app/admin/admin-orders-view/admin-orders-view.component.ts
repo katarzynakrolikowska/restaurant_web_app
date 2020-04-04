@@ -11,7 +11,7 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class AdminOrdersViewComponent implements OnInit {
   orders: Array<Order> = [];
-  displayedColumns: string[] = ['no', 'id', 'user', 'date', 'total', 'more'];
+  displayedColumns: string[] = ['no', 'id', 'user', 'date', 'total', 'status', 'more'];
   dataSource;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -39,6 +39,7 @@ export class AdminOrdersViewComponent implements OnInit {
 
         this.dataSource.sortingDataAccessor = (item, property) => {
           switch (property) {
+            case 'status': return item.status.name;
             default: return item[property];
           }
         };
