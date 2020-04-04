@@ -23,6 +23,7 @@ namespace JagWebApp.Persistence
                 .Include(o => o.Items)
                 .Include(o => o.User)
                     .ThenInclude(u => u.Address)
+                .Include(o => o.Status)
                 .ToListAsync();
         }
 
@@ -31,6 +32,7 @@ namespace JagWebApp.Persistence
             return await _context.Orders
                 .Where(o => o.UserId == userId)
                 .Include(o => o.Items)
+                .Include(o => o.Status)
                 .ToListAsync();
         }
 
@@ -41,6 +43,8 @@ namespace JagWebApp.Persistence
                 .Include(o => o.Items)
                 .Include(o => o.User)
                     .ThenInclude(u => u.Address)
+                .Include(o => o.MenuItems)
+                .Include(o => o.Status)
                 .SingleOrDefaultAsync();
         }
 
@@ -49,6 +53,7 @@ namespace JagWebApp.Persistence
             return await _context.Orders
                 .Where(o => o.Id == id && o.UserId == userId)
                 .Include(o => o.Items)
+                .Include(o => o.Status)
                 .SingleOrDefaultAsync();
         }
 

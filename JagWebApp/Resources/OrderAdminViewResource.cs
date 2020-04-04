@@ -17,6 +17,8 @@ namespace JagWebApp.Resources
 
         public string Info { get; set; }
 
+        public StatusResource Status { get; set; }
+
         public OrderAdminViewResource()
         {
             Items = new Collection<OrderedItemResource>();

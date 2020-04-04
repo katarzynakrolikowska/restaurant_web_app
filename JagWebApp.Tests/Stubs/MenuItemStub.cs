@@ -18,7 +18,6 @@ namespace JagWebApp.Tests.Stubs
                     }
                 },
                 Price = 1,
-                Limit = 1,
                 Available = 1,
                 IsMain = true
             };

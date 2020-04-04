@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
 import { MenuButton } from '../models/menu-button';
 import { MenuItem } from '../models/menu-item';
 import { AuthService } from '../services/auth.service';
@@ -18,7 +20,8 @@ export class MainMenuItemViewComponent implements OnInit {
   constructor(
     private router: Router,
     private menuService: MenuService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.buttons = [
@@ -37,22 +40,37 @@ export class MainMenuItemViewComponent implements OnInit {
         this.editMainItem();
         break;
       case this.buttons[2].label:
-        this.removeMainItem();
+        this.openConfirmingDialog();
         break;
       default: return;
     }
   }
 
-  addMainItem() {
+  private addMainItem() {
     this.router.navigate(['admin/menu/mainitem/new']);
   }
 
-  editMainItem() {
+  private editMainItem() {
     if (this.mainMenuItem)
       this.router.navigate(['admin/menu/mainitem/edit/' + this.mainMenuItem.id]);
   }
 
-  removeMainItem() {
+  private openConfirmingDialog(): void { 
+    let data = this.mainMenuItem.ordered > 0
+      ? 'Wybrana pozycja jest już zamówiona. Czy napewno chcesz ją usunąć?'
+      : 'Czy napewno chcesz usunąć wybraną pozycję?';
+
+    const dialogRef = this.dialog.open(
+      DialogConfirmComponent,
+      { data: data });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+        this.removeMainItem();
+    });
+  }
+
+  private removeMainItem() {
     if (this.mainMenuItem)
       this.menuService.deleteItem(this.mainMenuItem.id)
         .subscribe(() => { });

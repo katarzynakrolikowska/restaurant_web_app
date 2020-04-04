@@ -11,7 +11,7 @@ namespace JagWebApp.Resources
 
         public decimal Price { get; set; }
 
-        public int Limit { get; set; }
+        public int Ordered { get; set; }
 
         public int Available { get; set; }
 

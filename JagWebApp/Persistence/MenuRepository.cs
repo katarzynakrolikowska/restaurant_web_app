@@ -27,6 +27,8 @@ namespace JagWebApp.Persistence
                 .Include(m => m.Dishes)
                     .ThenInclude(md => md.Dish)
                         .ThenInclude(d => d.Category)
+                .Include(m => m.Orders)
+                    .ThenInclude(omi => omi.Order)
                 .ToListAsync();
         }
 

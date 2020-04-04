@@ -32,6 +32,8 @@ namespace JagWebApp.Persistance
 
         public DbSet<OrderedItem> OrderedItems { get; set; }
 
+        public DbSet<Status> Statuses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -67,6 +69,14 @@ namespace JagWebApp.Persistance
             modelBuilder.Entity<MenuItem>()
                 .Property(mi => mi.IsMain)
                 .HasDefaultValue(false);
+
+            modelBuilder.ApplyConfiguration(new StatusesConfiguration());
+            modelBuilder.Entity<Order>()
+               .Property(o => o.StatusId)
+               .HasDefaultValue(1);
+
+            modelBuilder.Entity<OrderMenuItem>().HasKey(om =>
+                new { om.OrderId, om.MenuItemId });
         }
     }
 }

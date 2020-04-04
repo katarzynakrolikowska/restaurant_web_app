@@ -5,6 +5,7 @@ using JagWebApp.Hubs;
 using JagWebApp.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -118,6 +119,30 @@ namespace JagWebApp.Controllers
                 _mapper.Map<IEnumerable<MenuItem>, IEnumerable<MenuItemResource>>(updatedMenuItems));
 
             return Ok(_mapper.Map<OrderResource>(order));
+        }
+
+        //PATCH: api/orders/1
+        [HttpPatch("{orderId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateStatus(int orderId, JsonPatchDocument<UpdateOrderResource> patchOrder)
+        {
+            var order = await _orderRepository.GetOrder(orderId);
+            if (order == null)
+                return BadRequest();
+
+            var updateOrder = _mapper.Map<UpdateOrderResource>(order);
+
+            patchOrder.ApplyTo(updateOrder, ModelState);
+
+            var isValid = TryValidateModel(updateOrder);
+            if (!isValid)
+                return BadRequest();
+
+            _mapper.Map(updateOrder, order);
+
+            await _unitOfWork.CompleteAsync();
+
+            return Ok();
         }
 
         private int? GetLoggedInUserId()
