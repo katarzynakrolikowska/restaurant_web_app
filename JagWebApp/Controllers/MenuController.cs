@@ -59,6 +59,8 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<MenuItem, MenuItemResource>(item));
         }
 
+        //GET
+
         //POST: api/menu
         [Authorize(Roles = "Admin")]
         [HttpPost]

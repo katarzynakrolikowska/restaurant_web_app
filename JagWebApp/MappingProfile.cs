@@ -69,6 +69,7 @@ namespace JagWebApp
                         .ForEach(omi => o.MenuItems.Remove(omi));
                     }
                 });
+            CreateMap<SaveCategoryResource, Category>();
 
 
 

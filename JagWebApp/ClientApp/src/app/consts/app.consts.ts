@@ -8,4 +8,5 @@ export const NAV_MENU_BUTTONS = [
     { name: 'Oferta', link: '/menu', role: '' },
     { name: 'Dania', link: '/admin/dishes', role: 'admin' },
     { name: 'Zamówienia', link: '/admin/orders', role: 'admin' },
+    { name: 'Kategorie', link: '/admin/categories', role: 'admin' },
 ]
