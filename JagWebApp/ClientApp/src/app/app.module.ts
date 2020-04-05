@@ -35,7 +35,6 @@ import { AdminGuard } from './guards/admin.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAdminGuard } from './guards/not-admin.guard';
 import { CustomMatPaginatorIntl } from './helpers/custom-mat-paginator-intl';
-import { HomeComponent } from './home/home.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPanelComponent } from './login-panel/login-panel.component';
 import { MainMenuItemDishCardComponent } from './main-menu-item-dish-card/main-menu-item-dish-card.component';
@@ -56,6 +55,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
 import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
 import { UserOrdersViewComponent } from './user-orders-view/user-orders-view.component';
+import { HomeComponent } from './home/home.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -65,7 +65,6 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
     RegisterFormComponent,
     LoginFormComponent,
     LoginPanelComponent,
@@ -101,6 +100,7 @@ export function tokenGetter() {
     AdminOrdersViewComponent,
     UserOrdersViewComponent,
     OrderDetailsViewComponent,
+    HomeComponent,
 
   ],
   imports: [
