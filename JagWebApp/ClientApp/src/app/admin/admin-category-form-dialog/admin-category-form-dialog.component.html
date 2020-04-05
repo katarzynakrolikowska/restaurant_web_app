@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content [formGroup]="form" class="pb-3">
+  <mat-form-field appearance="outline" class="display-block">
+    <input matInput placeholder="Kategoria" formControlName="category">
+    <mat-error *ngIf="category.invalid">{{ getCategoryErrorMessage() }}</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="pb-3 row justify-content-around">
+  <div class="col">
+    <button mat-stroked-button  (click)="onCloseClick()">Zamknij</button>
+  </div>
+  <div class="col text-center">
+    <button mat-stroked-button
+              color="primary"
+              [disabled]="category.invalid"
+              [mat-dialog-close]="{ category: category.value }"
+              cdkFocusInitial>
+        Zapisz
+      </button>
+  </div>
+</div>

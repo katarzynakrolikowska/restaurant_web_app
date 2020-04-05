@@ -56,6 +56,8 @@ import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon
 import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
 import { UserOrdersViewComponent } from './user-orders-view/user-orders-view.component';
 import { HomeComponent } from './home/home.component';
+import { AdminDishCategoriesViewComponent } from './admin/admin-dish-categories-view/admin-dish-categories-view.component';
+import { AdminCategoryFormDialogComponent } from './admin/admin-category-form-dialog/admin-category-form-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -101,6 +103,8 @@ export function tokenGetter() {
     UserOrdersViewComponent,
     OrderDetailsViewComponent,
     HomeComponent,
+    AdminDishCategoriesViewComponent,
+    AdminCategoryFormDialogComponent,
 
   ],
   imports: [
@@ -157,8 +161,13 @@ export function tokenGetter() {
             canActivate: [AdminGuard]
           },
           {
+            path: 'admin/categories',
+            component: AdminDishCategoriesViewComponent,
+            canActivate: [AdminGuard]
+          },
+          {
             path: 'user/data/address/new',
-            component: OrderAddressAddViewComponent,
+            component: OrderAddressFormComponent,
             canActivate: [NotAdminGuard]
           },
           {
@@ -210,7 +219,8 @@ export function tokenGetter() {
     entryComponents: [
       DialogConfirmComponent, 
       AdminOrdinaryItemEditDialogComponent, 
-      DialogOrderAcceptedComponent
+      DialogOrderAcceptedComponent,
+      AdminCategoryFormDialogComponent
     ],
     providers: [
       { provide: ErrorHandler, useClass: AppErrorHandler },
