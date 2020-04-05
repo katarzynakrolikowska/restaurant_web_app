@@ -13,6 +13,9 @@ export class UserDataTabsComponent implements OnInit {
   constructor(private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => this.selected = params.selected)
+    this.route.queryParams.subscribe(params => {
+      if (params.selected)
+        this.selected = params.selected;
+    })
   }
 }

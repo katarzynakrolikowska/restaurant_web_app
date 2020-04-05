@@ -9,7 +9,7 @@
 
     <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
       <mat-expansion-panel-header>
-        <mat-panel-title>Nowy klient</mat-panel-title>
+        <mat-panel-title>Nowy klient?</mat-panel-title>
       </mat-expansion-panel-header>
       <app-register-form (onNewUserRegistered)="setStep($event)"></app-register-form>
     </mat-expansion-panel>
