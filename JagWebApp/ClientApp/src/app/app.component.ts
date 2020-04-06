@@ -11,8 +11,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav', { static: false }) sidenav: MatSidenav;
   @ViewChild(MatSidenavContainer, { static: false }) sidenavContainer: MatSidenavContainer;
 
-  menuButtons = NAV_MENU_BUTTONS;
+  menuButtonsForAdmin = NAV_MENU_BUTTONS;
   menuButtonsForUser = NAV_MENU_BUTTONS.filter(btn => btn.role !== 'admin');
+  buttons: any;
   offset: number = 0;
 
   constructor(private authService: AuthService, private ref: ChangeDetectorRef) { }
@@ -21,6 +22,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     let token = localStorage.getItem('token');
     if (!this.authService.loggedIn() && token)
       localStorage.removeItem('token');
+
+    this.buttons = this.isAdmin() ? this.menuButtonsForAdmin : this.menuButtonsForUser;
   }
 
   ngAfterViewInit() {
