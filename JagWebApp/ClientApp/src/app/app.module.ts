@@ -12,6 +12,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { ToastrModule } from 'ngx-toastr';
 import { BlankComponent } from 'src/test/blank/blank.component';
+import { AdminCategoryFormDialogComponent } from './admin/admin-category-form-dialog/admin-category-form-dialog.component';
+import { AdminDishCategoriesViewComponent } from './admin/admin-dish-categories-view/admin-dish-categories-view.component';
 import { AdminDishFormComponent } from './admin/admin-dish-form/admin-dish-form.component';
 import { AdminDishTabsComponent } from './admin/admin-dish-tabs/admin-dish-tabs.component';
 import { AdminDishesViewComponent } from './admin/admin-dishes-view/admin-dishes-view.component';
@@ -31,10 +33,13 @@ import { DialogOrderAcceptedComponent } from './dialog-order-accepted/dialog-ord
 import { DishesListComponent } from './dishes-list/dishes-list.component';
 import { EditEmailFormComponent } from './edit-email-form/edit-email-form.component';
 import { EditPasswordFormComponent } from './edit-password-form/edit-password-form.component';
+import { FooterComponent } from './footer/footer.component';
 import { AdminGuard } from './guards/admin.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAdminGuard } from './guards/not-admin.guard';
+import { NotAuthGuard } from './guards/not-auth.guard';
 import { CustomMatPaginatorIntl } from './helpers/custom-mat-paginator-intl';
+import { HomeComponent } from './home/home.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPanelComponent } from './login-panel/login-panel.component';
 import { MainMenuItemDishCardComponent } from './main-menu-item-dish-card/main-menu-item-dish-card.component';
@@ -55,9 +60,6 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ToolbarIconButtonsComponent } from './toolbar-icon-buttons/toolbar-icon-buttons.component';
 import { UserDataTabsComponent } from './user-data-tabs/user-data-tabs.component';
 import { UserOrdersViewComponent } from './user-orders-view/user-orders-view.component';
-import { HomeComponent } from './home/home.component';
-import { AdminDishCategoriesViewComponent } from './admin/admin-dish-categories-view/admin-dish-categories-view.component';
-import { AdminCategoryFormDialogComponent } from './admin/admin-category-form-dialog/admin-category-form-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -105,7 +107,7 @@ export function tokenGetter() {
     HomeComponent,
     AdminDishCategoriesViewComponent,
     AdminCategoryFormDialogComponent,
-
+    FooterComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -195,9 +197,12 @@ export function tokenGetter() {
         component: CartViewComponent,
         canActivate: [NotAdminGuard]
       },
+      { 
+        path: 'login', 
+        component: LoginPanelComponent,
+        canActivate: [NotAuthGuard]
+      },
       { path: 'menu', component: MenuViewComponent },
-      { path: 'cart', component: CartViewComponent },
-      { path: 'login', component: LoginPanelComponent },
       { path: '**', component: NotFoundComponent }
     ]),
     BrowserAnimationsModule,
@@ -208,7 +213,7 @@ export function tokenGetter() {
     ToastrModule.forRoot(),
     JwtModule.forRoot({
       config: {
-      tokenGetter: tokenGetter,
+        tokenGetter: tokenGetter,
         whitelistedDomains: ["localhost:44363"],
         blacklistedRoutes: ["localhost:44363/api/auth"]
       }

@@ -1,7 +1,3 @@
-.sticky-top {
-  top: 80px;
-}
-
 @media (max-width: 575px) {
   .sticky-top {
     margin-top: 50px;
