@@ -142,6 +142,9 @@ namespace JagWebApp.Controllers
                 return BadRequest(updateCartResource);
 
             _mapper.Map(updateCartResource, cart);
+            if (cart.Items.Count == 0)
+                _cartRepository.Remove(cart);
+
             await _unitOfWork.CompleteAsync();
 
             return Ok(_mapper.Map<Cart, CartResource>(await _cartRepository.GetCart(cartId)));

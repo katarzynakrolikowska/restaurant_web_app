@@ -114,7 +114,8 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
   private update(patchCart, itemAdded: boolean) {
     this.cartService.update(patchCart, this.cart.id)
     .subscribe(cart => {
-      cart.items.sort((a, b) => a.id - b.id); 
+      if (cart)
+        cart.items.sort((a, b) => a.id - b.id); 
       this.cart = cart; 
       this.shareCartItemAction(itemAdded);
 
