@@ -31,7 +31,7 @@ namespace JagWebApp.Controllers
         {
             var categories = await _categoryRepository.GetCategories();
 
-            return Ok(_mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResource>>(categories));
+            return Ok(_mapper.Map<IEnumerable<CategoryResource>>(categories));
         }
 
         //POST: api/dishCategories
@@ -50,7 +50,7 @@ namespace JagWebApp.Controllers
         //PUT: api/dishCategories/1
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, CategoryResource category)
+        public async Task<IActionResult> Update(int id, SaveCategoryResource category)
         {
             var categoryFromDb = await _categoryRepository.GetCategory(id);
             if (categoryFromDb == null)

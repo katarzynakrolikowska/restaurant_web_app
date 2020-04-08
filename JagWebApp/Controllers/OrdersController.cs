@@ -124,7 +124,7 @@ namespace JagWebApp.Controllers
         //PATCH: api/orders/1
         [HttpPatch("{orderId}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateStatus(int orderId, JsonPatchDocument<UpdateOrderResource> patchOrder)
+        public async Task<IActionResult> Update(int orderId, JsonPatchDocument<UpdateOrderResource> patchOrder)
         {
             var order = await _orderRepository.GetOrder(orderId);
             if (order == null)
@@ -134,8 +134,7 @@ namespace JagWebApp.Controllers
 
             patchOrder.ApplyTo(updateOrder, ModelState);
 
-            var isValid = TryValidateModel(updateOrder);
-            if (!isValid)
+            if (!TryValidateModel(updateOrder))
                 return BadRequest();
 
             _mapper.Map(updateOrder, order);
