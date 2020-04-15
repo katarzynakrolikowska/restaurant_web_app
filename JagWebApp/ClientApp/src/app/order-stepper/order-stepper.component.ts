@@ -86,17 +86,16 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
         this.showDialog(order);
         this.cartItemsSharedService.shareCart(null);
       }, (errorRespone: HttpErrorResponse) => {
-        if (errorRespone.status === 404){
+        if (errorRespone.status === 404) {
           this.toastr.error('Wygląda na to, że produkty z Twojego koszyka zostały już wyprzedane :(');
           this.cart = null;
           this.cartItemsSharedService.shareCart(null);
-        }
-        else
+        } else
           this.toastr.error(ERROR_SERVER_MESSAGE);
       });
   }
 
-  private showDialog(order: Order){
+  private showDialog(order: Order) {
     const dialogRef = this.dialog.open(
       DialogOrderAcceptedComponent,
       { data: order });

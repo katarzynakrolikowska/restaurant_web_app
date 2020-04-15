@@ -12,7 +12,7 @@ import { OrderService } from 'src/app/services/order.service';
 export class AdminOrdersViewComponent implements OnInit {
   orders: Array<Order> = [];
   displayedColumns: string[] = ['no', 'id', 'user', 'date', 'total', 'status', 'more'];
-  dataSource;
+  dataSource: MatTableDataSource<Order>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;

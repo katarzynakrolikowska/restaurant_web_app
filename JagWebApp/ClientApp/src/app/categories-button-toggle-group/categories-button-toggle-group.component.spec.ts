@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonToggleModule } from '@angular/material';
 import { of } from 'rxjs';
-import { categoryStub } from '../../test/stubs/category.stub';
+import { categoryAStub } from '../../test/stubs/category.stub';
 import { Category } from '../models/category';
 import { CategoryService } from '../services/category.service';
 import { CategoriesButtonToggleGroupComponent } from './categories-button-toggle-group.component';
@@ -27,7 +27,7 @@ describe('CategoriesButtonToggleGroupComponent', () => {
     fixture = TestBed.createComponent(CategoriesButtonToggleGroupComponent);
     component = fixture.componentInstance;
     categoryService = TestBed.get(CategoryService);
-    categories = [categoryStub];
+    categories = [categoryAStub];
     spyOn(categoryService, 'getCategories').and.returnValue(of(categories));
     fixture.detectChanges();
   });
