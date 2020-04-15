@@ -22,7 +22,8 @@ describe('OrdinaryMenuItemCardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OrdinaryMenuItemCardComponent],
-      imports: [HttpClientModule,
+      imports: [
+        HttpClientModule,
         MatCardModule,
         MatDialogModule,
         ToastrModule.forRoot(),
@@ -47,42 +48,55 @@ describe('OrdinaryMenuItemCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call deleteItem from service when deleteItem is called', () => {
+  it('should call deleteItem from service when confirming dialog returns true', () => {
     let spyMenuService = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
+    spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(true) });
 
-    component.deleteItem();
+    component.openConfirmingDialog();
 
     expect(spyMenuService).toHaveBeenCalledWith(ordinaryMenuItemStub.id);
   });
 
+  it('should NOT call deleteItem from service when confirming dialog returns false', () => {
+    let spyMenuService = spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
+    spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(false) });
+
+    component.openConfirmingDialog();
+
+    expect(spyMenuService).not.toHaveBeenCalled();
+  });
+
   it('should show success toastr when deleteItem from service returns success', () => {
     spyOn(menuService, 'deleteItem').and.returnValue(of(Object));
+    spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(true) });
     let spyToastr = spyOn(toastr, 'success');
 
-    component.deleteItem();
+    component.openConfirmingDialog();
 
     expect(spyToastr).toHaveBeenCalled();
   });
 
-  it('should call updateItem from service when updateItem is called', () => {
+  it('should call updateItem from service when dialog returns updateMenuItem object', () => {
     let spyMenuService = spyOn(menuService, 'updateItem').and.returnValue(of(Object));
+    spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(updateMenuItemStub) });
 
-    component.updateItem(jasmine.any(Number), updateMenuItemStub);
+    component.showModal(ordinaryMenuItemStub);
 
     expect(spyMenuService).toHaveBeenCalledWith(jasmine.any(Number), updateMenuItemStub);
   });
 
   it('should show success toastr when updateItem from service returns success', () => {
     spyOn(menuService, 'updateItem').and.returnValue(of(Object));
+    spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(updateMenuItemStub) });
     let spyToastr = spyOn(toastr, 'success');
 
-    component.updateItem(jasmine.any(Number), updateMenuItemStub);
+    component.showModal(ordinaryMenuItemStub);
 
     expect(spyToastr).toHaveBeenCalled();
   });
 
   it('should open dialog when showModal is called', () => {
-    let spy = spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(Object) })
+    let spy = spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(Object) });
     spyOn(menuService, 'updateItem').and.returnValue(of(Object));
 
     component.showModal(ordinaryMenuItemStub);
@@ -90,7 +104,7 @@ describe('OrdinaryMenuItemCardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should NOT call updateLimit when afterClosed returns undefined', () => {
+  it('should NOT call updateLimit when dialog returns undefined after closed', () => {
     spyOn(dialog, 'open').and.returnValue({ afterClosed: () => of(undefined) })
     let spy = spyOn(menuService, 'updateItem');
 

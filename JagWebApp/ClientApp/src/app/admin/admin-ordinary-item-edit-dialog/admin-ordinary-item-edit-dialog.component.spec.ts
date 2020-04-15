@@ -10,7 +10,7 @@ describe('AdminOrdinaryItemEditDialogComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AdminOrdinaryItemEditDialogComponent],
-      imports: [ MatDialogModule],
+      imports: [MatDialogModule],
       providers: [
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: { price: 1, available: 1 } }

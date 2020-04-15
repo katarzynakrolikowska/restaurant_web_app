@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+import { Params } from '@angular/router';
 
 export const activatedRouteStub = {
     snapshot: {
@@ -9,4 +11,5 @@ export const activatedRouteStub = {
             path: 'admin/dishes/edit/1'
         }
     },
+    queryParams: new Observable<Params>()
 };

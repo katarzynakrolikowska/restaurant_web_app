@@ -32,5 +32,6 @@ export const menuItemStubWithTwoDishes: MenuItem = {
     ],
     price: 1,
     available: 1,
-    isMain: true
+    isMain: true,
+    ordered: 1
 };

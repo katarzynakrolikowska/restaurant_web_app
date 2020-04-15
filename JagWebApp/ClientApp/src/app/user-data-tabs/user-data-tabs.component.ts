@@ -10,12 +10,14 @@ import { AuthService } from './../services/auth.service';
 export class UserDataTabsComponent implements OnInit {
   selected: number;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(
+    private authService: AuthService, 
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       if (params.selected)
         this.selected = params.selected;
-    })
+    });
   }
 }

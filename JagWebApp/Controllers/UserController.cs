@@ -18,6 +18,7 @@ namespace JagWebApp.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ITokenRepository _tokenRepository;
         private readonly IAddressRepository _addressRepsitory;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -25,12 +26,14 @@ namespace JagWebApp.Controllers
             UserManager<User> userManager, 
             ITokenRepository tokenRepository, 
             IAddressRepository addressRepsitory,
+            IUserRepository userRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
             _addressRepsitory = addressRepsitory;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -41,9 +44,7 @@ namespace JagWebApp.Controllers
         {
             var id = GetLoggedInUserId();
 
-            var user = await _userManager.Users
-                .Include(u => u.Address)
-                .SingleOrDefaultAsync(u => u.Id == id);
+            var user = await _userRepository.GetUser((int)id);
             
             return Ok(_mapper.Map<UserCustomerResource>(user));
         }

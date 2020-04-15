@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -7,9 +7,11 @@ import { AuthService } from '../services/auth.service';
 })
 export class NotAuthGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router) { }
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(): boolean {
     if (!this.authService.loggedIn())
       return true;
 

@@ -31,10 +31,11 @@ export class OrdinaryMenuItemCardComponent {
       DialogConfirmComponent,
       { data: data });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.deleteItem();
-    });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result)
+          this.deleteItem();
+      });
   }
 
   private deleteItem() {

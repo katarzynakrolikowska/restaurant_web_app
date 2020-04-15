@@ -8,7 +8,6 @@ using JagWebApp.Tests.Stubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,19 +19,40 @@ namespace JagWebApp.Tests.Controllers
     {
         private readonly Mock<UserManager<User>> _userManager;
         private readonly AddressRepositoryMock _addressRepositoryMock;
+        private readonly UserRepositoryMock _userRepositoryMock;
         private readonly UserController _controller;
 
         public UserControllerTests()
         {
             var tokenRepo = TokenRepositoryMock.TokenRepoMock;
             var addressRepo = new Mock<IAddressRepository>();
+            var userRepo = new Mock<IUserRepository>();
             var unitOfWork = new Mock<IUnitOfWork>();
             var mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
             _userManager = UserManagerMock.UserManager;
 
-            _controller = new UserController(_userManager.Object, tokenRepo.Object, addressRepo.Object, unitOfWork.Object, mapper);
+            _controller = new UserController(
+                _userManager.Object, 
+                tokenRepo.Object, 
+                addressRepo.Object,
+                userRepo.Object,
+                unitOfWork.Object, 
+                mapper);
 
             _addressRepositoryMock = new AddressRepositoryMock(addressRepo);
+            _userRepositoryMock = new UserRepositoryMock(userRepo);
+        }
+
+        [Fact]
+        public async void GetUser_WhenCalled_ReturnsOkObjectResult()
+        {
+            UserStub.SetUser(1, _controller);
+            _userRepositoryMock.MockGetUser();
+
+            var result = await _controller.GetUser() as OkObjectResult;
+
+            Assert.IsType<UserCustomerResource>(result.Value);
+            Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]
@@ -75,7 +95,7 @@ namespace JagWebApp.Tests.Controllers
             UserManagerMock.MockFindByIdAsync(new User());
             UserManagerMock.MockIsInAdminRoleAsync(false);
             UserManagerMock.MockUpdateAsync(IdentityResult.Failed(identityError));
-            SetObjectValidator();
+            ObjectModelValidatorMock.SetObjectValidator(_controller);
 
             var result = await _controller.Update(patchUser) as ObjectResult;
             var errors = result.Value as List<IdentityError>;
@@ -92,7 +112,7 @@ namespace JagWebApp.Tests.Controllers
             UserManagerMock.MockFindByIdAsync(new User());
             UserManagerMock.MockIsInAdminRoleAsync(false);
             UserManagerMock.MockUpdateAsync(IdentityResult.Success);
-            SetObjectValidator();
+            ObjectModelValidatorMock.SetObjectValidator(_controller);
 
             await _controller.Update(patchUser);
 
@@ -109,7 +129,7 @@ namespace JagWebApp.Tests.Controllers
             UserManagerMock.MockIsInAdminRoleAsync(false);
             UserManagerMock.MockUpdateAsync(IdentityResult.Success);
             TokenRepositoryMock.MockGenerateToken("a");
-            SetObjectValidator();
+            ObjectModelValidatorMock.SetObjectValidator(_controller);
 
             var result = await _controller.Update(patchUser) as OkObjectResult;
 
@@ -126,7 +146,7 @@ namespace JagWebApp.Tests.Controllers
             UserManagerMock.MockIsInAdminRoleAsync(false);
             UserManagerMock.MockUpdateAsync(IdentityResult.Success);
             _addressRepositoryMock.MockRemove();
-            SetObjectValidator();
+            ObjectModelValidatorMock.SetObjectValidator(_controller);
 
             var result = await _controller.Update(patchUser) as OkResult;
 
@@ -185,17 +205,6 @@ namespace JagWebApp.Tests.Controllers
                 .ChangePassword(new ChangePasswordViewModelResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
-        }
-
-        private void SetObjectValidator()
-        {
-            var objectValidator = new Mock<IObjectModelValidator>();
-            objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
-                                              It.IsAny<ValidationStateDictionary>(),
-                                              It.IsAny<string>(),
-                                              It.IsAny<object>()));
-
-            _controller.ObjectValidator = objectValidator.Object;
         }
     }
 }

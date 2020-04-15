@@ -1,13 +1,11 @@
-import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DishService } from './../../services/dish.service';
-import { MenuService } from './../../services/menu.service';
-import { CategoryService } from './../../services/category.service';
 import { Component, OnInit } from '@angular/core';
-import { Category } from 'src/app/models/category';
 import { MatDialog } from '@angular/material';
-import { AdminCategoryFormDialogComponent } from '../admin-category-form-dialog/admin-category-form-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 import { ERROR_SERVER_MESSAGE } from 'src/app/consts/user-messages.consts';
+import { Category } from 'src/app/models/category';
+import { AdminCategoryFormDialogComponent } from '../admin-category-form-dialog/admin-category-form-dialog.component';
+import { CategoryService } from './../../services/category.service';
 
 @Component({
   selector: 'app-admin-dish-categories-view',
