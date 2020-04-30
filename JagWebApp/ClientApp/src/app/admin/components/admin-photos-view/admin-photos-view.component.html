@@ -1,0 +1,37 @@
+<div class="row">
+  <mat-toolbar class="mb-3 col-12">
+    Edycja zdjęcia
+  </mat-toolbar>
+  <div class="col-12 col-md-10 col-lg-6 px-md-0">
+    <mat-form-field appearance="outline" class="display-block">
+      <mat-label>Dodaj zdjęcie</mat-label>
+      <ngx-mat-file-input #removableInput placeholder="Photo" (change)="uploadPhoto()" #fileInput>
+      </ngx-mat-file-input>
+      <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+        <mat-icon>clear</mat-icon>
+      </button>
+      <mat-icon matSuffix>folder</mat-icon>
+    </mat-form-field>
+  </div>
+</div>
+<div *ngIf="photos" class="row">
+  <div *ngFor="let p of photos" class="text-center mr-4 col-12 col-md-4">
+    <img src="/uploads/{{ p.thumbnailName }}" class="img-thumbnail m-1" />
+    <div class="m-1 mb-4 display-block">
+      <button mat-raised-button
+              [matTooltip]="p.isMain ? 'Główne zdjęcie' : 'Ustaw jako główne zdjęcie'"
+              [class.photo-main]="p.isMain"
+              class="button-icon-width mr-4"
+              (click)="toggleMainPhoto(p.id)">
+        <mat-icon>check_circle_outline</mat-icon>
+      </button>
+      <button mat-raised-button
+              color="warn"
+              matTooltip="Usuń zdjęcie"
+              class="button-icon-width"
+              (click)="deletePhoto(p.id)">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

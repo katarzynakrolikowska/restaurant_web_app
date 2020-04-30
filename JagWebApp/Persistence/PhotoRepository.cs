@@ -23,34 +23,34 @@ namespace JagWebApp.Persistence
             _fileService = fileService;
         }
 
-        public async Task<IEnumerable<Photo>> GetPhotos(Dish dish)
+        public async Task<IEnumerable<Photo>> GetPhotosAsync(Dish dish)
         {
             return await _context.Photos
                 .Where(p => p.DishId == dish.Id)
                 .ToListAsync();
         }
 
-        public async Task<Photo> GetPhoto(int photoId)
+        public async Task<Photo> GetPhotoAsync(int photoId)
         {
             return await _context.Photos
                 .SingleOrDefaultAsync(p => p.Id == photoId);
         }
 
-        public async Task<Photo> GetLastMainPhoto(int dishId)
+        public async Task<Photo> GetLastMainPhotoAsync(int dishId)
         {
             return await _context.Photos
                 .SingleOrDefaultAsync(p => p.DishId == dishId && p.IsMain == true);
         }
 
-        public async Task<Photo> SavePhoto(Dish dish, IFormFile file)
+        public Photo SavePhoto(Dish dish, IFormFile file)
         {
             var dimensions = new ImageDimensions() { Height = 150, Width = 200 };
-            var thumbnailName = await _fileService.SaveFile(file, ROOT_NAME, dimensions); 
+            var thumbnailName = _fileService.SaveFile(file, ROOT_NAME, dimensions);
 
-            var photo = new Photo 
-            { 
+            var photo = new Photo
+            {
                 ThumbnailName = thumbnailName,
-                IsMain = dish.Photos.Count == 0 
+                IsMain = dish.Photos.Count == 0
             };
             dish.Photos.Add(photo);
 
@@ -69,7 +69,6 @@ namespace JagWebApp.Persistence
             {
                 _fileService.RemoveFile(p.ThumbnailName, ROOT_NAME);
             });
-            
         }
     }
 }

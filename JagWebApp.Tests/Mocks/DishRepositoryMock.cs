@@ -16,36 +16,36 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetDishes(IEnumerable<Dish> dishes)
         {
-            _dishRepo.Setup(dr => dr.GetDishes())
+            _dishRepo.Setup(dr => dr.GetDishesAsync())
                 .ReturnsAsync(dishes);
         }
 
         public void MockGetDishes()
         {
-            _dishRepo.Setup(dr => dr.GetDishes())
+            _dishRepo.Setup(dr => dr.GetDishesAsync())
                 .ReturnsAsync(It.IsAny<IEnumerable<Dish>>);
         }
 
         public void MockGetDish(Dish dish)
         {
-            _dishRepo.Setup(dr => dr.GetDish(It.IsAny<int>()))
+            _dishRepo.Setup(dr => dr.GetDishAsync(It.IsAny<int>()))
                 .ReturnsAsync(dish);
         }
 
         public void MockDishesExist(bool exist)
         {
-            _dishRepo.Setup(dr => dr.DishesExist(It.IsAny<IEnumerable<int>>()))
+            _dishRepo.Setup(dr => dr.DishesExistAsync(It.IsAny<IEnumerable<int>>()))
                 .ReturnsAsync(exist);
         }
 
         public void VerifyGetDishes()
         {
-            _dishRepo.Verify(dr => dr.GetDishes());
+            _dishRepo.Verify(dr => dr.GetDishesAsync());
         }
 
         public void VerifyGetDish()
         {
-            _dishRepo.Verify(dr => dr.GetDish(It.IsAny<int>()));
+            _dishRepo.Verify(dr => dr.GetDishAsync(It.IsAny<int>()));
         }
 
         public void VerifyAdd(Dish dish)

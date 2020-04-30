@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JagWebApp.Core.Models.Identity;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace JagWebApp.Core.Models

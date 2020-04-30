@@ -18,7 +18,7 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task<IEnumerable<MenuItem>> GetMenuItems()
+        public async Task<IEnumerable<MenuItem>> GetMenuItemsAsync()
         {
             return await _context.MenuItems
                 .Include(m => m.Dishes)
@@ -32,7 +32,7 @@ namespace JagWebApp.Persistence
                 .ToListAsync();
         }
 
-        public async Task<MenuItem> GetMenuItem(int id)
+        public async Task<MenuItem> GetMenuItemAsync(int id)
         {
             return await _context.MenuItems
                 .Include(m => m.Dishes)
@@ -44,7 +44,7 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<MenuItem> GetMainMenuItem()
+        public async Task<MenuItem> GetMainMenuItemAsync()
         {
             return await _context.MenuItems
                 .Include(m => m.Dishes)
@@ -56,7 +56,7 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync(m => m.IsMain == true);
         }
 
-        public async Task<MenuItem> GetMenuItemWithDish(int dishId)
+        public async Task<MenuItem> GetMenuItemWithDishAsync(int dishId)
         {
             return await _context.MenuItems
                 .Where(m => m.Dishes.Any(mid => mid.DishId == dishId))
@@ -73,13 +73,13 @@ namespace JagWebApp.Persistence
             _context.MenuItems.Remove(menuItem);
         }
 
-        public async Task<IEnumerable<MenuItem>> UpdateAvailability(IEnumerable<CartItem> cartItems)
+        public async Task<IEnumerable<MenuItem>> UpdateAvailabilityAsync(IEnumerable<CartItem> cartItems)
         {
             var updatedMenuItems = new Collection<MenuItem>();
 
             foreach (var cartItem in cartItems)
             {
-                var menuItem = await GetMenuItem(cartItem.MenuItemId);
+                var menuItem = await GetMenuItemAsync(cartItem.MenuItemId);
                 if (menuItem.Available - cartItem.Amount >= 0)
                 {
                     menuItem.Available -= cartItem.Amount;

@@ -1,5 +1,5 @@
 ﻿using JagWebApp.Core;
-using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +23,7 @@ namespace JagWebApp.Persistence
             _userManager = userManager;
         }
 
-        public async Task<string> GenerateToken(User user)
+        public async Task<string> GenerateTokenAsync(User user)
         {
             var claims = new List<Claim>
             {
@@ -32,8 +32,8 @@ namespace JagWebApp.Persistence
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            if (await _userManager.IsInRoleAsync(user, Role.Admin))
-                claims.Add(new Claim(ClaimTypes.Role, Role.Admin));
+            if (await _userManager.IsInRoleAsync(user, Role.ADMIN))
+                claims.Add(new Claim(ClaimTypes.Role, Role.ADMIN));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8
                 .GetBytes(_configuration.GetSection("AppSettings:Token").Value));

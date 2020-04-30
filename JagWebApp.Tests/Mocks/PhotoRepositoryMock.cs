@@ -17,13 +17,13 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetPhotos(Dish dish, ICollection<Photo> photos)
         {
-            _photoRepo.Setup(pr => pr.GetPhotos(dish))
+            _photoRepo.Setup(pr => pr.GetPhotosAsync(dish))
                 .ReturnsAsync(photos);
         }
 
         public void MockGetPhotos(ICollection<Photo> photos)
         {
-            _photoRepo.Setup(pr => pr.GetPhotos(It.IsAny<Dish>()))
+            _photoRepo.Setup(pr => pr.GetPhotosAsync(It.IsAny<Dish>()))
                 .ReturnsAsync(photos);
         }
 
@@ -34,19 +34,19 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetPhoto(Photo photo)
         {
-            _photoRepo.Setup(pr => pr.GetPhoto(It.IsAny<int>()))
+            _photoRepo.Setup(pr => pr.GetPhotoAsync(It.IsAny<int>()))
                 .ReturnsAsync(photo);
         }
 
         public void MockGetLastMainPhoto(Photo photo)
         {
-            _photoRepo.Setup(pr => pr.GetLastMainPhoto(It.IsAny<int>()))
+            _photoRepo.Setup(pr => pr.GetLastMainPhotoAsync(It.IsAny<int>()))
                 .ReturnsAsync(photo);
         }
 
         public void VerifyGetPhotos(Dish dish)
         {
-            _photoRepo.Verify(pr => pr.GetPhotos(dish));
+            _photoRepo.Verify(pr => pr.GetPhotosAsync(dish));
         }
 
         public void VerifySavePhoto(Dish dish, Mock<IFormFile> file)
@@ -66,7 +66,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void VerifyGetLastMainPhoto()
         {
-            _photoRepo.Verify(pr => pr.GetLastMainPhoto(It.IsAny<int>()));
+            _photoRepo.Verify(pr => pr.GetLastMainPhotoAsync(It.IsAny<int>()));
         }
     }
 }

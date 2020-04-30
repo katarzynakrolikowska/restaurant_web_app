@@ -23,7 +23,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetCategory(Category category)
         {
-            _dishCategoryRepo.Setup(dcr => dcr.GetCategory(It.IsAny<int>()))
+            _dishCategoryRepo.Setup(dcr => dcr.GetCategoryAsync(It.IsAny<int>()))
                 .ReturnsAsync(category);
         }
 
@@ -39,13 +39,13 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockCategoryExists(bool exist)
         {
-            _dishCategoryRepo.Setup(dcr => dcr.CategoryExists(It.IsAny<int>()))
+            _dishCategoryRepo.Setup(dcr => dcr.CategoryExistsAsync(It.IsAny<int>()))
                 .ReturnsAsync(exist);
         }
 
         public void MockDishWithCategoryExists(bool exist)
         {
-            _dishCategoryRepo.Setup(dcr => dcr.DishWithCategoryExists(It.IsAny<int>()))
+            _dishCategoryRepo.Setup(dcr => dcr.DishWithCategoryExistsAsync(It.IsAny<int>()))
                 .ReturnsAsync(exist);
         }
 

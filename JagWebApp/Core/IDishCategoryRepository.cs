@@ -6,16 +6,16 @@ namespace JagWebApp.Core
 {
     public interface IDishCategoryRepository
     {
-        Task<Category> GetCategory(int id);
+        Task<Category> GetCategoryAsync(int id);
 
         Task<IEnumerable<Category>> GetCategories();
 
-        Task<bool> CategoryExists(int categoryId);
+        Task<bool> CategoryExistsAsync(int categoryId);
 
         void Add(Category category);
 
         void Remove(Category category);
 
-        Task<bool> DishWithCategoryExists(int categoryId);
+        Task<bool> DishWithCategoryExistsAsync(int categoryId);
     }
 }

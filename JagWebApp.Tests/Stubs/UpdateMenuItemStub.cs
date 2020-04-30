@@ -1,4 +1,4 @@
-﻿using JagWebApp.Resources;
+﻿using JagWebApp.Resources.MenuItemResources;
 using System.Collections.ObjectModel;
 
 namespace JagWebApp.Tests.Stubs

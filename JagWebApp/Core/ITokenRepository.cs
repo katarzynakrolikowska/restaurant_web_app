@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 
 namespace JagWebApp.Core
 {
     public interface ITokenRepository
     {
-        Task<string> GenerateToken(User user);
+        Task<string> GenerateTokenAsync(User user);
     }
 }

@@ -14,7 +14,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockRemove()
         {
-            _addressRepo.Setup(ar => ar.Remove(It.IsAny<int>()));
+            _addressRepo.Setup(ar => ar.RemoveAsync(It.IsAny<int>()));
         }
     }
 }

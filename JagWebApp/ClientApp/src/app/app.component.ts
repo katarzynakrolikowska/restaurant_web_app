@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material';
-import { NAV_MENU_BUTTONS } from './consts/app.consts';
-import { AuthService } from './services/auth.service';
+import { NAV_MENU_BUTTONS } from 'shared/consts/app.consts';
+import { AuthService } from 'shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,28 +16,23 @@ export class AppComponent implements OnInit, AfterViewInit {
   buttons: any;
   offset: number = 0;
 
-  constructor(private authService: AuthService, private ref: ChangeDetectorRef) { }
+  constructor(
+    private authService: AuthService, 
+    private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    let token = localStorage.getItem('token');
-    if (!this.authService.loggedIn() && token)
-      localStorage.removeItem('token');
+    if (!this.authService.loggedIn() && this.authService.token)
+      this.authService.removeToken();
 
-    this.buttons = this.isAdmin() ? this.menuButtonsForAdmin : this.menuButtonsForUser;
+    this.buttons = this.authService.isAdmin() ? this.menuButtonsForAdmin : this.menuButtonsForUser;
   }
 
   ngAfterViewInit() {
-    this.sidenavContainer.scrollable.elementScrolled().subscribe(() => {
-      this.offset = this.sidenavContainer.scrollable.measureScrollOffset('top');
-      this.ref.detectChanges();
-    });
-  }
-
-  isAdmin() {
-    if (!this.authService.loggedIn())
-      return false;
-
-    return this.authService.isAdmin();
+    this.sidenavContainer.scrollable.elementScrolled()
+      .subscribe(() => {
+        this.offset = this.sidenavContainer.scrollable.measureScrollOffset('top');
+        this.ref.detectChanges();
+      });
   }
 
   close() {

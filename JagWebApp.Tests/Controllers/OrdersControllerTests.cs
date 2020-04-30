@@ -2,7 +2,8 @@
 using JagWebApp.Controllers;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.OrderResources;
 using JagWebApp.Tests.Mocks;
 using JagWebApp.Tests.Stubs;
 using Microsoft.AspNetCore.JsonPatch;
@@ -50,92 +51,92 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void GetOrders_WhenCalled_ReturnsOkObjectResult()
+        public async void GetOrdersAsync_WhenCalled_ReturnsOkObjectResult()
         {
             _orderRepositoryMock.MockGetOrders();
 
-            var result = await _controller.GetOrders() as OkObjectResult;
+            var result = await _controller.GetOrdersAsync() as OkObjectResult;
 
             Assert.Equal(200, result.StatusCode);
             Assert.IsType<List<OrderAdminViewResource>>(result.Value);
         }
 
         [Fact]
-        public void GetUserOrders_WhenCalled_ReturnsIActionResult()
+        public void GetUserOrdersAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.GetUserOrders();
+            var result = _controller.GetUserOrdersAsync();
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void GetUserOrders_WhenUserIsAdmin_ReturnsBadRequestResult()
+        public async void GetUserOrdersAsync_WhenUserIsAdmin_ReturnsBadRequestResult()
         {
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockIsInAdminRoleAsync(true);
 
-            var result = await _controller.GetUserOrders() as BadRequestResult;
+            var result = await _controller.GetUserOrdersAsync() as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void GetUserOrders_WhenUserIsNotAdmin_ReturnsOkObjectResult()
+        public async void GetUserOrdersAsync_WhenUserIsNotAdmin_ReturnsOkObjectResult()
         {
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockIsInAdminRoleAsync(false);
             _orderRepositoryMock.MockGetUserOrders();
 
-            var result = await _controller.GetUserOrders() as OkObjectResult;
+            var result = await _controller.GetUserOrdersAsync() as OkObjectResult;
 
             Assert.Equal(200, result.StatusCode);
             Assert.IsType<List<OrderResource>>(result.Value);
         }
 
         [Fact]
-        public void GetUserOrder_WhenCalled_ReturnsIActionResult()
+        public void GetUserOrderAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.GetUserOrder(It.IsAny<int>());
+            var result = _controller.GetUserOrderAsync(It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void GetUserOrder_WhenUserIsAdminAndOrderIsNull_ReturnsBadRequestResult()
+        public async void GetUserOrderAsync_WhenUserIsAdminAndOrderIsNull_ReturnsBadRequestResult()
         {
             Order order = null;
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockIsInAdminRoleAsync(true);
             _orderRepositoryMock.MockGetOrder(order);
 
-            var result = await _controller.GetUserOrder(It.IsAny<int>()) as BadRequestResult;
+            var result = await _controller.GetUserOrderAsync(It.IsAny<int>()) as BadRequestResult;
 
             _orderRepositoryMock.VerifyGetOrder();
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void GetUserOrder_WhenUserIsNotAdminAndOrderIsNull_ReturnsBadRequestResult()
+        public async void GetUserOrderAsync_WhenUserIsNotAdminAndOrderIsNull_ReturnsBadRequestResult()
         {
             Order order = null;
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockIsInAdminRoleAsync(false);
             _orderRepositoryMock.MockGetUserOrder(order);
 
-            var result = await _controller.GetUserOrder(It.IsAny<int>()) as BadRequestResult;
+            var result = await _controller.GetUserOrderAsync(It.IsAny<int>()) as BadRequestResult;
 
             _orderRepositoryMock.VerifyGetUserOrder();
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void GetUserOrder_WhenUserIsAdminAndOrderExists_ReturnsOkObjectResult()
+        public async void GetUserOrderAsync_WhenUserIsAdminAndOrderExists_ReturnsOkObjectResult()
         {
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockIsInAdminRoleAsync(true);
             _orderRepositoryMock.MockGetOrder(new Order());
 
-            var result = await _controller.GetUserOrder(It.IsAny<int>()) as OkObjectResult;
+            var result = await _controller.GetUserOrderAsync(It.IsAny<int>()) as OkObjectResult;
 
             _orderRepositoryMock.VerifyGetOrder();
             Assert.Equal(200, result.StatusCode);
@@ -143,13 +144,13 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void GetUserOrder_WhenUserIsNotAdminAndOrderExists_ReturnsOkObjectResult()
+        public async void GetUserOrderAsync_WhenUserIsNotAdminAndOrderExists_ReturnsOkObjectResult()
         {
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockIsInAdminRoleAsync(false);
             _orderRepositoryMock.MockGetUserOrder(new Order());
 
-            var result = await _controller.GetUserOrder(It.IsAny<int>()) as OkObjectResult;
+            var result = await _controller.GetUserOrderAsync(It.IsAny<int>()) as OkObjectResult;
 
             _orderRepositoryMock.VerifyGetUserOrder();
             Assert.Equal(200, result.StatusCode);
@@ -157,27 +158,27 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Create_WhenCalled_ReturnsIActionResult()
+        public void CreateAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Create(It.IsAny<SaveOrderResource>());
+            var result = _controller.CreateAsync(It.IsAny<SaveOrderResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Create_WhenUserIsAdmin_ReturnsBadRequestResult()
+        public async void CreateAsync_WhenUserIsAdmin_ReturnsBadRequestResult()
         {
             UserStub.SetUser(1, _controller);
             UserManagerMock.MockFindByIdAsync(new User());
             UserManagerMock.MockIsInAdminRoleAsync(true);
 
-            var result = await _controller.Create(It.IsAny<SaveOrderResource>()) as BadRequestResult;
+            var result = await _controller.CreateAsync(It.IsAny<SaveOrderResource>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Create_WhenUserCartIsNull_ReturnsNotFoundResult()
+        public async void CreateAsync_WhenUserCartIsNull_ReturnsNotFoundResult()
         {
             Cart cart = null;
             UserStub.SetUser(1, _controller);
@@ -185,13 +186,13 @@ namespace JagWebApp.Tests.Controllers
             UserManagerMock.MockIsInAdminRoleAsync(false);
             _cartRepositoryMock.MockGetCart(cart);
 
-            var result = await _controller.Create(It.IsAny<SaveOrderResource>()) as NotFoundResult;
+            var result = await _controller.CreateAsync(It.IsAny<SaveOrderResource>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void Create_WhenUserCartExist_ReturnsOkObjectResult()
+        public async void CreateAsync_WhenUserCartExist_ReturnsOkObjectResult()
         {
             var cart = new Cart();
             UserStub.SetUser(1, _controller);
@@ -204,7 +205,7 @@ namespace JagWebApp.Tests.Controllers
             _unitOfWorkMock.MockCompleteAsync();
             HubContextMock.MockHub();
 
-            var result = await _controller.Create(new SaveOrderResource()) as OkObjectResult;
+            var result = await _controller.CreateAsync(new SaveOrderResource()) as OkObjectResult;
 
             _menuRepositoryMock.VerifyUpdateAvailability();
             _cartRepositoryMock.VerifyRemove(cart);
@@ -215,33 +216,33 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Update_WhenCalled_ReturnsIActionResult()
+        public void UpdateAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Update(It.IsAny<int>(), It.IsAny<JsonPatchDocument<UpdateOrderResource>>());
+            var result = _controller.UpdateAsync(It.IsAny<int>(), It.IsAny<JsonPatchDocument<UpdateOrderResource>>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Update_WhenOrderIsNull_ReturnsBadRequestResult()
+        public async void UpdateAsync_WhenOrderIsNull_ReturnsBadRequestResult()
         {
             Order order = null;
             _orderRepositoryMock.MockGetOrder(order);
 
-            var result = await _controller.Update(It.IsAny<int>(), It.IsAny<JsonPatchDocument<UpdateOrderResource>>())
+            var result = await _controller.UpdateAsync(It.IsAny<int>(), It.IsAny<JsonPatchDocument<UpdateOrderResource>>())
                 as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Update_WhenOrderExistsAndUpdatedOrderIsValid_ReturnsOkResult()
+        public async void UpdateAsync_WhenOrderExistsAndUpdatedOrderIsValid_ReturnsOkResult()
         {
             _orderRepositoryMock.MockGetOrder(new Order());
             ObjectModelValidatorMock.SetObjectValidator(_controller);
             _unitOfWorkMock.MockCompleteAsync();
 
-            var result = await _controller.Update(It.IsAny<int>(), new JsonPatchDocument<UpdateOrderResource>())
+            var result = await _controller.UpdateAsync(It.IsAny<int>(), new JsonPatchDocument<UpdateOrderResource>())
                 as OkResult;
 
             _unitOfWorkMock.VerifyCompleteAsync();

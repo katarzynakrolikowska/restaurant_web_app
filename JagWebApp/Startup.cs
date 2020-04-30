@@ -1,6 +1,5 @@
 using AutoMapper;
 using JagWebApp.Core;
-using JagWebApp.Core.Models;
 using JagWebApp.Persistance;
 using JagWebApp.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +22,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using JagWebApp.Hubs;
 using JagWebApp.Core.Models.Helpers;
+using JagWebApp.Core.Models.Identity;
 
 namespace JagWebApp
 {
@@ -40,7 +40,7 @@ namespace JagWebApp
         {
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
 
-            services.AddTransient<ITokenRepository, TokenRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IDishCategoryRepository, DishCategoryRepository>();

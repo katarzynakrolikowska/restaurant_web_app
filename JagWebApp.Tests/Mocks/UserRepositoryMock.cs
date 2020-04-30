@@ -1,5 +1,5 @@
 ﻿using JagWebApp.Core;
-using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 using Moq;
 
 namespace JagWebApp.Tests.Mocks
@@ -15,7 +15,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetUser()
         {
-            _userRepo.Setup(ur => ur.GetUser(It.IsAny<int>()))
+            _userRepo.Setup(ur => ur.GetUserAsync(It.IsAny<int>()))
                 .ReturnsAsync(new User());
         }
     }

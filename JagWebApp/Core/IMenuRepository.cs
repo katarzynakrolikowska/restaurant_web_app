@@ -6,18 +6,18 @@ namespace JagWebApp.Core
 {
     public interface IMenuRepository
     {
-        Task<IEnumerable<MenuItem>> GetMenuItems();
+        Task<IEnumerable<MenuItem>> GetMenuItemsAsync();
 
-        Task<MenuItem> GetMenuItem(int id);
+        Task<MenuItem> GetMenuItemAsync(int id);
 
-        Task<MenuItem> GetMainMenuItem();
+        Task<MenuItem> GetMainMenuItemAsync();
 
-        Task<MenuItem> GetMenuItemWithDish(int dishId);
+        Task<MenuItem> GetMenuItemWithDishAsync(int dishId);
 
         void Add(MenuItem menuItem);
 
         void Remove(MenuItem menuItem);
 
-        Task<IEnumerable<MenuItem>> UpdateAvailability(IEnumerable<CartItem> cartItems);
+        Task<IEnumerable<MenuItem>> UpdateAvailabilityAsync(IEnumerable<CartItem> cartItems);
     }
 }

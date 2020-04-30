@@ -1,4 +1,4 @@
-﻿using JagWebApp.Resources;
+﻿using JagWebApp.Resources.CartResources;
 using System.ComponentModel.DataAnnotations;
 
 namespace JagWebApp.Utilities

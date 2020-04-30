@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.DishResources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JagWebApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Role.ADMIN)]
     [Route("api/[controller]")]
     [ApiController]
     public class DishesController : ControllerBase
@@ -39,33 +40,33 @@ namespace JagWebApp.Controllers
 
         //GET: api/dishes
         [HttpGet]
-        public async Task<IActionResult> GetDishes()
+        public async Task<IActionResult> GetDishesAsync()
         {
-            var dishes = await _dishRepository.GetDishes();
+            var dishes = await _dishRepository.GetDishesAsync();
 
-            return Ok(_mapper.Map<IEnumerable<Dish>, IEnumerable<DishResource>>(dishes));
+            return Ok(_mapper.Map<IEnumerable<DishResource>>(dishes));
         }
 
         //GET: api/dishes/1
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDish(int id)
+        public async Task<IActionResult> GetDishAsync(int id)
         {
-            var dish = await _dishRepository.GetDish(id);
+            var dish = await _dishRepository.GetDishAsync(id);
 
             if (dish == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<Dish, SaveDishResource>(dish));
+            return Ok(_mapper.Map<SaveDishResource>(dish));
         }
 
         //POST: api/dishes
         [HttpPost]
-        public async Task<IActionResult> CreateDish(SaveDishResource saveDishResource)
+        public async Task<IActionResult> CreateAsync(SaveDishResource saveDishResource)
         {
-            if (!await _categoryRepository.CategoryExists(saveDishResource.CategoryId))
+            if (!await _categoryRepository.CategoryExistsAsync(saveDishResource.CategoryId))
                 return BadRequest();
 
-            var dish = _mapper.Map<SaveDishResource, Dish>(saveDishResource);
+            var dish = _mapper.Map<Dish>(saveDishResource);
 
             _dishRepository.Add(dish);
             await _unitOfWork.CompleteAsync();
@@ -75,9 +76,9 @@ namespace JagWebApp.Controllers
 
         //PUT: api/dishes/1
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDish(int id, SaveDishResource saveDishResource)
+        public async Task<IActionResult> UpdateAsync(int id, SaveDishResource saveDishResource)
         {
-            var dish = await _dishRepository.GetDish(id);
+            var dish = await _dishRepository.GetDishAsync(id);
 
             if (dish == null)
                 return NotFound();
@@ -90,14 +91,14 @@ namespace JagWebApp.Controllers
 
         //DELETE: api/dishes/1
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveDish(int id)
+        public async Task<IActionResult> RemoveAsync(int id)
         {
-            var dish = await _dishRepository.GetDish(id);
+            var dish = await _dishRepository.GetDishAsync(id);
 
             if (dish == null)
                 return NotFound();
 
-            var menuItem = await _menuRepository.GetMenuItemWithDish(id);
+            var menuItem = await _menuRepository.GetMenuItemWithDishAsync(id);
             if (menuItem != null)
                 return BadRequest("Danie jest zapisane w Menu");
 

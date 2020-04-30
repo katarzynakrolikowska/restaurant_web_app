@@ -1,5 +1,5 @@
 ﻿using JagWebApp.Core;
-using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 using Moq;
 
 namespace JagWebApp.Tests.Mocks
@@ -10,7 +10,7 @@ namespace JagWebApp.Tests.Mocks
 
         public static void MockGenerateToken(string token)
         {
-            TokenRepoMock.Setup(tr => tr.GenerateToken(It.IsAny<User>()))
+            TokenRepoMock.Setup(tr => tr.GenerateTokenAsync(It.IsAny<User>()))
                 .ReturnsAsync(token);
         }
     }

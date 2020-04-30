@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
-using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.UserResources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +30,7 @@ namespace JagWebApp.Controllers
 
         //POST: api/auth/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserForRegisterResource userForRegisterResource)
+        public async Task<IActionResult> RegisterAsync(UserForRegisterResource userForRegisterResource)
         {
             var userToRegister = _mapper.Map<User>(userForRegisterResource);
 
@@ -47,7 +47,7 @@ namespace JagWebApp.Controllers
         //POST: api/auth/login
         [HttpPost("login")]
 
-        public async Task<IActionResult> Login(UserForLoginResource userForLoginResource)
+        public async Task<IActionResult> LoginAsync(UserForLoginResource userForLoginResource)
         {
             var user = await _userManager.FindByEmailAsync(userForLoginResource.Email);
             if (user == null)
@@ -59,7 +59,7 @@ namespace JagWebApp.Controllers
             {
                 return Ok(new
                 {
-                    token = _tokenRepository.GenerateToken(user).Result
+                    token = _tokenRepository.GenerateTokenAsync(user).Result
                 });
             }
 
@@ -68,7 +68,7 @@ namespace JagWebApp.Controllers
 
         //GET: api/auth/a@abc.com
         [HttpGet("{email}")]
-        public async Task<IActionResult> UserExists(string email)
+        public async Task<IActionResult> UserExistsAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
