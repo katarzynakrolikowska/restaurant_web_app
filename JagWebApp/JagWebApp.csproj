@@ -94,6 +94,8 @@
     <Compile Remove="Migrations\20200404065344_AddStatusOfOrder.Designer.cs" />
     <Compile Remove="Migrations\20200404113437_RemoveRequiredItems.cs" />
     <Compile Remove="Migrations\20200404113437_RemoveRequiredItems.Designer.cs" />
+    <Compile Remove="Migrations\20200430074911_RemoveOrderedPropertiesOfMenuItem.cs" />
+    <Compile Remove="Migrations\20200430074911_RemoveOrderedPropertiesOfMenuItem.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
