@@ -1,6 +1,13 @@
 ﻿using AutoMapper;
 using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.CartResources;
+using JagWebApp.Resources.CategoryResources;
+using JagWebApp.Resources.DishResources;
+using JagWebApp.Resources.MenuItemResources;
+using JagWebApp.Resources.OrderResources;
+using JagWebApp.Resources.UserResources;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -145,6 +152,7 @@ namespace JagWebApp
                         });
                     }
 
+                    o.Date = DateTime.Now;
                     o.Total = sum;
                 });
         }

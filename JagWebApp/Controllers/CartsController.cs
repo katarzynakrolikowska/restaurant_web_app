@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.CartResources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
@@ -38,48 +39,47 @@ namespace JagWebApp.Controllers
         //GET: api/carts/1
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCart(int id)
+        public async Task<IActionResult> GetCartAsync(int id)
         {
-            var cart = await _cartRepository.GetCart(id);
+            var cart = await _cartRepository.GetCartAsync(id);
             if (cart == null)
                 return BadRequest();
 
-            return Ok(_mapper.Map<Cart, CartResource>(cart));
+            return Ok(_mapper.Map<CartResource>(cart));
         }
 
         //GET: api/carts/user/1
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetUserCart(int userId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserCartAsync()
         {
+            var userId = (int)GetLoggedInUserId();
+
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null || await _userManager.IsInRoleAsync(user, "Admin"))
+            if (user == null || await _userManager.IsInRoleAsync(user, Role.ADMIN))
                 return BadRequest();
 
-            if (userId != GetLoggedInUserId())
-                return BadRequest();
-
-            var cart = await _cartRepository.GetUserCart(userId);
+            var cart = await _cartRepository.GetUserCartAsync(userId);
             
-            return Ok(_mapper.Map<Cart, CartResource>(cart));
+            return Ok(_mapper.Map<CartResource>(cart));
         }
 
 
         //POST: api/carts
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Create(SaveCartResource saveCart)
+        public async Task<IActionResult> CreateAsync(SaveCartResource saveCart)
         {
-            var menuItem = await _menuRepository.GetMenuItem(saveCart.MenuItemId);
+            var menuItem = await _menuRepository.GetMenuItemAsync(saveCart.MenuItemId);
             if (menuItem == null || menuItem.Available < 1)
                 return BadRequest();
 
-            var cart = _mapper.Map<SaveCartResource, Cart>(saveCart);
+            var cart = _mapper.Map<Cart>(saveCart);
 
             int? userId = GetLoggedInUserId();
             if (userId != null)
             {
                 var user = await _userManager.FindByIdAsync(userId.ToString());
-                if (!await _userManager.IsInRoleAsync(user, "Admin"))
+                if (!await _userManager.IsInRoleAsync(user, Role.ADMIN))
                     cart.UserId = userId;
             }
 
@@ -87,26 +87,24 @@ namespace JagWebApp.Controllers
 
             await _unitOfWork.CompleteAsync();
 
-            return Ok(_mapper.Map<Cart, CartResource>(cart));
+            return Ok(_mapper.Map<CartResource>(cart));
         }
 
         //PUT: api/carts/1
         [HttpPut("{cartId}")]
-        public async Task<IActionResult> Update(int cartId)
+        public async Task<IActionResult> UpdateAnonymousCartToUserCartAsync(int cartId)
         {
-            var cart = await _cartRepository.GetCart(cartId, false);
+            var cart = await _cartRepository.GetCartAsync(cartId, false);
             if (cart == null)
                 return BadRequest();
 
             int? userId = GetLoggedInUserId();
-            if (userId == null)
-                return BadRequest();
 
             var loggedInUser = await _userManager.FindByIdAsync(userId.ToString());
-            if (await _userManager.IsInRoleAsync(loggedInUser, "Admin"))
+            if (await _userManager.IsInRoleAsync(loggedInUser, Role.ADMIN))
                 return BadRequest();
 
-            var userCart = await _cartRepository.GetUserCart((int)userId);
+            var userCart = await _cartRepository.GetUserCartAsync((int)userId);
             if (userCart == null)
                 cart.UserId = userId;
             else
@@ -117,19 +115,19 @@ namespace JagWebApp.Controllers
             
             await _unitOfWork.CompleteAsync();
 
-            var newCart = await _cartRepository.GetUserCart((int)userId);
-            return Ok(_mapper.Map<Cart, CartResource>(newCart));
+            var newCart = await _cartRepository.GetUserCartAsync((int)userId);
+            return Ok(_mapper.Map<CartResource>(newCart));
         }
 
         //PATCH: api/carts/1
         [AllowAnonymous]
         [HttpPatch("{cartId}")]
-        public async Task<IActionResult> UpdateCart(int cartId, [FromBody] JsonPatchDocument<UpdateCartResource> patchCart)
+        public async Task<IActionResult> UpdateAsync(int cartId, [FromBody] JsonPatchDocument<UpdateCartResource> patchCart)
         {
             if (patchCart == null)
                 return BadRequest();
 
-            var cart = await _cartRepository.GetCart(cartId);
+            var cart = await _cartRepository.GetCartAsync(cartId);
             if (cart == null)
                 return BadRequest();
 
@@ -147,15 +145,15 @@ namespace JagWebApp.Controllers
 
             await _unitOfWork.CompleteAsync();
 
-            return Ok(_mapper.Map<Cart, CartResource>(await _cartRepository.GetCart(cartId)));
+            return Ok(_mapper.Map<CartResource>(await _cartRepository.GetCartAsync(cartId)));
         }
 
         //DELETE: api/carts/1
         [AllowAnonymous]
         [HttpDelete("{cartId}")]
-        public async Task<IActionResult> Remove(int cartId)
+        public async Task<IActionResult> RemoveAsync(int cartId)
         {
-            var cart = await _cartRepository.GetCart(cartId, false);
+            var cart = await _cartRepository.GetCartAsync(cartId, false);
             if (cart == null)
                 return BadRequest();
 
@@ -167,7 +165,7 @@ namespace JagWebApp.Controllers
 
         private int? GetLoggedInUserId()
         {
-            return Core.Models.User.GetLoggedInUserId((ClaimsIdentity)User.Identity);
+            return Core.Models.Identity.User.GetLoggedInUserId((ClaimsIdentity)User.Identity);
         }
     }
 }

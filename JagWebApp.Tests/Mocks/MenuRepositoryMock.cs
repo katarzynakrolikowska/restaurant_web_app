@@ -17,19 +17,19 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetMenuItemWithDish(MenuItem item)
         {
-            _menuRepo.Setup(mr => mr.GetMenuItemWithDish(It.IsAny<int>()))
+            _menuRepo.Setup(mr => mr.GetMenuItemWithDishAsync(It.IsAny<int>()))
                 .ReturnsAsync(item);
         }
 
         public void MockGetMenuItems(ICollection<MenuItem> items)
         {
-            _menuRepo.Setup(mr => mr.GetMenuItems())
+            _menuRepo.Setup(mr => mr.GetMenuItemsAsync())
                .ReturnsAsync(items);
         }
 
         public void MockGetMainMenuItem(MenuItem item)
         {
-            _menuRepo.Setup(mr => mr.GetMainMenuItem())
+            _menuRepo.Setup(mr => mr.GetMainMenuItemAsync())
                 .ReturnsAsync(item);
         }
 
@@ -40,7 +40,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetMenuItem(MenuItem item)
         {
-            _menuRepo.Setup(mr => mr.GetMenuItem(It.IsAny<int>()))
+            _menuRepo.Setup(mr => mr.GetMenuItemAsync(It.IsAny<int>()))
                 .ReturnsAsync(item);
         }
 
@@ -51,12 +51,12 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockUpdateAvailability()
         {
-            _menuRepo.Setup(mr => mr.UpdateAvailability(It.IsAny<Collection<CartItem>>()));
+            _menuRepo.Setup(mr => mr.UpdateAvailabilityAsync(It.IsAny<Collection<CartItem>>()));
         }
 
         public void VerifyGetMenuItems()
         {
-            _menuRepo.Verify(mr => mr.GetMenuItems());
+            _menuRepo.Verify(mr => mr.GetMenuItemsAsync());
         }
 
         public void VerifyAdd()
@@ -71,7 +71,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void VerifyUpdateAvailability()
         {
-            _menuRepo.Verify(mr => mr.UpdateAvailability(It.IsAny<Collection<CartItem>>()));
+            _menuRepo.Verify(mr => mr.UpdateAvailabilityAsync(It.IsAny<Collection<CartItem>>()));
         }
     }
 }

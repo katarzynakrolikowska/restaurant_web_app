@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace JagWebApp.Persistence
 {
@@ -18,7 +17,7 @@ namespace JagWebApp.Persistence
             _host = host;
         }
 
-        public async Task<string> SaveFile(IFormFile file, string root, ImageDimensions dimensions = null)
+        public string SaveFile(IFormFile file, string root, ImageDimensions dimensions)
         {
             var uploadFolderPath = Path.Combine(_host.WebRootPath, root);
 
@@ -28,23 +27,13 @@ namespace JagWebApp.Persistence
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var filePath = Path.Combine(uploadFolderPath, fileName);
 
-            if (dimensions == null)
+
+            using (var memoryStream = new MemoryStream())
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-            }
-            else
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    using (var img = Image.FromStream(file.OpenReadStream()))
-                    {
-                        Image image = GetResizedImage(img, dimensions.Width, dimensions.Height);
-                        image.Save(filePath);
-                    }
-                }
+                using var img = Image.FromStream(file.OpenReadStream());
+
+                Image image = GetResizedImage(img, dimensions.Width, dimensions.Height);
+                image.Save(filePath);
             }
 
             return fileName;

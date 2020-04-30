@@ -1,4 +1,4 @@
-﻿using JagWebApp.Core.Models;
+﻿using JagWebApp.Core.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 

@@ -4,6 +4,6 @@ namespace JagWebApp.Core
 {
     public interface IAddressRepository
     {
-        Task Remove(int? addressId);
+        Task RemoveAsync(int? addressId);
     }
 }

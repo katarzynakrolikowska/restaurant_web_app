@@ -2,7 +2,7 @@
 using JagWebApp.Controllers;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Resources.MenuItemResources;
 using JagWebApp.Tests.Mocks;
 using JagWebApp.Tests.Stubs;
 using Microsoft.AspNetCore.Mvc;
@@ -46,30 +46,30 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void GetMenu_WhenCalled_ReturnsIActionResult()
+        public void GetMenuAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.GetMenu();
+            var result = _controller.GetMenuAsync();
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void GetMenu_WhenCalled_GetMenuItemsFromRepoIsCalled()
+        public async void GetMenuAsync_WhenCalled_GetMenuItemsFromRepoIsCalled()
         {
             _menuRepositoryMock.MockGetMenuItems(new List<MenuItem>());
 
-            await _controller.GetMenu();
+            await _controller.GetMenuAsync();
 
             _menuRepositoryMock.VerifyGetMenuItems();
         }
 
         [Fact]
-        public async void GetMenu_WhenCalled_ReturnsOkObjectResultWithMenuItems()
+        public async void GetMenuAsync_WhenCalled_ReturnsOkObjectResultWithMenuItems()
         {
             var menuItems = new List<MenuItem>() { new MenuItem(), new MenuItem() };
             _menuRepositoryMock.MockGetMenuItems(menuItems);
 
-            var result = await _controller.GetMenu() as OkObjectResult;
+            var result = await _controller.GetMenuAsync() as OkObjectResult;
             var values = result.Value as List<MenuItemResource>;
 
             Assert.Equal(200, result.StatusCode);
@@ -77,78 +77,78 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Create_WhenCalled_ReturnsIActionResult()
+        public void CreateAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Create(It.IsAny<SaveMenuItemResource>());
+            var result = _controller.CreateAsync(It.IsAny<SaveMenuItemResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Create_WhenSaveMenuItemIsMainItemAndMainMenuItemExsist_ReturnsBadRequestObjectResult()
+        public async void CreateAsync_WhenSaveMenuItemIsMainItemAndMainMenuItemExsist_ReturnsBadRequestObjectResult()
         {
             var saveMenuItem = new SaveMenuItemResource { IsMain = true };
             _menuRepositoryMock.MockGetMainMenuItem(new MenuItem());
 
-            var result = await _controller.Create(saveMenuItem) as BadRequestObjectResult;
+            var result = await _controller.CreateAsync(saveMenuItem) as BadRequestObjectResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Create_WhenDishesNotExist_ReturnsBadRequestObjectResult()
+        public async void CreateAsync_WhenDishesNotExist_ReturnsBadRequestObjectResult()
         {
             _dishRepositoryMock.MockDishesExist(false);
 
-            var result = await _controller.Create(new SaveMenuItemResource()) as BadRequestObjectResult;
+            var result = await _controller.CreateAsync(new SaveMenuItemResource()) as BadRequestObjectResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Create_WhenDishExistsAndModelIsValid_MenuItemIsSaved()
+        public async void CreateAsync_WhenDishExistsAndModelIsValid_MenuItemIsSaved()
         {
             _dishRepositoryMock.MockDishesExist(true);
             _menuRepositoryMock.MockAdd();
 
-            await _controller.Create(new SaveMenuItemResource());
+            await _controller.CreateAsync(new SaveMenuItemResource());
 
             _menuRepositoryMock.VerifyAdd();
         }
 
         [Fact]
-        public async void Create_WhenDishExistsAndModelIsValid_ReturnsOkResult()
+        public async void CreateAsync_WhenDishExistsAndModelIsValid_ReturnsOkResult()
         {
             _dishRepositoryMock.MockDishesExist(true);
             _menuRepositoryMock.MockAdd();
 
-            var result = await _controller.Create(new SaveMenuItemResource()) as OkResult;
+            var result = await _controller.CreateAsync(new SaveMenuItemResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]
-        public void UpdateMenuItem_WhenCalled_ReturnsIActionResult()
+        public void UpdateAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.UpdateMenuItem(It.IsAny<int>(), It.IsAny<UpdateMenuItemResource>());
+            var result = _controller.UpdateAsync(It.IsAny<int>(), It.IsAny<UpdateMenuItemResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void UpdateMenuItem_WhenMenuItemDoesNotExist_ReturnsNotFoundResult()
+        public async void UpdateAsync_WhenMenuItemDoesNotExist_ReturnsNotFoundResult()
         {
             MenuItem item = null;
             _menuRepositoryMock.MockGetMenuItem(item);
 
             var result = await _controller
-                .UpdateMenuItem(It.IsAny<int>(), It.IsAny<UpdateMenuItemResource>()) as NotFoundResult;
+                .UpdateAsync(It.IsAny<int>(), It.IsAny<UpdateMenuItemResource>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void UpdateMenuItem_WhenMenuItemExists_ItemIsUpdated()
+        public async void UpdateAsync_WhenMenuItemExists_ItemIsUpdated()
         {
             var item = MenuItemStub.GetMenuItem();
             var updateItem = UpdateMenuItemStub.GetUpdateMenuItem();
@@ -157,7 +157,7 @@ namespace JagWebApp.Tests.Controllers
             _cartRepositoryMock.MockUpdateCartItemAmountContainsMenuItem(item);
             HubContextMock.MockHub();
 
-            await _controller.UpdateMenuItem(1, updateItem);
+            await _controller.UpdateAsync(1, updateItem);
 
             _cartRepositoryMock.VerifyUpdateCartItemAmountContainsMenuItem(item);
             _unitOfWorkMock.VerifyCompleteAsync();
@@ -167,37 +167,37 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public async void UpdateMenuItem_WhenMenuItemExists_ReturnsOkResult()
+        public async void UpdateAsync_WhenMenuItemExists_ReturnsOkResult()
         {
             _menuRepositoryMock.MockGetMenuItem(new MenuItem());
             HubContextMock.MockHub();
 
-            var result = await _controller.UpdateMenuItem(It.IsAny<int>(), new UpdateMenuItemResource()) as OkResult;
+            var result = await _controller.UpdateAsync(It.IsAny<int>(), new UpdateMenuItemResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]
-        public void Remove_WhenCalled_ReturnsIActionResult()
+        public void RemoveAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Remove(It.IsAny<int>());
+            var result = _controller.RemoveAsync(It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Remove_WhenMenuItemDoesNotExist_ReturnsNotFoundResult()
+        public async void RemoveAsync_WhenMenuItemDoesNotExist_ReturnsNotFoundResult()
         {
             MenuItem item = null;
             _menuRepositoryMock.MockGetMenuItem(item);
 
-            var result = await _controller.Remove(It.IsAny<int>()) as NotFoundResult;
+            var result = await _controller.RemoveAsync(It.IsAny<int>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void Remove_WhenMenuItemExists_ItemIsRemoved()
+        public async void RemoveAsync_WhenMenuItemExists_ItemIsRemoved()
         {
             var item = new MenuItem();
             _menuRepositoryMock.MockGetMenuItem(item);
@@ -205,19 +205,19 @@ namespace JagWebApp.Tests.Controllers
             _unitOfWorkMock.MockCompleteAsync();
             HubContextMock.MockHub();
 
-            await _controller.Remove(It.IsAny<int>());
+            await _controller.RemoveAsync(It.IsAny<int>());
 
             _menuRepositoryMock.VerifyRemove(item);
             _unitOfWorkMock.VerifyCompleteAsync();
         }
 
         [Fact]
-        public async void Remove_WhenMenuItemExists_ReturnsOkResult()
+        public async void RemoveAsync_WhenMenuItemExists_ReturnsOkResult()
         {
             _menuRepositoryMock.MockGetMenuItem(new MenuItem());
             HubContextMock.MockHub();
 
-            var result = await _controller.Remove(It.IsAny<int>()) as OkResult;
+            var result = await _controller.RemoveAsync(It.IsAny<int>()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }

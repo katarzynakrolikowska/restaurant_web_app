@@ -7,13 +7,13 @@ namespace JagWebApp.Core
 {
     public interface IPhotoRepository
     {
-        Task<IEnumerable<Photo>> GetPhotos(Dish dish);
+        Task<IEnumerable<Photo>> GetPhotosAsync(Dish dish);
 
-        Task<Photo> GetPhoto(int photoId);
+        Task<Photo> GetPhotoAsync(int photoId);
 
-        Task<Photo> GetLastMainPhoto(int dishId);
+        Task<Photo> GetLastMainPhotoAsync(int dishId);
 
-        Task<Photo> SavePhoto(Dish dish, IFormFile file);
+        Photo SavePhoto(Dish dish, IFormFile file);
 
         void Remove(Photo photo);
 

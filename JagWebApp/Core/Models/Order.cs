@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JagWebApp.Core.Models.Identity;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 

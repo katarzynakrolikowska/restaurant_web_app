@@ -16,13 +16,13 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetOrders()
         {
-            _orderRepo.Setup(or => or.GetOrders())
+            _orderRepo.Setup(or => or.GetOrdersAsync())
                 .ReturnsAsync(new List<Order>());
         }
 
         public void MockGetUserOrders()
         {
-            _orderRepo.Setup(or => or.GetUserOrders(It.IsAny<int>()))
+            _orderRepo.Setup(or => or.GetUserOrdersAsync(It.IsAny<int>()))
                 .ReturnsAsync(new List<Order>());
         }
 
@@ -34,7 +34,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetUserOrder(Order order)
         {
-            _orderRepo.Setup(or => or.GetUserOrder(It.IsAny<int>(), It.IsAny<int>()))
+            _orderRepo.Setup(or => or.GetUserOrderAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(order);
         }
 
@@ -50,7 +50,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void VerifyGetUserOrder()
         {
-            _orderRepo.Verify(or => or.GetUserOrder(It.IsAny<int>(), It.IsAny<int>()));
+            _orderRepo.Verify(or => or.GetUserOrderAsync(It.IsAny<int>(), It.IsAny<int>()));
         }
 
         public void VerifyAdd()

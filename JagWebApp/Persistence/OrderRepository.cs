@@ -17,7 +17,7 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
             return await _context.Orders
                 .Include(o => o.Items)
@@ -27,7 +27,7 @@ namespace JagWebApp.Persistence
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetUserOrders(int userId)
+        public async Task<IEnumerable<Order>> GetUserOrdersAsync(int userId)
         {
             return await _context.Orders
                 .Where(o => o.UserId == userId)
@@ -48,7 +48,7 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Order> GetUserOrder(int id, int userId)
+        public async Task<Order> GetUserOrderAsync(int id, int userId)
         {
             return await _context.Orders
                 .Where(o => o.Id == id && o.UserId == userId)

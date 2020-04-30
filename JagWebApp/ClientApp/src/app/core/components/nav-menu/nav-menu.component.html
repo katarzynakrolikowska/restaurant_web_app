@@ -1,0 +1,52 @@
+<header>
+  <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-white border-bottom box-shadow">
+    <div class="container">
+      <a class="navbar-brand" [routerLink]="['/']">
+        <mat-icon svgIcon="doll" class="title-icon"></mat-icon>
+        Jagienka
+      </a>
+      <div class="navbar-collapse collapse d-sm-inline-flex">
+        <span *ngIf="isAdmin()">
+          <button *ngFor="let button of menuButtons" mat-button [routerLink]="[button.link]">
+            {{ button.name }}
+          </button>
+        </span>
+        <span *ngIf="!isAdmin()">
+          <button *ngFor="let button of menuButtonsForUser" mat-button [routerLink]="[button.link]">
+            {{ button.name }}
+          </button>
+        </span>
+      </div>
+      <div>
+        <button *ngIf="!loggedIn(); else userProfileLink"
+                mat-button
+                class="nav-mat-button"
+                [matMenuTriggerFor]="menu">
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/login']">Zaloguj się</button>
+          <button mat-menu-item [routerLink]="['/login']" [queryParams]="{ step: '1'}">
+            Zarejestruj się
+          </button>
+        </mat-menu>
+        <ng-template #userProfileLink>
+          <button mat-button class="nav-mat-button" [matMenuTriggerFor]="menu">
+            <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['/user/data']">Moje dane</button>
+            <button *ngIf="!isAdmin()" mat-menu-item [routerLink]="['/user/orders']">Moje zamówienia</button>
+            <button mat-menu-item (click)="logout()">Wyloguj się</button>
+          </mat-menu>
+        </ng-template>
+        <span *ngIf="!isAdmin()">
+          <app-nav-cart-button [user-id]="authService.userId"></app-nav-cart-button>
+        </span>
+        <button mat-button class="nav-mat-button d-sm-none" (click)="sidenav.open()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>

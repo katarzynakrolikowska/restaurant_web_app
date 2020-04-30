@@ -1,5 +1,5 @@
 ﻿using JagWebApp.Core;
-using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 using JagWebApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -15,16 +15,16 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task Remove(int? addressId)
+        public async Task RemoveAsync(int? addressId)
         {
             if (addressId == null)
                 return;
 
-            var address = await GetAddress((int)addressId);
+            var address = await GetAddressAsync((int)addressId);
             _context.Addresses.Remove(address);
         }
 
-        private async Task<Address> GetAddress(int id)
+        private async Task<Address> GetAddressAsync(int id)
         {
             return await _context.Addresses
                 .SingleOrDefaultAsync(a => a.Id == id);

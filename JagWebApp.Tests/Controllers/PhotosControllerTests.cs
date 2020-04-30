@@ -3,7 +3,7 @@ using JagWebApp.Controllers;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
 using JagWebApp.Core.Models.Helpers;
-using JagWebApp.Resources;
+using JagWebApp.Resources.DishResources;
 using JagWebApp.Tests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -48,44 +48,44 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void GetPhotos_WhenCalled_ReturnsIActionResult()
+        public void GetPhotosAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.GetPhotos(It.IsAny<int>());
+            var result = _controller.GetPhotosAsync(It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void GetPhotos_WhenDishDoesNotExist_ReturnsNotFoundResult()
+        public async void GetPhotosAsync_WhenDishDoesNotExist_ReturnsNotFoundResult()
         {
             Dish dish = null;
             _dishRepositoryMock.MockGetDish(dish);
 
-            var result = await _controller.GetPhotos(It.IsAny<int>()) as NotFoundResult;
+            var result = await _controller.GetPhotosAsync(It.IsAny<int>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void GetPhotos_WhenDishExists_GetPhotosFromRepoIsCalled()
+        public async void GetPhotosAsync_WhenDishExists_GetPhotosFromRepoIsCalled()
         {
             var dish = new Dish();
             _dishRepositoryMock.MockGetDish(dish);
             _photoRepositoryMock.MockGetPhotos(dish, new List<Photo>());
 
-            await _controller.GetPhotos(It.IsAny<int>());
+            await _controller.GetPhotosAsync(It.IsAny<int>());
 
             _photoRepositoryMock.VerifyGetPhotos(dish);
         }
 
         [Fact]
-        public async void GetPhotos_WhenDishExists_ReturnsOkObjectResult()
+        public async void GetPhotosAsync_WhenDishExists_ReturnsOkObjectResult()
         {
             var photos = new List<Photo>() { new Photo() };
             _dishRepositoryMock.MockGetDish(new Dish());
             _photoRepositoryMock.MockGetPhotos(photos);
 
-            var result = await _controller.GetPhotos(It.IsAny<int>()) as OkObjectResult;
+            var result = await _controller.GetPhotosAsync(It.IsAny<int>()) as OkObjectResult;
             var values = result.Value as List<PhotoResource>;
 
             Assert.Equal(200, result.StatusCode);
@@ -93,60 +93,60 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Upload_WhenCalled_ReturnsIActionResult()
+        public void UploadAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Upload(It.IsAny<int>(), It.IsAny<IFormFile>());
+            var result = _controller.UploadAsync(It.IsAny<int>(), It.IsAny<IFormFile>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Upload_WhenDishDoesNotExist_ReturnsNotFoundResult()
+        public async void UploadAsync_WhenDishDoesNotExist_ReturnsNotFoundResult()
         {
             Dish dish = null;
             _dishRepositoryMock.MockGetDish(dish);
 
-            var result = await _controller.Upload(It.IsAny<int>(), It.IsAny<IFormFile>()) as NotFoundResult;
+            var result = await _controller.UploadAsync(It.IsAny<int>(), It.IsAny<IFormFile>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void Upload_WhenFileIsNull_ReturnsBadRequestObjectResult()
+        public async void UploadAsync_WhenFileIsNull_ReturnsBadRequestObjectResult()
         {
             _dishRepositoryMock.MockGetDish(new Dish());
 
-            var result = await _controller.Upload(It.IsAny<int>(), null) as BadRequestObjectResult;
+            var result = await _controller.UploadAsync(It.IsAny<int>(), null) as BadRequestObjectResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Upload_WhenFileIsEmpty_ReturnsBadRequestObjectResult()
+        public async void UploadAsync_WhenFileIsEmpty_ReturnsBadRequestObjectResult()
         {
             _file.Setup(mf => mf.Length).Returns(0);
             _dishRepositoryMock.MockGetDish(new Dish());
 
-            var result = await _controller.Upload(It.IsAny<int>(), _file.Object) as BadRequestObjectResult;
+            var result = await _controller.UploadAsync(It.IsAny<int>(), _file.Object) as BadRequestObjectResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Upload_WhenFileIsTooBig_ReturnsBadRequestObjectResult()
+        public async void UploadAsync_WhenFileIsTooBig_ReturnsBadRequestObjectResult()
         {
             _dishRepositoryMock.MockGetDish(new Dish());
             _file.Setup(f => f.Length).Returns(2);
             _settings.MaxBytes = 1;
 
-            var result = await _controller.Upload(It.IsAny<int>(), _file.Object) as BadRequestObjectResult;
+            var result = await _controller.UploadAsync(It.IsAny<int>(), _file.Object) as BadRequestObjectResult;
 
             Assert.Equal(400, result.StatusCode);
             
         }
 
         [Fact]
-        public async void Upload_WhenFileExtensionIsInvalid_ReturnsBadRequestObjectResult()
+        public async void UploadAsync_WhenFileExtensionIsInvalid_ReturnsBadRequestObjectResult()
         {
             _dishRepositoryMock.MockGetDish(new Dish());
             _file.Setup(f => f.Length).Returns(1);
@@ -154,86 +154,86 @@ namespace JagWebApp.Tests.Controllers
             _settings.MaxBytes = 2;
             _settings.AcceptedFileTypes = new string[] { ".a" };
 
-            var result = await _controller.Upload(It.IsAny<int>(), _file.Object) as BadRequestObjectResult;
+            var result = await _controller.UploadAsync(It.IsAny<int>(), _file.Object) as BadRequestObjectResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Upload_WhenFileIsValid_SavePhotoIsCalled()
+        public async void UploadAsync_WhenFileIsValid_SavePhotoIsCalled()
         {
             var dish = new Dish();
             _dishRepositoryMock.MockGetDish(dish);
             SetUpValidFile();
 
-            await _controller.Upload(It.IsAny<int>(), _file.Object);
+            await _controller.UploadAsync(It.IsAny<int>(), _file.Object);
 
             _photoRepositoryMock.VerifySavePhoto(dish, _file);
         }
 
         [Fact]
-        public async void Upload_WhenFileIsValid_ReturnsOkObjectResult()
+        public async void UploadAsync_WhenFileIsValid_ReturnsOkObjectResult()
         {
             var dish = new Dish();
             _dishRepositoryMock.MockGetDish(dish);
             SetUpValidFile();
 
-            var result = await _controller.Upload(It.IsAny<int>(), _file.Object) as OkObjectResult;
+            var result = await _controller.UploadAsync(It.IsAny<int>(), _file.Object) as OkObjectResult;
 
             Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]
-        public void UpdateMainPhoto_WhenCalled_ReturnsIActionResult()
+        public void UpdateMainPhotoAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.UpdateMainPhoto(It.IsAny<int>(), It.IsAny<int>());
+            var result = _controller.UpdateMainPhotoAsync(It.IsAny<int>(), It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void UpdateMainPhoto_WhenPhotoDoesNotExist_ReturnsNotFoundResult()
+        public async void UpdateMainPhotoAsync_WhenPhotoDoesNotExist_ReturnsNotFoundResult()
         {
             Photo photo = null;
             _photoRepositoryMock.MockGetPhoto(photo);
 
-            var result = await _controller.UpdateMainPhoto(It.IsAny<int>(), It.IsAny<int>()) as NotFoundResult;
+            var result = await _controller.UpdateMainPhotoAsync(It.IsAny<int>(), It.IsAny<int>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void UpdateMainPhoto_WhenPhotoIdAnDishIdAreNotEqual_ReturnsBadRequestResult()
+        public async void UpdateMainPhotoAsync_WhenPhotoIdAnDishIdAreNotEqual_ReturnsBadRequestResult()
         {
             var photo = new Photo() { Id = 1 };
             _photoRepositoryMock.MockGetPhoto(photo);
 
-            var result = await _controller.UpdateMainPhoto(2, It.IsAny<int>()) as BadRequestResult;
+            var result = await _controller.UpdateMainPhotoAsync(2, It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void UpdateMainPhoto_WhenPhotoIsNotMainPhotoAndDishHasMainPhoto_LastMainPhotoIsUpdated()
+        public async void UpdateMainPhotoAsync_WhenPhotoIsNotMainPhotoAndDishHasMainPhoto_LastMainPhotoIsUpdated()
         {
             var lastMainPhoto = new Photo() { Id = 1, IsMain = true };
             var photo = new Photo() { IsMain = false };
             _photoRepositoryMock.MockGetPhoto(photo);
             _photoRepositoryMock.MockGetLastMainPhoto(lastMainPhoto);
 
-            await _controller.UpdateMainPhoto(It.IsAny<int>(), It.IsAny<int>());
+            await _controller.UpdateMainPhotoAsync(It.IsAny<int>(), It.IsAny<int>());
 
             _photoRepositoryMock.VerifyGetLastMainPhoto();
             Assert.False(lastMainPhoto.IsMain);
         }
 
         [Fact]
-        public async void UpdateMainPhoto_WhenPhotoIsMainPhoto_ReturnsOkObjectResult()
+        public async void UpdateMainPhotoAsync_WhenPhotoIsMainPhoto_ReturnsOkObjectResult()
         {
             var photo = new Photo() { IsMain = true };
             _photoRepositoryMock.MockGetPhoto(photo);
 
-            var result = await _controller.UpdateMainPhoto(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
+            var result = await _controller.UpdateMainPhotoAsync(It.IsAny<int>(), It.IsAny<int>()) as OkObjectResult;
             var value = result.Value;
 
             Assert.False(photo.IsMain);
@@ -242,54 +242,54 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Remove_WhenCalled_ReturnsIActionResult()
+        public void RemoveAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Remove(It.IsAny<int>(), It.IsAny<int>());
+            var result = _controller.RemoveAsync(It.IsAny<int>(), It.IsAny<int>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Remove_WhenPhotoDoesNotExist_ReturnsNotFoundResult()
+        public async void RemoveAsync_WhenPhotoDoesNotExist_ReturnsNotFoundResult()
         {
             Photo photo = null;
             _photoRepositoryMock.MockGetPhoto(photo);
 
-            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as NotFoundResult;
+            var result = await _controller.RemoveAsync(It.IsAny<int>(), It.IsAny<int>()) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public async void Remove_WhenPhotoIdAnDishIdAreNotEqual_ReturnsBadRequestResult()
+        public async void RemoveAsync_WhenPhotoIdAnDishIdAreNotEqual_ReturnsBadRequestResult()
         {
             var photo = new Photo() { Id = 1 };
             _photoRepositoryMock.MockGetPhoto(photo);
 
-            var result = await _controller.Remove(2, It.IsAny<int>()) as BadRequestResult;
+            var result = await _controller.RemoveAsync(2, It.IsAny<int>()) as BadRequestResult;
 
             Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
-        public async void Remove_WhenPhotoIsValid_PhotoIsRemoved()
+        public async void RemoveAsync_WhenPhotoIsValid_PhotoIsRemoved()
         {
             var photo = new Photo();
             _photoRepositoryMock.MockGetPhoto(photo);
             _unitOfWorkMock.MockCompleteAsync();
 
-            await _controller.Remove(It.IsAny<int>(), It.IsAny<int>());
+            await _controller.RemoveAsync(It.IsAny<int>(), It.IsAny<int>());
 
             _photoRepositoryMock.VerifyRemove(photo);
             _unitOfWorkMock.VerifyCompleteAsync();
         }
 
         [Fact]
-        public async void Remove_WhenPhotoIsValid_ReturnsOkResult()
+        public async void RemoveAsync_WhenPhotoIsValid_ReturnsOkResult()
         {
             _photoRepositoryMock.MockGetPhoto(new Photo());
 
-            var result = await _controller.Remove(It.IsAny<int>(), It.IsAny<int>()) as OkResult;
+            var result = await _controller.RemoveAsync(It.IsAny<int>(), It.IsAny<int>()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }

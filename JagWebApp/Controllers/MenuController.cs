@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 using JagWebApp.Hubs;
-using JagWebApp.Resources;
+using JagWebApp.Resources.MenuItemResources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -42,37 +43,37 @@ namespace JagWebApp.Controllers
         //GET: api/menu
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetMenu()
+        public async Task<IActionResult> GetMenuAsync()
         {
-            var menuItems = await _menuRepository.GetMenuItems();
-            return Ok(_mapper.Map<IEnumerable<MenuItem>, IEnumerable<MenuItemResource>>(menuItems));
+            var menuItems = await _menuRepository.GetMenuItemsAsync();
+            return Ok(_mapper.Map<IEnumerable<MenuItemResource>>(menuItems));
         }
 
         //GET: api/menu/1
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetMenuItem(int id)
+        public async Task<IActionResult> GetMenuItemAsync(int id)
         {
-            var item = await _menuRepository.GetMenuItem(id);
+            var item = await _menuRepository.GetMenuItemAsync(id);
             if (item == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<MenuItem, MenuItemResource>(item));
+            return Ok(_mapper.Map<MenuItemResource>(item));
         }
 
         //GET
 
         //POST: api/menu
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.ADMIN)]
         [HttpPost]
-        public async Task<IActionResult> Create(SaveMenuItemResource saveMenuItemResource)
+        public async Task<IActionResult> CreateAsync(SaveMenuItemResource saveMenuItemResource)
         {
-            if (saveMenuItemResource.IsMain && await _menuRepository.GetMainMenuItem() != null)
+            if (saveMenuItemResource.IsMain && await _menuRepository.GetMainMenuItemAsync() != null)
                 return BadRequest("Zestaw dnia już istnieje");
 
-            if (!await _dishRepository.DishesExist(saveMenuItemResource.Dishes))
+            if (!await _dishRepository.DishesExistAsync(saveMenuItemResource.Dishes))
                 return BadRequest("Niepoprawne dane");
 
-            var menuItem = _mapper.Map<SaveMenuItemResource, MenuItem>(saveMenuItemResource);
+            var menuItem = _mapper.Map<MenuItem>(saveMenuItemResource);
 
             _menuRepository.Add(menuItem);
             await _unitOfWork.CompleteAsync();
@@ -81,11 +82,11 @@ namespace JagWebApp.Controllers
         }
 
         //PUT: api/menu/1
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.ADMIN)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMenuItem(int id, UpdateMenuItemResource updateMenuItemResource)
+        public async Task<IActionResult> UpdateAsync(int id, UpdateMenuItemResource updateMenuItemResource)
         {
-            var item = await _menuRepository.GetMenuItem(id);
+            var item = await _menuRepository.GetMenuItemAsync(id);
             if (item == null)
                 return NotFound();
 
@@ -93,29 +94,29 @@ namespace JagWebApp.Controllers
                 return BadRequest();
 
             _mapper.Map(updateMenuItemResource, item);
-            await _cartRepository.UpdateCartItemAmountWithMenuItem(item);
+            await _cartRepository.UpdateCartItemAmountOfMenuItemAsync(item);
             await _unitOfWork.CompleteAsync();
 
             await _hub.Clients.All.SendAsync(
                 "transferUpdatedItem",
-                _mapper.Map<IEnumerable<MenuItem>, IEnumerable<MenuItemResource>>(new Collection<MenuItem>() { item }));
+                _mapper.Map<IEnumerable<MenuItemResource>>(new Collection<MenuItem>() { item }));
 
             return Ok();
         }
 
         //DELETE: api/menu/1
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.ADMIN)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> RemoveAsync(int id)
         {
-            var item = await _menuRepository.GetMenuItem(id);
+            var item = await _menuRepository.GetMenuItemAsync(id);
             if (item == null)
                 return NotFound();
 
             _menuRepository.Remove(item);
             await _unitOfWork.CompleteAsync();
 
-            await _hub.Clients.All.SendAsync("transferDeletedItem",  _mapper.Map<MenuItem, MenuItemResource>(item));
+            await _hub.Clients.All.SendAsync("transferDeletedItem",  _mapper.Map<MenuItemResource>(item));
 
             return Ok();
         }

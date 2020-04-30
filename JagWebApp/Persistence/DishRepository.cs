@@ -16,7 +16,7 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task<Dish> GetDish(int id)
+        public async Task<Dish> GetDishAsync(int id)
         {
             return await _context.Dishes
                 .Include(d => d.Category)
@@ -24,7 +24,7 @@ namespace JagWebApp.Persistence
                 .SingleOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<IEnumerable<Dish>> GetDishes()
+        public async Task<IEnumerable<Dish>> GetDishesAsync()
         {
             return await _context.Dishes
                 .Include(d => d.Category)
@@ -41,13 +41,13 @@ namespace JagWebApp.Persistence
             _context.Remove(dish);
         }
 
-        public async Task<bool> DishesExist(IEnumerable<int> ids)
+        public async Task<bool> DishesExistAsync(IEnumerable<int> ids)
         {
             var dishesExist = true;
 
             foreach (var id in ids)
             {
-                var dish = await GetDish(id);
+                var dish = await GetDishAsync(id);
                 if (dish == null)
                 {
                     dishesExist = false;

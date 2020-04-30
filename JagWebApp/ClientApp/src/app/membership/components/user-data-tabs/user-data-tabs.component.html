@@ -1,0 +1,11 @@
+<mat-tab-group [selectedIndex]="selected">
+  <mat-tab label="Email">
+    <app-edit-email-form></app-edit-email-form>
+  </mat-tab>
+  <mat-tab label="Hasło">
+    <app-edit-password-form></app-edit-password-form>
+  </mat-tab>
+  <mat-tab *ngIf="!authService.isAdmin()" label="Dane dostawy">
+    <app-address-form></app-address-form>
+  </mat-tab>
+</mat-tab-group>

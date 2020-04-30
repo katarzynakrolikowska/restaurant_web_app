@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JagWebApp.Core;
 using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.CategoryResources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ namespace JagWebApp.Controllers
 
         //GET: api/dishCategories
         [HttpGet]
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetCategoriesAsync()
         {
             var categories = await _categoryRepository.GetCategories();
 
@@ -35,9 +36,9 @@ namespace JagWebApp.Controllers
         }
 
         //POST: api/dishCategories
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.ADMIN)]
         [HttpPost]
-        public async Task<IActionResult> Create(SaveCategoryResource saveCategory)
+        public async Task<IActionResult> CreateAsync(SaveCategoryResource saveCategory)
         {
             var category = _mapper.Map<Category>(saveCategory);
 
@@ -48,11 +49,11 @@ namespace JagWebApp.Controllers
         }
 
         //PUT: api/dishCategories/1
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.ADMIN)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, SaveCategoryResource category)
+        public async Task<IActionResult> UpdateAsync(int id, SaveCategoryResource category)
         {
-            var categoryFromDb = await _categoryRepository.GetCategory(id);
+            var categoryFromDb = await _categoryRepository.GetCategoryAsync(id);
             if (categoryFromDb == null)
                 return BadRequest();
 
@@ -63,15 +64,15 @@ namespace JagWebApp.Controllers
         }
 
         //DELETE: api/dishCategories/1
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.ADMIN)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> RemoveAsync(int id)
         {
-            var category = await _categoryRepository.GetCategory(id);
+            var category = await _categoryRepository.GetCategoryAsync(id);
             if (category == null)
                 return BadRequest();
 
-            if (await _categoryRepository.DishWithCategoryExists(id))
+            if (await _categoryRepository.DishWithCategoryExistsAsync(id))
                 return BadRequest("Category is used");
 
             _categoryRepository.Remove(category);

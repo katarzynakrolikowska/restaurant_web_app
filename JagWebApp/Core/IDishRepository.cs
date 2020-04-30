@@ -6,14 +6,14 @@ namespace JagWebApp.Core
 {
     public interface IDishRepository
     {
-        Task<Dish> GetDish(int id);
+        Task<Dish> GetDishAsync(int id);
 
-        Task<IEnumerable<Dish>> GetDishes();
+        Task<IEnumerable<Dish>> GetDishesAsync();
 
         void Add(Dish dish);
 
         void Remove(Dish dish);
 
-        Task<bool> DishesExist(IEnumerable<int> idsDishes);
+        Task<bool> DishesExistAsync(IEnumerable<int> idsDishes);
     }
 }

@@ -17,7 +17,7 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task<IEnumerable<Cart>> GetCarts()
+        public async Task<IEnumerable<Cart>> GetCartsAsync()
         {
             return await _context.Carts
                 .Include(c => c.Items)
@@ -33,7 +33,7 @@ namespace JagWebApp.Persistence
                 .ToListAsync();
         }
 
-        public async Task<Cart> GetCart(int id, bool includeRelated = true)
+        public async Task<Cart> GetCartAsync(int id, bool includeRelated = true)
         {
             if (includeRelated)
             {
@@ -59,7 +59,7 @@ namespace JagWebApp.Persistence
             
         }
 
-        public async Task<Cart> GetUserCart(int userId)
+        public async Task<Cart> GetUserCartAsync(int userId)
         {
             return await _context.Carts
                 .Include(c => c.Items)
@@ -110,9 +110,9 @@ namespace JagWebApp.Persistence
             items = items.Where(ci => ci.CartId == anotherCart.Id);
         }
 
-        public async Task UpdateCartItemAmountWithMenuItem(MenuItem item)
+        public async Task UpdateCartItemAmountOfMenuItemAsync(MenuItem item)
         {
-            var carts = await GetCarts();
+            var carts = await GetCartsAsync();
 
             foreach (var cart in carts)
             {

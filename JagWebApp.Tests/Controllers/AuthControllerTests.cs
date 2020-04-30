@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using JagWebApp.Controllers;
-using JagWebApp.Core.Models;
-using JagWebApp.Resources;
+using JagWebApp.Core.Models.Identity;
+using JagWebApp.Resources.UserResources;
 using JagWebApp.Tests.Mocks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,40 +30,40 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Register_WhenCalled_ReturnsIActionResult()
+        public void RegisterAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Register(It.IsAny<UserForRegisterResource>());
+            var result = _controller.RegisterAsync(It.IsAny<UserForRegisterResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Register_WhenCalled_CreateAsyncIsCalled()
+        public async void RegisterAsync_WhenCalled_CreateAsyncIsCalled()
         {
             UserManagerMock.MockCreateAsync(IdentityResult.Success);
 
-            await _controller.Register(new UserForRegisterResource());
+            await _controller.RegisterAsync(new UserForRegisterResource());
 
             _userManager.Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()));
         }
 
         [Fact]
-        public async void Register_WhenResultSucceeded_ReturnsOkResult()
+        public async void RegisterAsync_WhenResultSucceeded_ReturnsOkResult()
         {
             UserManagerMock.MockCreateAsync(IdentityResult.Success);
 
-            var result = await _controller.Register(new UserForRegisterResource()) as OkResult;
+            var result = await _controller.RegisterAsync(new UserForRegisterResource()) as OkResult;
 
             Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]
-        public async void Register_WhenResultFailed_ReturnsBadRequestObjectResult()
+        public async void RegisterAsync_WhenResultFailed_ReturnsBadRequestObjectResult()
         {
             var identityError = new IdentityError() { Code = "400", Description = "a" };
             UserManagerMock.MockCreateAsync(IdentityResult.Failed(identityError));
 
-            var result = await _controller.Register(new UserForRegisterResource()) as BadRequestObjectResult;
+            var result = await _controller.RegisterAsync(new UserForRegisterResource()) as BadRequestObjectResult;
             var errors = result.Value as List<IdentityError>;
 
             Assert.Equal(400, result.StatusCode);
@@ -71,26 +71,26 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void Login_WhenCalled_ReturnsIActionResult()
+        public void LoginAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.Login(It.IsAny<UserForLoginResource>());
+            var result = _controller.LoginAsync(It.IsAny<UserForLoginResource>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void Login_WhenUserEmailIsInvalid_ReturnsUnauthorizedResult()
+        public async void LoginAsync_WhenUserEmailIsInvalid_ReturnsUnauthorizedResult()
         {
             User user = null;
             UserManagerMock.MockFindByEmailAsync(user);
 
-            var result = await _controller.Login(new UserForLoginResource()) as UnauthorizedResult;
+            var result = await _controller.LoginAsync(new UserForLoginResource()) as UnauthorizedResult;
 
             Assert.Equal(401, result.StatusCode);
         }
 
         [Fact]
-        public async void Login_WhenCalled_CheckPasswordSignInAsyncIsCalled()
+        public async void LoginAsync_WhenCalled_CheckPasswordSignInAsyncIsCalled()
         {
             var user = new User();
             UserManagerMock.MockFindByEmailAsync(user);
@@ -100,61 +100,61 @@ namespace JagWebApp.Tests.Controllers
                 "b", 
                 Microsoft.AspNetCore.Identity.SignInResult.Success);
 
-            await _controller.Login(userForLoginResource);
+            await _controller.LoginAsync(userForLoginResource);
 
             _signInManager.Verify(sm => sm.CheckPasswordSignInAsync(user, "b", false));
         }
 
         [Fact]
-        public async void Login_WhenCheckPasswordSignInReturnsSuccess_ReturnsOkObjectResultWithToken()
+        public async void LoginAsync_WhenCheckPasswordSignInReturnsSuccess_ReturnsOkObjectResultWithToken()
         {
             var token = new { token = "a" };
             TokenRepositoryMock.MockGenerateToken("a");
             UserManagerMock.MockFindByEmailAsync(new User());
             SignInManagerMock.MockCheckPasswordSignInAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
 
-            var result = await _controller.Login(new UserForLoginResource()) as OkObjectResult;
+            var result = await _controller.LoginAsync(new UserForLoginResource()) as OkObjectResult;
 
             Assert.Equal(200, result.StatusCode);
             Assert.Equal(token.ToString(), result.Value.ToString());
         }
 
         [Fact]
-        public async void Login_WhenResultFailed_ReturnsUnauthorizedResult()
+        public async void LoginAsync_WhenResultFailed_ReturnsUnauthorizedResult()
         {
             UserManagerMock.MockFindByEmailAsync();
             SignInManagerMock.MockCheckPasswordSignInAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed);
 
-            var result = await _controller.Login(new UserForLoginResource()) as UnauthorizedResult;
+            var result = await _controller.LoginAsync(new UserForLoginResource()) as UnauthorizedResult;
 
             Assert.Equal(401, result.StatusCode);
         }
 
         [Fact]
-        public void UserExists_WhenCalled_ReturnsIActionResult()
+        public void UserExistsAsync_WhenCalled_ReturnsIActionResult()
         {
-            var result = _controller.UserExists(It.IsAny<string>());
+            var result = _controller.UserExistsAsync(It.IsAny<string>());
 
             Assert.IsType<Task<IActionResult>>(result);
         }
 
         [Fact]
-        public async void UserExists_WhenUserIsNotFound_ReturnsOkObjectResultContainsTrue()
+        public async void UserExistsAsync_WhenUserIsNotFound_ReturnsOkObjectResultContainsTrue()
         {
             User user = null;
             UserManagerMock.MockFindByEmailAsync(user);
 
-            var result = await _controller.UserExists(It.IsAny<string>()) as OkObjectResult;
+            var result = await _controller.UserExistsAsync(It.IsAny<string>()) as OkObjectResult;
 
             Assert.Equal(false, result.Value);
         }
 
         [Fact]
-        public async void UserExists_WhenUserIsFound_ReturnsOkObjectResultContainsTrue()
+        public async void UserExistsAsync_WhenUserIsFound_ReturnsOkObjectResultContainsTrue()
         {
             UserManagerMock.MockFindByEmailAsync(new User());
 
-            var result = await _controller.UserExists(It.IsAny<string>()) as OkObjectResult;
+            var result = await _controller.UserExistsAsync(It.IsAny<string>()) as OkObjectResult;
 
             Assert.Equal(true, result.Value);
         }

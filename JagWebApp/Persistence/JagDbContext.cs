@@ -1,4 +1,5 @@
 ﻿using JagWebApp.Core.Models;
+using JagWebApp.Core.Models.Identity;
 using JagWebApp.Persistence.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

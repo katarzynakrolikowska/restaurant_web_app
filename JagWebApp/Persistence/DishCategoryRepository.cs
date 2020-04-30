@@ -17,7 +17,7 @@ namespace JagWebApp.Persistence
             _context = context;
         }
 
-        public async Task<Category> GetCategory(int id)
+        public async Task<Category> GetCategoryAsync(int id)
         {
             return await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
         }
@@ -27,9 +27,9 @@ namespace JagWebApp.Persistence
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<bool> CategoryExists(int categoryId)
+        public async Task<bool> CategoryExistsAsync(int categoryId)
         {
-            var category = await GetCategory(categoryId);
+            var category = await GetCategoryAsync(categoryId);
 
             return category != null;
         }
@@ -44,7 +44,7 @@ namespace JagWebApp.Persistence
             _context.Categories.Remove(category);
         }
 
-        public async Task<bool> DishWithCategoryExists(int categoryId)
+        public async Task<bool> DishWithCategoryExistsAsync(int categoryId)
         {
             var dishes = await _context.Dishes.Where(d => d.CategoryId == categoryId).ToListAsync();
 

@@ -15,13 +15,13 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockGetCart(Cart cart)
         {
-            _cartRepo.Setup(cr => cr.GetCart(It.IsAny<int>(), It.IsAny<bool>()))
+            _cartRepo.Setup(cr => cr.GetCartAsync(It.IsAny<int>(), It.IsAny<bool>()))
                 .ReturnsAsync(cart);
         }
 
         public void MockGetUserCart(Cart cart)
         {
-            _cartRepo.Setup(cr => cr.GetUserCart(It.IsAny<int>()))
+            _cartRepo.Setup(cr => cr.GetUserCartAsync(It.IsAny<int>()))
                 .ReturnsAsync(cart);
         }
 
@@ -47,7 +47,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void MockUpdateCartItemAmountContainsMenuItem(MenuItem item)
         {
-            _cartRepo.Setup(cr => cr.UpdateCartItemAmountWithMenuItem(item));
+            _cartRepo.Setup(cr => cr.UpdateCartItemAmountOfMenuItemAsync(item));
         }
 
         public void VerifyAdd()
@@ -67,7 +67,7 @@ namespace JagWebApp.Tests.Mocks
 
         public void VerifyUpdateCartItemAmountContainsMenuItem(MenuItem item)
         {
-            _cartRepo.Verify(cr => cr.UpdateCartItemAmountWithMenuItem(item));
+            _cartRepo.Verify(cr => cr.UpdateCartItemAmountOfMenuItemAsync(item));
         }
     }
 }
