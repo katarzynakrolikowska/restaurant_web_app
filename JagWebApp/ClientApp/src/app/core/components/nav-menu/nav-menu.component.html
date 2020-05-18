@@ -32,7 +32,8 @@
         </mat-menu>
         <ng-template #userProfileLink>
           <button mat-button class="nav-mat-button" [matMenuTriggerFor]="menu">
-            <mat-icon>person</mat-icon>
+            <mat-icon class="icon-person">person</mat-icon>
+            <mat-icon *ngIf="loggedIn()" class="icon-dot">fiber_manual_record</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item [routerLink]="['/user/data']">Moje dane</button>

@@ -7,7 +7,7 @@ import { MenuItem } from 'shared/models/menu-item';
   providedIn: 'root'
 })
 export class SignalRService {
-  private hubConnection: signalR.HubConnection
+  private hubConnection: signalR.HubConnection;
   onUpdatedItemReceived = new EventEmitter();
   onDeletedItemReceived = new EventEmitter();
 
@@ -20,11 +20,8 @@ export class SignalRService {
 
     this.hubConnection
       .start()
-      .then(() => console.log('Connection started'))
-      .catch(err => {
-        console.log('Error while starting connection: ' + err);
-        setTimeout(this.startConnection, 5000);
-      })
+      .then(() => {})
+      .catch(() => setTimeout(this.startConnection, 5000));
   }
 
   addTransferUpdatedItemListener = () => {
@@ -39,7 +36,5 @@ export class SignalRService {
     });
   }
 
-  isConnected() {
-    return this.hubConnection && this.hubConnection.state === 'Connected';
-  }
+  isConnected = () => { this.hubConnection && this.hubConnection.state === 'Connected' }
 }
