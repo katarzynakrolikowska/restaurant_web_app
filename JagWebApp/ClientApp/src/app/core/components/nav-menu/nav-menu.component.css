@@ -21,3 +21,15 @@ html {
   width: 27px;
   height: 27px;
 }
+
+.icon-person {
+  position: relative;
+}
+
+.icon-dot {
+  position: absolute;
+  right: 1px;
+  bottom: -7px;
+  color: #33cc33;
+  font-size: 15px;
+}
