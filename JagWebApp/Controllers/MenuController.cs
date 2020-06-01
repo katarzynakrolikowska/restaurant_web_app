@@ -60,7 +60,6 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<MenuItemResource>(item));
         }
 
-        //GET
 
         //POST: api/menu
         [Authorize(Roles = Role.ADMIN)]
@@ -98,7 +97,7 @@ namespace JagWebApp.Controllers
             await _unitOfWork.CompleteAsync();
 
             await _hub.Clients.All.SendAsync(
-                "transferUpdatedItem",
+                MenuItemHub.UPDATED_ITEM_METHOD_NAME,
                 _mapper.Map<IEnumerable<MenuItemResource>>(new Collection<MenuItem>() { item }));
 
             return Ok();
@@ -116,7 +115,7 @@ namespace JagWebApp.Controllers
             _menuRepository.Remove(item);
             await _unitOfWork.CompleteAsync();
 
-            await _hub.Clients.All.SendAsync("transferDeletedItem",  _mapper.Map<MenuItemResource>(item));
+            await _hub.Clients.All.SendAsync(MenuItemHub.DELETED_ITEM_METHOD_NAME, _mapper.Map<MenuItemResource>(item));
 
             return Ok();
         }

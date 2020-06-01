@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Cart } from 'shared/models/cart';
-import { MenuItem } from 'shared/models/menu-item';
-import { CartItemsSharedService } from 'shared/services/cart-items-shared.service';
-import { CartService } from 'shared/services/cart.service';
-import { SignalRService } from 'shared/services/signal-r.service';
+import { Cart } from '../../models/cart';
+import { MenuItem } from '../../models/menu-item';
+import { CartItemsSharedService } from '../../services/cart-items-shared.service';
+import { CartService } from '../../services/cart.service';
+import { SignalRService } from '../../services/signal-r.service';
 
 @Component({
   selector: 'app-nav-cart-button',

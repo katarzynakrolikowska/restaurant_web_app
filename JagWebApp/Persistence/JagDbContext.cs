@@ -72,6 +72,7 @@ namespace JagWebApp.Persistance
                 .HasDefaultValue(false);
 
             modelBuilder.ApplyConfiguration(new StatusesConfiguration());
+
             modelBuilder.Entity<Order>()
                .Property(o => o.StatusId)
                .HasDefaultValue(1);

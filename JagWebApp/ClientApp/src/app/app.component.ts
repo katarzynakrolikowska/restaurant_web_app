@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material';
-import { NAV_MENU_BUTTONS } from 'shared/consts/app.consts';
-import { AuthService } from 'shared/services/auth.service';
+import { NAV_MENU_BUTTONS } from './shared/consts/app.consts';
+import { AuthService } from './shared/services/auth.service';
 
 @Component({
   selector: 'app-root',

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthGuard } from 'shared/guards/auth.guard';
-import { NotAdminGuard } from 'shared/guards/not-admin.guard';
+import { AuthGuard } from '../shared/guards/auth.guard';
+import { NotAdminGuard } from '../shared/guards/not-admin.guard';
 import { SharedModule } from './../shared/shared.module';
 import { AddressAddViewComponent } from './components/address-add-view/address-add-view.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';

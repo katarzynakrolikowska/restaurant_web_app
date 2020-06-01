@@ -2,12 +2,12 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { ERROR_EMAIL_MESSAGE, ERROR_MAX_LENGTH_PASSWORD_MESSAGE, ERROR_MIN_LENGTH_PASSWORD_MESSAGE, ERROR_MISMATCH_PASSWORDS_MESSAGE, ERROR_REQUIRED_MESSAGE, ERROR_UNIQUE_EMAIL_MESSAGE, SUCCESS_REGISTER_MESSAGE } from 'shared/consts/user-messages.consts';
-import { MismatchErrorStateMatcher } from 'shared/helpers/error-state-matcher';
-import { AuthService } from 'shared/services/auth.service';
-import { User } from '../../../membership/models/user';
-import { EmailValidators } from '../../../membership/validators/email.validaor';
-import { passwordsMatch } from '../../../membership/validators/password.validator';
+import { User } from 'src/app/membership/models/user';
+import { EmailValidators } from 'src/app/membership/validators/email.validaor';
+import { passwordsMatch } from 'src/app/membership/validators/password.validator';
+import { ERROR_EMAIL_MESSAGE, ERROR_MAX_LENGTH_PASSWORD_MESSAGE, ERROR_MIN_LENGTH_PASSWORD_MESSAGE, ERROR_MISMATCH_PASSWORDS_MESSAGE, ERROR_REQUIRED_MESSAGE, ERROR_UNIQUE_EMAIL_MESSAGE, SUCCESS_REGISTER_MESSAGE } from 'src/app/shared/consts/user-messages.consts';
+import { MismatchErrorStateMatcher } from 'src/app/shared/helpers/error-state-matcher';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 
 @Component({

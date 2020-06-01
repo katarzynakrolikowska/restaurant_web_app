@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ROLE_ADMIN, TOKEN } from 'shared/consts/app.consts';
+import { ROLE_ADMIN, TOKEN } from '../consts/app.consts';
 
 @Injectable({
   providedIn: 'root'

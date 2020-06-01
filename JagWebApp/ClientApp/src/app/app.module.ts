@@ -1,3 +1,4 @@
+import { TOKEN } from './shared/consts/app.consts';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -10,7 +11,7 @@ import { SharedModule } from './shared/shared.module';
 import { ShoppingModule } from './shopping/shopping.module';
 
 export function tokenGetter() {
-  return localStorage.getItem("token");
+  return localStorage.getItem(TOKEN);
 }
 
 @NgModule({
