@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { CART_ID } from 'shared/consts/app.consts';
-import { Cart } from 'shared/models/cart';
 import { SaveCart } from '../../shopping/models/save-cart';
+import { CART_ID } from '../consts/app.consts';
+import { Cart } from '../models/cart';
 
 @Injectable({
   providedIn: 'root'

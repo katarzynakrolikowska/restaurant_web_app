@@ -1,6 +1,7 @@
 import { EventEmitter, Inject, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { MenuItem } from 'shared/models/menu-item';
+import { DELETED_ITEM_HUB_METHOD_NAME, UPDATED_ITEM_HUB_METHOD_NAME } from '../consts/app.consts';
+import { MenuItem } from '../models/menu-item';
 
 
 @Injectable({
@@ -25,16 +26,16 @@ export class SignalRService {
   }
 
   addTransferUpdatedItemListener = () => {
-    this.hubConnection.on('transferUpdatedItem', (data: MenuItem[]) => {
+    this.hubConnection.on(UPDATED_ITEM_HUB_METHOD_NAME, (data: MenuItem[]) => {
       this.onUpdatedItemReceived.emit(data);
     });
   }
 
   addTransferDeletedItemListener = () => {
-    this.hubConnection.on('transferDeletedItem', (data: MenuItem) => {
+    this.hubConnection.on(DELETED_ITEM_HUB_METHOD_NAME, (data: MenuItem) => {
       this.onDeletedItemReceived.emit(data);
     });
   }
 
-  isConnected = () => { this.hubConnection && this.hubConnection.state === 'Connected' }
+  isConnected = () => { return this.hubConnection && this.hubConnection.state === 'Connected' }
 }

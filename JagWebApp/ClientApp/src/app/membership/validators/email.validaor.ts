@@ -1,6 +1,6 @@
 import { AbstractControl } from "@angular/forms";
 import { map } from "rxjs/operators";
-import { AuthService } from "shared/services/auth.service";
+import { AuthService } from "src/app/shared/services/auth.service";
 
 
 export class EmailValidators {

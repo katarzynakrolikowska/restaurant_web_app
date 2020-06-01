@@ -37,9 +37,7 @@ namespace JagWebApp.Controllers
             var result = await _userManager.CreateAsync(userToRegister, userForRegisterResource.Password);
 
             if (result.Succeeded)
-            {
                 return Ok();
-            }
 
             return BadRequest(result.Errors);
         }
@@ -56,12 +54,7 @@ namespace JagWebApp.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginResource.Password, false);
 
             if (result.Succeeded)
-            {
-                return Ok(new
-                {
-                    token = _tokenRepository.GenerateTokenAsync(user).Result
-                });
-            }
+                return Ok(new { token = _tokenRepository.GenerateTokenAsync(user).Result });
 
             return Unauthorized();
         }

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { MenuItem } from 'shared/models/menu-item';
-import { UpdateMenuItem } from 'shared/models/update-menu-item';
+import { MenuItem } from '../models/menu-item';
+import { UpdateMenuItem } from '../models/update-menu-item';
 
 @Injectable({
   providedIn: 'root'

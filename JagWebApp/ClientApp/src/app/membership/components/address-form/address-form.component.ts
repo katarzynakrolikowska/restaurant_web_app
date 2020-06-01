@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ERROR_PATTERN_MESSAGE, ERROR_REQUIRED_MESSAGE, SUCCESS_SAVE_DATA_MESSAGE } from 'shared/consts/user-messages.consts';
-import { Address } from 'shared/models/address';
-import { Customer } from 'shared/models/customer';
-import { UserService } from 'shared/services/user.service';
-import { notEmptyInput } from 'shared/validators/not-empty-input.validator';
+import { ERROR_PATTERN_MESSAGE, ERROR_REQUIRED_MESSAGE, SUCCESS_SAVE_DATA_MESSAGE } from 'src/app/shared/consts/user-messages.consts';
+import { Address } from 'src/app/shared/models/address';
+import { Customer } from 'src/app/shared/models/customer';
+import { UserService } from 'src/app/shared/services/user.service';
+import { notEmptyInput } from 'src/app/shared/validators/not-empty-input.validator';
 
 @Component({
   selector: 'app-address-form',

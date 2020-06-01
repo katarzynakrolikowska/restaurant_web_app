@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { ERROR_INVALID_USER_PASSWORD, ERROR_MAX_LENGTH_PASSWORD_MESSAGE, ERROR_MIN_LENGTH_PASSWORD_MESSAGE, ERROR_MISMATCH_PASSWORDS_MESSAGE, ERROR_REQUIRED_MESSAGE, ERROR_SERVER_MESSAGE, SUCCESS_SAVE_DATA_MESSAGE } from 'shared/consts/user-messages.consts';
-import { CustomErrorStateMatcher, MismatchErrorStateMatcher } from 'shared/helpers/error-state-matcher';
-import { UserService } from 'shared/services/user.service';
+import { ERROR_INVALID_USER_PASSWORD, ERROR_MAX_LENGTH_PASSWORD_MESSAGE, ERROR_MIN_LENGTH_PASSWORD_MESSAGE, ERROR_MISMATCH_PASSWORDS_MESSAGE, ERROR_REQUIRED_MESSAGE, ERROR_SERVER_MESSAGE, SUCCESS_SAVE_DATA_MESSAGE } from 'src/app/shared/consts/user-messages.consts';
+import { CustomErrorStateMatcher, MismatchErrorStateMatcher } from 'src/app/shared/helpers/error-state-matcher';
+import { UserService } from 'src/app/shared/services/user.service';
 import { ChangePasswordView } from '../../models/change-password-view';
 import { passwordsMatch } from '../../validators/password.validator';
 

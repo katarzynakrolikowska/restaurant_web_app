@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { WARNING_INVALID_CLAIMS } from 'shared/consts/user-messages.consts';
-import { AuthService } from 'shared/services/auth.service';
+import { WARNING_INVALID_CLAIMS } from '../consts/user-messages.consts';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'

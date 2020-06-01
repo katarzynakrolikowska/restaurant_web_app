@@ -2,7 +2,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { CART_ID } from 'shared/consts/app.consts';
 import { CartItemsSharedService } from 'shared/services/cart-items-shared.service';
 import { CartService } from 'shared/services/cart.service';
 import { SignalRService } from 'shared/services/signal-r.service';

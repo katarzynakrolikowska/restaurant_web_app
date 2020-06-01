@@ -112,7 +112,7 @@ namespace JagWebApp.Controllers
             await _unitOfWork.CompleteAsync();
 
             await _hub.Clients.All.SendAsync(
-                "transferUpdatedItem", 
+                MenuItemHub.UPDATED_ITEM_METHOD_NAME, 
                 _mapper.Map<IEnumerable<MenuItem>, IEnumerable<MenuItemResource>>(updatedMenuItems));
 
             return Ok(_mapper.Map<OrderResource>(order));
