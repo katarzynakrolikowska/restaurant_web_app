@@ -77,6 +77,86 @@ namespace JagWebApp.Tests.Controllers
         }
 
         [Fact]
+        public void GetMenuItemAsync_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.GetMenuItemAsync(It.IsAny<int>());
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void GetMenuItemAsync_WhenCalled_GetMenuItemFromRepoIsCalled()
+        {
+            _menuRepositoryMock.MockGetMenuItem(new MenuItem());
+
+            await _controller.GetMenuItemAsync(It.IsAny<int>());
+
+            _menuRepositoryMock.VerifyGetMenuItem();
+        }
+
+        [Fact]
+        public async void GetMenuItemAsync_WhenMenuItemIsNull_ReturnsNotFoundResult()
+        {
+            MenuItem item = null;
+            _menuRepositoryMock.MockGetMenuItem(item);
+
+            var result = await _controller.GetMenuItemAsync(It.IsAny<int>()) as NotFoundResult;
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void GetMenuItemAsync_WhenMenuItemExists_ReturnsOkObjectResult()
+        {
+            _menuRepositoryMock.MockGetMenuItem(new MenuItem());
+
+            var result = await _controller.GetMenuItemAsync(It.IsAny<int>()) as OkObjectResult;
+
+            Assert.IsType<MenuItemResource>(result.Value);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public void GetMainMenuItemAsync_WhenCalled_ReturnsIActionResult()
+        {
+            var result = _controller.GetMainMenuItemAsync();
+
+            Assert.IsType<Task<IActionResult>>(result);
+        }
+
+        [Fact]
+        public async void GetMainMenuItemAsync_WhenCalled_GetMainMenuItemFromRepoIsCalled()
+        {
+            _menuRepositoryMock.MockGetMainMenuItem(new MenuItem());
+
+            await _controller.GetMainMenuItemAsync();
+
+            _menuRepositoryMock.VerifyGetMainMenuItem();
+        }
+
+        [Fact]
+        public async void GetMainMenuItemAsync_WhenMainMenuItemIsNull_ReturnsNotFoundResult()
+        {
+            MenuItem item = null;
+            _menuRepositoryMock.MockGetMainMenuItem(item);
+
+            var result = await _controller.GetMainMenuItemAsync() as NotFoundResult;
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void GetMainMenuItemAsync_WhenMainMenuItemExists_ReturnsOkObjectResult()
+        {
+            _menuRepositoryMock.MockGetMainMenuItem(new MenuItem());
+
+            var result = await _controller.GetMainMenuItemAsync() as OkObjectResult;
+
+            Assert.IsType<MenuItemResource>(result.Value);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
         public void CreateAsync_WhenCalled_ReturnsIActionResult()
         {
             var result = _controller.CreateAsync(It.IsAny<SaveMenuItemResource>());

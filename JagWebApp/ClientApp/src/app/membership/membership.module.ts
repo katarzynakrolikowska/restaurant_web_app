@@ -23,17 +23,17 @@ import { UserDataTabsComponent } from './components/user-data-tabs/user-data-tab
     SharedModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'user',
         runGuardsAndResolvers: 'always',
         canActivateChild: [AuthGuard],
         children: [
           {
-            path: 'user/data/address/new',
+            path: 'data/address/new',
             component: AddressFormComponent,
             canActivate: [NotAdminGuard]
           },
           {
-            path: 'user/data',
+            path: 'data',
             component: UserDataTabsComponent
           },
         ]

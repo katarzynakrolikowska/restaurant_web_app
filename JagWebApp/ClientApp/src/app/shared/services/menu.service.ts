@@ -21,6 +21,11 @@ export class MenuService {
       .pipe(map((response: MenuItem) => response));
   }
 
+  getMainItem() {
+    return this.http.get(this.baseUrl + 'api/menu/main')
+      .pipe(map((response: MenuItem) => response));
+  }
+
   create(menuItem) {
     return this.http.post(this.baseUrl + 'api/menu', menuItem);
   }

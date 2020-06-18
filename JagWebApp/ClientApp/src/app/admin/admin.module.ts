@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { OrderDetailsViewComponent } from 'shared/components/order-details-view/order-details-view.component';
 import { AuthGuard } from 'shared/guards/auth.guard';
 import { SharedModule } from './../shared/shared.module';
 import { AdminCategoryFormDialogComponent } from './components/admin-category-form-dialog/admin-category-form-dialog.component';
@@ -24,47 +25,52 @@ import { AdminGuard } from './guards/admin.guard';
     SharedModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'admin',
         runGuardsAndResolvers: 'always',
         canActivateChild: [AuthGuard],
         children: [
           {
-            path: 'admin/dishes/new',
+            path: 'dishes/new',
             component: AdminDishFormComponent,
             data: { roles: ['Admin'] },
             canActivate: [AdminGuard]
           },
           {
-            path: 'admin/dishes/edit/:id',
+            path: 'dishes/edit/:id',
             component: AdminDishTabsComponent,
             data: { roles: ['Admin'] },
             canActivate: [AdminGuard]
           },
           {
-            path: 'admin/dishes',
+            path: 'dishes',
             component: AdminDishesViewComponent,
             data: { roles: ['Admin'] },
             canActivate: [AdminGuard]
           },
           {
-            path: 'admin/menu/:item/edit/:id',
+            path: 'menu/:item/edit/:id',
             component: AdminMainItemEditFormComponent,
             data: { roles: ['Admin'] },
             canActivate: [AdminGuard]
           },
           {
-            path: 'admin/menu/:item/new',
+            path: 'menu/:item/new',
             component: AdminMenuFormComponent,
             data: { roles: ['Admin'] },
             canActivate: [AdminGuard]
           },
           {
-            path: 'admin/orders',
+            path: 'orders',
             component: AdminOrdersViewComponent,
             canActivate: [AdminGuard]
           },
           {
-            path: 'admin/categories',
+            path: 'orders/:id',
+            component: OrderDetailsViewComponent,
+            canActivate: [AdminGuard]
+          },
+          {
+            path: 'categories',
             component: AdminDishCategoriesViewComponent,
             canActivate: [AdminGuard]
           }

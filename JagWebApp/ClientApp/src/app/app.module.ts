@@ -27,6 +27,11 @@ export function tokenGetter() {
     ShoppingModule,
     RouterModule.forRoot([
       { 
+        path: '', 
+        redirectTo: 'home', 
+        pathMatch: 'full' 
+      },
+      { 
         path: '**', 
         redirectTo: 'home', 
         pathMatch: 'full' 

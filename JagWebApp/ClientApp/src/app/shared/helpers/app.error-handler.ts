@@ -18,7 +18,7 @@ export class AppErrorHandler implements ErrorHandler {
     this.ngZone.run(() => {
       this.spinner.hide();
       this.toastr = this.injector.get(ToastrService);
-      
+      console.log(error)
       this.toastr.error(ERROR_SERVER_MESSAGE);
     });
   }

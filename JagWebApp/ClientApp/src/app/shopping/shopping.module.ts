@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { OrderDetailsViewComponent } from 'shared/components/order-details-view/order-details-view.component';
 import { NotAdminGuard } from 'shared/guards/not-admin.guard';
 import { SharedModule } from './../shared/shared.module';
 import { CartActionButtonsComponent } from './components/cart-action-buttons/cart-action-buttons.component';
@@ -47,6 +48,11 @@ import { UserOrdersViewComponent } from './components/user-orders-view/user-orde
       {
         path: 'checkout',
         component: OrderStepperComponent,
+        canActivate: [NotAdminGuard]
+      },
+      {
+        path: 'user/orders/:id',
+        component: OrderDetailsViewComponent,
         canActivate: [NotAdminGuard]
       },
       {

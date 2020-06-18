@@ -60,6 +60,18 @@ namespace JagWebApp.Controllers
             return Ok(_mapper.Map<MenuItemResource>(item));
         }
 
+        //GET: api/menu/main
+        [AllowAnonymous]
+        [HttpGet("main")]
+        public async Task<IActionResult> GetMainMenuItemAsync()
+        {
+            var item = await _menuRepository.GetMainMenuItemAsync();
+            if (item == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<MenuItemResource>(item));
+        }
+
 
         //POST: api/menu
         [Authorize(Roles = Role.ADMIN)]
