@@ -35,7 +35,7 @@ export class CartViewComponent implements OnInit, OnDestroy {
   }
 
   getPhotoName(dish: Dish) {
-    return dish.mainPhoto ? dish.mainPhoto.thumbnailName : 'default.png';
+    return dish.mainPhoto ? 'uploads/' + dish.mainPhoto.thumbnailName : 'defaults/default-4.png';
   }
 
   clearCart() {

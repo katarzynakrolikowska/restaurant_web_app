@@ -9,7 +9,7 @@
         <div *ngFor="let dish of cartItem.menuItem.dishes">
           <div class="mb-2 row align-items-center">
             <div class="col-3">
-              <img [src]="'/uploads/' + getPhotoName(dish)"
+              <img [src]="getPhotoName(dish)"
                    class="img-circle mr-3">
             </div>
             <div class="col-9 pl-4 pl-md-3">{{ dish.name }}</div>

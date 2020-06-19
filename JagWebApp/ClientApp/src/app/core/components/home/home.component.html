@@ -1,0 +1,32 @@
+<div class="text-center">
+  <p>Witaj <mat-icon matSuffix class="align-middle">sentiment_satisfied_alt</mat-icon></p>
+  <p> Na co masz dzisiaj ochotę?</p>
+  <div class="m-auto carousel-container">
+    <carousel *ngIf="mainMenuItem; else showDefaults"
+              [showIndicators]="false">
+      <slide *ngFor="let dish of mainMenuItem.dishes"> 
+        <img 
+          [src]="dish.mainPhoto ? '/uploads/' + dish.mainPhoto.thumbnailName : '/defaults/default-4.jpg'" 
+          alt="dish.name">
+        <div class="carousel-caption"></div>
+        <h5 class="carousel-caption-text">{{ dish.name }}</h5>
+      </slide>
+    </carousel>
+    <ng-template #showDefaults>
+      <carousel [showIndicators]="false">
+        <slide> 
+          <img [src]="'/defaults/default-1.jpg'" alt="default-1">
+        </slide>
+        <slide> 
+          <img [src]="'/defaults/default-2.jpg'" alt="default-2">
+        </slide>
+        <slide> 
+          <img [src]="'/defaults/default-3.jpg'" alt="default-3">
+        </slide>
+      </carousel>
+    </ng-template>
+    <button mat-stroked-button color="accent" class="font-size-lg mt-5" [routerLink]="['/menu']">
+      ZOBACZ CAŁĄ OFERTĘ
+    </button>
+  </div>
+</div>

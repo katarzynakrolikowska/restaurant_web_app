@@ -59,6 +59,16 @@ namespace JagWebApp.Tests.Mocks
             _menuRepo.Verify(mr => mr.GetMenuItemsAsync());
         }
 
+        public void VerifyGetMenuItem()
+        {
+            _menuRepo.Verify(mr => mr.GetMenuItemAsync(It.IsAny<int>()));
+        }
+
+        public void VerifyGetMainMenuItem()
+        {
+            _menuRepo.Verify(mr => mr.GetMainMenuItemAsync());
+        }
+
         public void VerifyAdd()
         {
             _menuRepo.Verify(mr => mr.Add(It.IsAny<MenuItem>()));

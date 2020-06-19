@@ -40,7 +40,6 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
     this.userService.getSingle()
       .subscribe(customer => {
         this.customer = customer;
-        console.log(customer)
         if (this.customer && this.form)
           this.form.clearValidators();
       });

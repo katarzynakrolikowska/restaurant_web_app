@@ -36,8 +36,36 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\guards\**" />
+    <Compile Remove="ClientApp\src\app\helpers\**" />
+    <Compile Remove="ClientApp\src\app\models\**" />
+    <Compile Remove="ClientApp\src\app\services\**" />
+    <Compile Remove="ClientApp\src\app\user-messages\**" />
+    <Compile Remove="ClientApp\src\app\validators\**" />
+    <Compile Remove="ClientApp\src\test\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\guards\**" />
+    <Content Remove="ClientApp\src\app\helpers\**" />
+    <Content Remove="ClientApp\src\app\models\**" />
+    <Content Remove="ClientApp\src\app\services\**" />
+    <Content Remove="ClientApp\src\app\user-messages\**" />
+    <Content Remove="ClientApp\src\app\validators\**" />
+    <Content Remove="ClientApp\src\test\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\guards\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\helpers\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\models\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\services\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\user-messages\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\validators\**" />
+    <EmbeddedResource Remove="ClientApp\src\test\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\guards\**" />
+    <None Remove="ClientApp\src\app\helpers\**" />
+    <None Remove="ClientApp\src\app\models\**" />
+    <None Remove="ClientApp\src\app\services\**" />
+    <None Remove="ClientApp\src\app\user-messages\**" />
+    <None Remove="ClientApp\src\app\validators\**" />
+    <None Remove="ClientApp\src\test\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -102,67 +130,6 @@
     <None Remove="ClientApp\src\app\app-routing.module.ts" />
     <None Remove="ClientApp\src\app\app.error-handler.ts" />
     <None Remove="ClientApp\src\app\consts\app-consts.ts" />
-    <None Remove="ClientApp\src\app\helpers\custom-mat-paginator-intl.ts" />
-    <None Remove="ClientApp\src\app\helpers\error-state-matcher.ts" />
-    <None Remove="ClientApp\src\app\models\cart-item.ts" />
-    <None Remove="ClientApp\src\app\models\cart.ts" />
-    <None Remove="ClientApp\src\app\models\category.ts" />
-    <None Remove="ClientApp\src\app\models\change-password-view.ts" />
-    <None Remove="ClientApp\src\app\models\dish.ts" />
-    <None Remove="ClientApp\src\app\models\input-autocomplete-data.ts" />
-    <None Remove="ClientApp\src\app\models\main-menu-item.ts" />
-    <None Remove="ClientApp\src\app\models\menu-button.ts" />
-    <None Remove="ClientApp\src\app\models\ordinary-menu-item.ts" />
-    <None Remove="ClientApp\src\app\models\photo.ts" />
-    <None Remove="ClientApp\src\app\models\save-cart.ts" />
-    <None Remove="ClientApp\src\app\models\save-menu-item.ts" />
-    <None Remove="ClientApp\src\app\models\update-menu-item.ts" />
-    <None Remove="ClientApp\src\app\models\user.ts" />
-    <None Remove="ClientApp\src\test\mocks\signal-r.mock.ts" />
-    <None Remove="ClientApp\src\test\stubs\cart.stub.ts" />
-    <None Remove="ClientApp\src\test\stubs\photo.stub.ts" />
-    <None Remove="ClientApp\src\app\user-messages\messages.ts" />
-    <None Remove="ClientApp\src\app\validators\email.validaor.ts" />
-    <None Remove="ClientApp\src\app\validators\menu-item.validator.ts" />
-    <None Remove="ClientApp\src\app\validators\password.validator.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\app-routing.module.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\app.error-handler.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\helpers\error-state-matcher.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\helpers\custom-mat-paginator-intl.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\mat-component.module.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\cart-item.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\cart.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\category.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\change-password-view.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\dish.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\input-autocomplete-data.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\menu-button.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\ordinary-menu-item.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\photo.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\save-cart.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\save-menu-item.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\update-menu-item.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\mocks\signal-r.mock.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\activated-route.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\cart.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\category.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\menu-item.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\ordinary-menu-item.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\photo.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\test\stubs\update-menu-item.stub.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\user-messages\messages.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\validators\email.validaor.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\validators\menu-item.validator.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\validators\password.validator.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\src\app\guards\" />
-    <Folder Include="ClientApp\src\app\services\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

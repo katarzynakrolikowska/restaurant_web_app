@@ -30,7 +30,7 @@ export class AdminDishFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute) {
 
-    if (route.snapshot.routeConfig.path === 'admin/dishes/new')
+    if (route.snapshot.routeConfig.path === 'dishes/new')
       return;
     else {
       this.id = +this.route.snapshot.params['id'];

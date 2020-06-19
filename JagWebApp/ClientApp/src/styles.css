@@ -126,7 +126,6 @@ button:focus {
   overflow-y: hidden !important;
 } 
 
-
 @media (max-width: 767px) {
   .mat-tab-body-content {
     padding-left: 10px;

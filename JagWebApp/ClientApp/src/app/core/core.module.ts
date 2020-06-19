@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotAuthGuard } from 'shared/guards/not-auth.guard';
 import { SharedModule } from './../shared/shared.module';
@@ -25,11 +26,13 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
   ],
   imports: [
     NgxSpinnerModule,
+    CarouselModule.forRoot(),
     SharedModule,
     RouterModule.forChild([
       { 
         path: 'home', 
-        component: HomeComponent },
+        component: HomeComponent 
+      },
       { 
         path: 'login', 
         component: LoginPanelComponent,
