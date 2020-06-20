@@ -44,8 +44,7 @@ namespace JagWebApp.Persistence
 
         public Photo SavePhoto(Dish dish, IFormFile file)
         {
-            var dimensions = new ImageDimensions() { Height = 150, Width = 200 };
-            var thumbnailName = _fileService.SaveFile(file, ROOT_NAME, dimensions);
+            var thumbnailName = _fileService.SaveFile(file, ROOT_NAME);
 
             var photo = new Photo
             {

@@ -5,7 +5,7 @@ namespace JagWebApp.Core
 {
     public interface IFileService
     {
-        string SaveFile(IFormFile file, string root, ImageDimensions dimensions);
+        string SaveFile(IFormFile file, string root);
 
         void RemoveFile(string fileName, string root);
     }

@@ -1,7 +1,8 @@
   <mat-card class="dish-card mb-4">
     <img *ngIf="dish.mainPhoto; else defaultImage"
          mat-card-image src="/uploads/{{ dish.mainPhoto.thumbnailName }}"
-         alt="Danie">
+         alt="Danie"
+         class="img-dimensions">
     <ng-template #defaultImage>
       <div class="text-center">
         <img mat-card-image src="/defaults/default-4.png" alt="Danie" class="img-default-dimensions">
