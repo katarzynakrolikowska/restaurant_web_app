@@ -15,6 +15,7 @@ import { OrdinaryMenuItemCardComponent } from './components/ordinary-menu-item-c
 import { OrdinaryMenuItemsViewComponent } from './components/ordinary-menu-items-view/ordinary-menu-items-view.component';
 import { ToolbarIconButtonsComponent } from './components/toolbar-icon-buttons/toolbar-icon-buttons.component';
 import { UserOrdersViewComponent } from './components/user-orders-view/user-orders-view.component';
+import { AuthGuard } from 'shared/guards/auth.guard';
 
 
 
@@ -47,8 +48,15 @@ import { UserOrdersViewComponent } from './components/user-orders-view/user-orde
       },
       {
         path: 'checkout',
-        component: OrderStepperComponent,
-        canActivate: [NotAdminGuard]
+        runGuardsAndResolvers: 'always',
+        canActivateChild: [AuthGuard],
+        children: [
+          {
+            path: '',
+            component: OrderStepperComponent,
+            canActivate: [NotAdminGuard]
+          }
+        ]
       },
       {
         path: 'user/orders/:id',
