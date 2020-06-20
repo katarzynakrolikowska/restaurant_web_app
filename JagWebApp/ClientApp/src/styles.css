@@ -72,6 +72,11 @@ button:focus {
   background-color: #F7F9F9;
 }
 
+.img-dimensions {
+  max-width: 255px;
+  max-height: 140px;
+}
+
 .img-default-dimensions {
   max-height: 157.5px !important;
   width: 150px !important;
