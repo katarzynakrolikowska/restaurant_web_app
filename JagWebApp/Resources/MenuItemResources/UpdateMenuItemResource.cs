@@ -1,5 +1,7 @@
 ﻿using DataAnnotationsExtensions;
+using JagWebApp.Core.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace JagWebApp.Resources.MenuItemResources
@@ -15,5 +17,10 @@ namespace JagWebApp.Resources.MenuItemResources
         [Min(0)]
         [Required]
         public int Available { get; set; }
+
+        public UpdateMenuItemResource()
+        {
+            Dishes = new Collection<int>();
+        }
     }
 }

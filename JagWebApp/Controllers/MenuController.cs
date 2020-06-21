@@ -108,9 +108,11 @@ namespace JagWebApp.Controllers
             await _cartRepository.UpdateCartItemAmountOfMenuItemAsync(item);
             await _unitOfWork.CompleteAsync();
 
+            var updatedItem = await _menuRepository.GetMenuItemAsync(item.Id);
+
             await _hub.Clients.All.SendAsync(
                 MenuItemHub.UPDATED_ITEM_METHOD_NAME,
-                _mapper.Map<IEnumerable<MenuItemResource>>(new Collection<MenuItem>() { item }));
+                _mapper.Map<IEnumerable<MenuItemResource>>(new Collection<MenuItem>() { updatedItem }));
 
             return Ok();
         }
