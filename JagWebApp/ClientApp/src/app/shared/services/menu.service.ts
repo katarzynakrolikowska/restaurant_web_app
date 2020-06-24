@@ -13,7 +13,7 @@ export class MenuService {
 
   getAll() {
     return this.http.get(this.baseUrl + 'api/menu')
-      .pipe(map((response: Array<MenuItem>) => response));
+      .pipe(map((response: MenuItem[]) => response));
   }
 
   getSingle(itemId: number) {

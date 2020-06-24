@@ -35,17 +35,20 @@ export class AdminMainItemEditFormComponent implements OnInit {
 
   ngOnInit() {
     this.menuService.getSingle(this.itemId)
-      .subscribe(menuItem => {
-        if (!menuItem.isMain) {
-          this.toastr.error(ERROR_SERVER_MESSAGE);
-          this.router.navigate(['menu']);
-        }
-        this.mainMenuItemToUpdate = menuItem;
-      }, (errorResponse: HttpErrorResponse) => {
+      .subscribe(
+        menuItem => {
+          if (!menuItem.isMain) {
+            this.toastr.error(ERROR_SERVER_MESSAGE);
+            this.router.navigate(['menu']);
+          }
+          this.mainMenuItemToUpdate = menuItem;
+        }, 
+        (errorResponse: HttpErrorResponse) => {
           if (errorResponse.status !== 404)
             this.toastr.error(ERROR_SERVER_MESSAGE);
 
           this.router.navigate(['menu']);
-        });
+        }
+      );
   }
 }

@@ -27,13 +27,6 @@ export class CartViewComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  get cartValue() {
-    let value = 0;
-
-    this.cart.items.forEach(item => value += item.menuItem.price * item.amount);
-    return value;
-  }
-
   getPhotoName(dish: Dish) {
     return dish.mainPhoto ? 'uploads/' + dish.mainPhoto.thumbnailName : 'defaults/default-4.png';
   }

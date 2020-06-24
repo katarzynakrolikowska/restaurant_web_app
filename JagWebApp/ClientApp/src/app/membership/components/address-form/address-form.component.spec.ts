@@ -11,7 +11,7 @@ import { customerStub } from 'shared/test/stubs/customer.stub';
 import { AddressFormComponent } from './address-form.component';
 
 
-export const activatedRouteStub2 = {
+export const activatedRouteStub = {
   snapshot: {
       routeConfig: {
           path: 'user/data/address/edit'
@@ -37,7 +37,7 @@ describe('AddressFormComponent', () => {
       ],
       providers: [
         { provide: 'BASE_URL', useValue: baseURL },
-        { provide: ActivatedRoute, useValue: activatedRouteStub2 }
+        { provide: ActivatedRoute, useValue: activatedRouteStub }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

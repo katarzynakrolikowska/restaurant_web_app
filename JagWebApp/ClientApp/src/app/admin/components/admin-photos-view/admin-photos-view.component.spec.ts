@@ -16,7 +16,7 @@ import { AdminPhotosViewComponent } from './admin-photos-view.component';
 
 describe('AdminPhotosViewComponent', () => {
   const baseURL = '';
-  let photos: Array<Photo> = [];
+  let photos: Photo[] = [];
   
   let component: AdminPhotosViewComponent;
   let fixture: ComponentFixture<AdminPhotosViewComponent>;

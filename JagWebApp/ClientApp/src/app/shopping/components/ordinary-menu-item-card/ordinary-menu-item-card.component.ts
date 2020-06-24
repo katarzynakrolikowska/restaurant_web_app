@@ -5,8 +5,8 @@ import { DialogConfirmComponent } from 'shared/components/dialog-confirm/dialog-
 import { SUCCESS_UPDATE_MENU_MESSAGE } from 'shared/consts/user-messages.consts';
 import { UpdateMenuItem } from 'shared/models/update-menu-item';
 import { MenuService } from 'shared/services/menu.service';
-import { AdminOrdinaryItemEditDialogComponent } from '../../../admin/components/admin-ordinary-item-edit-dialog/admin-ordinary-item-edit-dialog.component';
-import { OrdinaryMenuItem } from '../../models/ordinary-menu-item';
+import { AdminOrdinaryItemEditDialogComponent } from 'src/app/admin/components/admin-ordinary-item-edit-dialog/admin-ordinary-item-edit-dialog.component';
+import { OrdinaryMenuItem } from 'src/app/shopping/models/ordinary-menu-item';
 
 @Component({
   selector: 'app-ordinary-menu-item-card',
@@ -23,13 +23,14 @@ export class OrdinaryMenuItemCardComponent {
     public dialog: MatDialog) { }
 
   openConfirmingDialog(): void { 
-    let data = this.menuItem.ordered > 0
+    const data = this.menuItem.ordered > 0
       ? 'Wybrana pozycja jest już zamówiona. Czy napewno chcesz ją usunąć?'
       : 'Czy napewno chcesz usunąć wybraną pozycję?';
 
     const dialogRef = this.dialog.open(
       DialogConfirmComponent,
-      { data: data });
+      { data: data }
+    );
 
     dialogRef.afterClosed()
       .subscribe(result => {
@@ -56,7 +57,7 @@ export class OrdinaryMenuItemCardComponent {
   }
 
   private updateItem(itemId, data) {
-    let item: UpdateMenuItem = Object.assign({}, data);
+    const item: UpdateMenuItem = Object.assign({}, data);
     
     this.menuService.update(itemId, item)
       .subscribe(() => this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE));

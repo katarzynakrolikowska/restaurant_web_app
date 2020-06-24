@@ -36,11 +36,35 @@ export class AddressFormComponent implements OnInit {
       });
   }
 
+  get customerName() {
+    return this.form.get('customerName');
+  }
+
+  get phone() {
+    return this.form.get('phone');
+  }
+
+  get street() {
+    return this.form.get('street');
+  }
+
+  get houseNumber() {
+    return this.form.get('houseNumber');
+  }
+
+  get postcode() {
+    return this.form.get('postcode');
+  }
+
+  get city() {
+    return this.form.get('city');
+  }
+
   save() {
     if (this.form.invalid)
       return;
 
-    let address: Address = {
+    const address: Address = {
       customerName: this.customerName.value,
       street: this.street.value,
       houseNumber: this.houseNumber.value,
@@ -48,7 +72,7 @@ export class AddressFormComponent implements OnInit {
       city: this.city.value
     };
 
-    let patchUser = [
+    const patchUser = [
       { op: 'replace', path: "/phoneNumber", value: this.phone.value },
       { op: 'replace', path: "/address", value: address}
     ];
@@ -96,30 +120,6 @@ export class AddressFormComponent implements OnInit {
     return this.city.hasError('required') || this.city.hasError('empty') ? ERROR_REQUIRED_MESSAGE : '';
   }
 
-  get customerName() {
-    return this.form.get('customerName');
-  }
-
-  get phone() {
-    return this.form.get('phone');
-  }
-
-  get street() {
-    return this.form.get('street');
-  }
-
-  get houseNumber() {
-    return this.form.get('houseNumber');
-  }
-
-  get postcode() {
-    return this.form.get('postcode');
-  }
-
-  get city() {
-    return this.form.get('city');
-  }
-
   private initForm() {
     this.form = new FormGroup({
       customerName: new FormControl('', [Validators.required, notEmptyInput()]),
@@ -132,13 +132,12 @@ export class AddressFormComponent implements OnInit {
   }
 
   private setFormValues() {
-    if (this.customer.address) {
-      this.phone.setValue(this.customer.phoneNumber);
-      this.customerName.setValue(this.customer.address.customerName);
-      this.street.setValue(this.customer.address.street);
-      this.houseNumber.setValue(this.customer.address.houseNumber);
-      this.postcode.setValue(this.customer.address.postcode);
-      this.city.setValue(this.customer.address.city);
-    }
+    if (!this.customer.address)
+      return;
+      
+    for (const key in this.form.controls) 
+      this.form.controls[key].setValue(this.customer.address[key]);
+
+    this.phone.setValue(this.customer.phoneNumber);
   }
 }

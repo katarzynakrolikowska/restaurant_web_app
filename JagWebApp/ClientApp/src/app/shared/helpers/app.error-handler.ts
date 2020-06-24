@@ -14,11 +14,10 @@ export class AppErrorHandler implements ErrorHandler {
     private spinner: NgxSpinnerService
   ) { }
 
-  handleError(error: any): void {
+  handleError(): void {
     this.ngZone.run(() => {
       this.spinner.hide();
       this.toastr = this.injector.get(ToastrService);
-      console.log(error)
       this.toastr.error(ERROR_SERVER_MESSAGE);
     });
   }

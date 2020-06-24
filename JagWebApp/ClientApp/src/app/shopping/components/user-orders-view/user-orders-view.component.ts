@@ -10,7 +10,7 @@ import { OrderService } from 'shared/services/order.service';
   styleUrls: ['./user-orders-view.component.css']
 })
 export class UserOrdersViewComponent implements OnInit {
-  orders: Array<Order> = [];
+  orders: Order[] = [];
   displayedColumns: string[] = ['id', 'date', 'total', 'more'];
   dataSource;
 

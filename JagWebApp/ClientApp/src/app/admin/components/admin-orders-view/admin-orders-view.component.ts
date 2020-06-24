@@ -10,7 +10,7 @@ import { OrderService } from 'shared/services/order.service';
   styleUrls: ['./admin-orders-view.component.css']
 })
 export class AdminOrdersViewComponent implements OnInit {
-  orders: Array<Order> = [];
+  orders:Order[] = [];
   displayedColumns: string[] = ['no', 'id', 'user', 'date', 'total', 'status', 'more'];
   dataSource: MatTableDataSource<Order>;
 
@@ -64,7 +64,8 @@ export class AdminOrdersViewComponent implements OnInit {
         if (data[key][k] !== null) 
           search = this.nestedFilterCheck(search, data[key], k);
       }
-    } else 
+    } 
+    else 
       search += data[key];
     
     return search;

@@ -46,7 +46,8 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
 
     this.form = new FormGroup(
       { additionalInfo: new FormControl('') },
-      deliveryDataRequired(this.customer));
+      deliveryDataRequired(this.customer)
+    );
 
       this.subscription = this.cartItemsSharedService.cartContent$
         .subscribe(cart => {
@@ -68,13 +69,6 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
     return cartItem.amount * cartItem.menuItem.price;
   }
 
-  getCartSum() {
-    let sum = 0;
-
-    this.cart.items.forEach(item => sum += item.menuItem.price * item.amount);
-    return sum;
-  }
-
   orderMenu() {
     if (this.form.invalid)
       return;
@@ -82,17 +76,20 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
     let order: SaveOrder = { info: this.form.get('additionalInfo').value }
 
     this.orderService.create(order)
-      .subscribe(order => {
-        this.showDialog(order);
-        this.cartItemsSharedService.shareCart(null);
-      }, (errorRespone: HttpErrorResponse) => {
-        if (errorRespone.status === 404) {
-          this.toastr.error('Wygląda na to, że produkty z Twojego koszyka zostały już wyprzedane :(');
-          this.cart = null;
+      .subscribe(
+        order => {
+          this.showDialog(order);
           this.cartItemsSharedService.shareCart(null);
-        } else
-          this.toastr.error(ERROR_SERVER_MESSAGE);
-      });
+        }, 
+        (errorRespone: HttpErrorResponse) => {
+          if (errorRespone.status === 404) {
+            this.toastr.error('Wygląda na to, że produkty z Twojego koszyka zostały już wyprzedane :(');
+            this.cart = null;
+            this.cartItemsSharedService.shareCart(null);
+          } else
+            this.toastr.error(ERROR_SERVER_MESSAGE);
+        }
+      );
   }
 
   private showDialog(order: Order) {

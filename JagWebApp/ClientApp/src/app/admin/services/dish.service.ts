@@ -12,7 +12,7 @@ export class DishService {
 
   getAll() {
     return this.http.get(this.baseUrl + 'api/dishes')
-      .pipe(map((result: Array<Dish>) => result));
+      .pipe(map((result: Dish[]) => result));
   }
 
   getSingle(id: number) {

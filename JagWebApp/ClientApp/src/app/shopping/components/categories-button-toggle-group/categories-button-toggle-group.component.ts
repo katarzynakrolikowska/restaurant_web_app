@@ -9,7 +9,7 @@ import { CategoryService } from 'shared/services/category.service';
   styleUrls: ['./categories-button-toggle-group.component.css']
 })
 export class CategoriesButtonToggleGroupComponent implements OnInit {
-  categories: Array<Category> = [];
+  categories: Category[] = [];
   
   @Output('onToggleCategory') onToggleCategory = new EventEmitter(); 
 
@@ -17,7 +17,7 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
 
   ngOnInit() {
     this.categoryService.getAll()
-      .subscribe((categories: Array<Category>) => {
+      .subscribe((categories: Category[]) => {
         this.categories = categories.sort((a, b) => a.name.localeCompare(b.name));
         let categoryAll: Category = {
           id: ALL_MENU_ITEMS_CATEGORY_ID,
@@ -38,7 +38,7 @@ export class CategoriesButtonToggleGroupComponent implements OnInit {
     this.onToggleCategory.emit(categoryId);
   }
 
-  checked(id) {
+  isChecked(id) {
     return id === ALL_MENU_ITEMS_CATEGORY_ID;
   }
 }

@@ -18,12 +18,12 @@ export class OrderService {
 
   getAll() {
     return this.http.get(this.baseUrl + 'api/orders/')
-    .pipe(map((orders: Array<Order>) => this.getSortedArray(orders)));
+    .pipe(map((orders: Order[]) => this.getSortedArray(orders)));
   }
 
   getUserOrders() {
     return this.http.get(this.baseUrl + 'api/orders/user')
-      .pipe(map((orders: Array<Order>) => this.getSortedArray(orders)));
+      .pipe(map((orders: Order[]) => this.getSortedArray(orders)));
   }
 
   create(order: SaveOrder){
@@ -35,7 +35,7 @@ export class OrderService {
     return this.http.patch(this.baseUrl + 'api/orders/' + orderId, patchDoc);
   }
 
-  private getSortedArray(array: Array<any>) {
+  private getSortedArray(array: any[]) {
     return array.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 }

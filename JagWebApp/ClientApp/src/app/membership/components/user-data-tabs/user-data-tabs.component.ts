@@ -11,7 +11,7 @@ export class UserDataTabsComponent implements OnInit {
   selected: number;
 
   constructor(
-    private authService: AuthService, 
+    public authService: AuthService, 
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {

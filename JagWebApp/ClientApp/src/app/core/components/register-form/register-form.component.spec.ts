@@ -65,7 +65,7 @@ describe('RegisterFormComponent', () => {
 
   it('should make email control accepts only unique email', () => {
     spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
-    spyOn(authService, 'loggedIn').and.returnValue(false);
+    spyOn(authService, 'isLoggedIn').and.returnValue(false);
     
     emailControl.setValue(emailAddress);
 
@@ -94,7 +94,7 @@ describe('RegisterFormComponent', () => {
     let spyRegister = spyOn(authService, 'register').and.returnValue(empty());
 
     spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(false) : of(true));
-    spyOn(authService, 'loggedIn').and.returnValue(false);
+    spyOn(authService, 'isLoggedIn').and.returnValue(false);
     setValidControls();
 
     component.register();
@@ -106,7 +106,7 @@ describe('RegisterFormComponent', () => {
     let step = 1;
     spyOn(authService, 'register').and.returnValue(of({}));
     spyOn(authService, 'userExists').and.callFake(email => email === emailAddress ? of(false) : of(true));
-    spyOn(authService, 'loggedIn').and.returnValue(false);
+    spyOn(authService, 'isLoggedIn').and.returnValue(false);
     setValidControls();
     component.onNewUserRegistered.subscribe(s => step = s)
 

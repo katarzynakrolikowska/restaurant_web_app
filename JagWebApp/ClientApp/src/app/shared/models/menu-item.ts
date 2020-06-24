@@ -2,7 +2,7 @@ import { Dish } from "./dish";
 
 export interface MenuItem {
   id?: number;
-  dishes: Array<Dish>,
+  dishes: Dish[],
   price: number;
   ordered?: number;
   available: number;

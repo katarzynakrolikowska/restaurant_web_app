@@ -42,6 +42,8 @@ export function tokenGetter() {
         tokenGetter: tokenGetter,
         whitelistedDomains: ["localhost:44363"],
         blacklistedRoutes: ["localhost:44363/api/auth"]
+        // whitelistedDomains: ["jag-restaurant.pl"],
+        // blacklistedRoutes: ["jag-restaurant.pl/api/auth"]
       }
     })
   ],

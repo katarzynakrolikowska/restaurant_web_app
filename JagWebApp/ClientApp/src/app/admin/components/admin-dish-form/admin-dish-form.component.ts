@@ -17,7 +17,7 @@ import { DishService } from '../../services/dish.service';
 })
 export class AdminDishFormComponent implements OnInit {
   form: FormGroup;
-  categories: Array<Category> = [];
+  categories: Category[] = [];
   dish: Dish;
   id;
 
@@ -62,6 +62,18 @@ export class AdminDishFormComponent implements OnInit {
     );
   }
 
+  get name() {
+    return this.form.get('name');
+  }
+
+  get category() {
+    return this.form.get('categoryId');
+  }
+
+  get amount() {
+    return this.form.get('amount');
+  }
+
   save() {
     if (this.form.invalid)
       return;
@@ -97,18 +109,6 @@ export class AdminDishFormComponent implements OnInit {
         : this.amount.hasError('pattern') 
           ? ERROR_PATTERN_MESSAGE 
           : '';
-  }
-
-  get name() {
-    return this.form.get('name');
-  }
-
-  get category() {
-    return this.form.get('categoryId');
-  }
-
-  get amount() {
-    return this.form.get('amount');
   }
 
   private initForm() {

@@ -6,7 +6,7 @@ import { Dish } from 'shared/models/dish';
 import { MenuItem } from 'shared/models/menu-item';
 import { MenuService } from 'shared/services/menu.service';
 import { SignalRService } from 'shared/services/signal-r.service';
-import { OrdinaryMenuItem } from '../../models/ordinary-menu-item';
+import { OrdinaryMenuItem } from 'src/app/shopping/models/ordinary-menu-item';
 
 
 @Component({
@@ -19,9 +19,9 @@ export class MenuViewComponent implements OnInit, OnDestroy {
   categoryMainItem = MAIN_MENU_ITEM_CATEGORY_ID;
   currentSelectedCategoryId = ALL_MENU_ITEMS_CATEGORY_ID;
 
-  ordinaryMenuItems: Array<OrdinaryMenuItem> = [];
+  ordinaryMenuItems: OrdinaryMenuItem[] = [];
   mainMenuItem: MenuItem;
-  filteredMenuItems: Array<OrdinaryMenuItem> = [];
+  filteredMenuItems: OrdinaryMenuItem[] = [];
   subscription: Subscription;
   
   constructor(
@@ -55,7 +55,7 @@ export class MenuViewComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private initMenuItems(menuItems: Array<MenuItem>) {
+  private initMenuItems(menuItems: MenuItem[]) {
     menuItems.forEach(item => {
       !item.isMain ? this.ordinaryMenuItems.push(this.getOrdinaryMenuItem(item)) :
         this.mainMenuItem = item;
@@ -68,11 +68,11 @@ export class MenuViewComponent implements OnInit, OnDestroy {
     this.filteredMenuItems = this.ordinaryMenuItems;
   }
 
-  private sortDishesByCategoryId(array: Array<Dish>) {
+  private sortDishesByCategoryId(array: Dish[]) {
     array.sort((a, b) => a.category.id - b.category.id);
   }
 
-  private sortOrdinaryMenuItemsByCategoryId(array: Array<OrdinaryMenuItem>) {
+  private sortOrdinaryMenuItemsByCategoryId(array: OrdinaryMenuItem[]) {
     array.sort((a, b) => a.dish.category.id - b.dish.category.id);
   }
 
@@ -98,8 +98,8 @@ export class MenuViewComponent implements OnInit, OnDestroy {
       this.updateMenuItemInArray(menuItem, this.filteredMenuItems);
   }
 
-  private updateMenuItemInArray(menuItem: MenuItem, array: Array<OrdinaryMenuItem>) {
-    let index = array.findIndex(item => item.id === menuItem.id);
+  private updateMenuItemInArray(menuItem: MenuItem, array: OrdinaryMenuItem[]) {
+    const index = array.findIndex(item => item.id === menuItem.id);
     array[index].available = menuItem.available;
     array[index].price = menuItem.price;
   }
@@ -114,14 +114,14 @@ export class MenuViewComponent implements OnInit, OnDestroy {
       this.removeItemFromArray(this.filteredMenuItems, item.id);
   }
 
-  private removeItemFromArray(array: Array<any>, itemId) {
-    let index = array.findIndex(i => i.id === itemId);
+  private removeItemFromArray(array: any[], itemId) {
+    const index = array.findIndex(i => i.id === itemId);
     if (index >= 0)
       array.splice(index, 1);
   }
   
   private getOrdinaryMenuItem = (item: MenuItem) => {
-     return {
+    return {
       id: item.id,
       dish: item.dishes[0],
       price: item.price,

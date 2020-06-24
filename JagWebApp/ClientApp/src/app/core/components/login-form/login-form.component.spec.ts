@@ -76,13 +76,13 @@ describe('LoginFormComponent', () => {
   });
 
   it('should set errorLogin to false after successful login', () => {
-    component.errorLogin = true;
+    component.isIncorrectLogin = true;
     spyOn(authService, 'login').and.returnValue(of(Object));
     setControls();
 
     component.login();
 
-    expect(component.errorLogin).toBeFalsy();
+    expect(component.isIncorrectLogin).toBeFalsy();
   });
 
   it('should redirect user to home page after successful login', () => {
@@ -103,7 +103,7 @@ describe('LoginFormComponent', () => {
 
     component.login();
 
-    expect(component.errorLogin).toBeTruthy();
+    expect(component.isIncorrectLogin).toBeTruthy();
     expect(component.errorMessage).not.toBe('');
   });
 

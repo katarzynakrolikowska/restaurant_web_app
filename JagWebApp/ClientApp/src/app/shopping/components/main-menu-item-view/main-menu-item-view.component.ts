@@ -13,14 +13,14 @@ import { MenuButton } from '../../models/menu-button';
   styleUrls: []
 })
 export class MainMenuItemViewComponent implements OnInit {
-  buttons: Array<MenuButton> = [];
+  buttons: MenuButton[] = [];
 
   @Input('main-menu-item') mainMenuItem: MenuItem;
 
   constructor(
     private router: Router,
     private menuService: MenuService,
-    private authService: AuthService,
+    public authService: AuthService,
     public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -56,7 +56,7 @@ export class MainMenuItemViewComponent implements OnInit {
   }
 
   private openConfirmingDialog(): void { 
-    let data = this.mainMenuItem.ordered > 0
+    const data = this.mainMenuItem.ordered > 0
       ? 'Wybrana pozycja jest już zamówiona. Czy napewno chcesz ją usunąć?'
       : 'Czy napewno chcesz usunąć wybraną pozycję?';
 

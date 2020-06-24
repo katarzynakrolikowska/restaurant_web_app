@@ -6,7 +6,7 @@ export interface Order {
   id?: number,
   user?: Customer,
   date: Date,
-  items: Array<OrderedItem>,
+  items: OrderedItem[],
   total: number,
   info?: string;
   status: Status;
