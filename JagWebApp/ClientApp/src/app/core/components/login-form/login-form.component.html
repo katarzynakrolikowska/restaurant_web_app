@@ -21,7 +21,7 @@
   <button mat-raised-button color="primary" type="submit" class="my-4">Zaloguj</button>
 </form>
 
-<alert *ngIf="errorLogin" type="danger">
+<alert *ngIf="isIncorrectLogin" type="danger">
   {{ errorMessage }}
 </alert>
 

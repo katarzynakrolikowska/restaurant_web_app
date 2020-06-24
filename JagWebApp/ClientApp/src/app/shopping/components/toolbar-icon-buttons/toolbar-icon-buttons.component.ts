@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MenuButton } from '../../models/menu-button';
 
 @Component({
@@ -6,22 +6,14 @@ import { MenuButton } from '../../models/menu-button';
   templateUrl: './toolbar-icon-buttons.component.html',
   styleUrls: []
 })
-export class ToolbarIconButtonsComponent implements OnInit {
-  isMobile: boolean;
+export class ToolbarIconButtonsComponent {
 
-  @Input('buttons') buttons: Array<MenuButton> = [];
+  @Input('buttons') buttons: MenuButton[] = [];
   @Output('onButtonClick') onButtonClick = new EventEmitter();
 
   constructor() { }
 
-  ngOnInit() {
-    this.isMobile = this.getIsMobile();
-    window.onresize = () => {
-      this.isMobile = this.getIsMobile();
-    };
-  }
-
-  getIsMobile(): boolean {
+  get isMobile(): boolean {
     const width = document.documentElement.clientWidth;
     const breakpoint = 768;
 

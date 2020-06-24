@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Cart } from '../../models/cart';
-import { MenuItem } from '../../models/menu-item';
-import { CartItemsSharedService } from '../../services/cart-items-shared.service';
-import { CartService } from '../../services/cart.service';
-import { SignalRService } from '../../services/signal-r.service';
+import { Cart } from 'shared/models/cart';
+import { MenuItem } from 'shared/models/menu-item';
+import { CartItemsSharedService } from 'shared/services/cart-items-shared.service';
+import { CartService } from 'shared/services/cart.service';
+import { SignalRService } from 'shared/services/signal-r.service';
 
 @Component({
   selector: 'app-nav-cart-button',
@@ -24,7 +24,7 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
     private signalRService: SignalRService) { }
 
   ngOnInit() {
-    let cartId = this.cartService.cartId;
+    const cartId = this.cartService.cartId;
 
     if (cartId)
       this.initCart(cartId)
@@ -50,14 +50,16 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
           this.shareCart();
           this.cartService.removeCartId();
         });
-    } else if (this.userId && this.cartItemsQuantity === 0) {
+    } 
+    else if (this.userId && this.cartItemsQuantity === 0) {
       this.cartService.getUserCart()
         .subscribe(cart => {
           this.cart = cart;
           this.setCartItemsQuantity();
           this.shareCart();
         });
-    } else {
+    } 
+    else {
       this.cart = null;
       this.cartItemsQuantity = 0;
       this.shareCart();
@@ -108,7 +110,7 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
         if (!this.cart)
           return;
 
-        let index = this.cart.items.findIndex(ci => ci.menuItem.id === item.id);
+        const index = this.cart.items.findIndex(ci => ci.menuItem.id === item.id);
         if (index < 0)
           return;
 
@@ -124,7 +126,7 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateCart(item: MenuItem) {
-    let index = this.cart.items.findIndex(ci => ci.menuItem.id === item.id);
+    const index = this.cart.items.findIndex(ci => ci.menuItem.id === item.id);
     if (index < 0)
       return;
 

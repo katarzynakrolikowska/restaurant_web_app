@@ -20,6 +20,14 @@ export class CartService implements OnInit {
     this.headers = this.headers.append('content-type', 'application/json');
   }
 
+  get cartId() {
+    return localStorage.getItem(CART_ID);
+  }
+
+  set cartId(cartId: string) {
+    localStorage.setItem(CART_ID, cartId);
+  }
+
   getSingle(id) {
     return this.http.get(this.baseUrl + 'api/carts/' + id)
       .pipe(map((result: Cart) => result));
@@ -27,7 +35,7 @@ export class CartService implements OnInit {
 
   getUserCart() {
     return this.http.get(this.baseUrl + 'api/carts/user')
-      .pipe(map((result: Cart) => result));
+      .pipe(map((result: Cart) => new Cart(result.id, result.items, result.userId)));
   }
 
   create(cart: SaveCart) {
@@ -47,14 +55,6 @@ export class CartService implements OnInit {
 
   delete(cartId) {
     return this.http.delete(this.baseUrl + 'api/carts/' + cartId);
-  }
-
-  get cartId() {
-    return localStorage.getItem(CART_ID);
-  }
-
-  set cartId(cartId: string) {
-    localStorage.setItem(CART_ID, cartId);
   }
 
   removeCartId() {

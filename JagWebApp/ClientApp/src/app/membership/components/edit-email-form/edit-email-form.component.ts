@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { EmailValidators } from 'src/app/membership/validators/email.validaor';
 import { ERROR_EMAIL_MESSAGE, ERROR_REQUIRED_MESSAGE, ERROR_UNIQUE_EMAIL_MESSAGE, SUCCESS_SAVE_DATA_MESSAGE } from 'src/app/shared/consts/user-messages.consts';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserService } from 'src/app/shared/services/user.service';
-import { EmailValidators } from '../../validators/email.validaor';
 
 
 @Component({
@@ -53,7 +53,7 @@ export class EditEmailFormComponent implements OnInit {
 
     this.spinner.show();
 
-    var patchUser = [
+    const patchUser = [
       { op: "replace", path: "/email", value: this.email.value },
       { op: "replace", path: "/userName", value: this.email.value }
     ];

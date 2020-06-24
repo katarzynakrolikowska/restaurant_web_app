@@ -22,11 +22,11 @@ import { menuItemMatch } from '../../validators/menu-item.validator';
 export class AdminMenuFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
-  dishesFromService: Array<Dish> = [];
-  dishesGroup: Array<InputAutocompleteData> = [];
-  filteredDishesGroup: Array<InputAutocompleteData> = [];
+  dishesFromService: Dish[] = [];
+  dishesGroup: InputAutocompleteData[] = [];
+  filteredDishesGroup: InputAutocompleteData[] = [];
   routeParam: string;
-  dishesToSave: Array<Dish> = [];
+  dishesToSave: Dish[] = [];
 
   @Input('main-menu-item-to-update') mainMenuItemToUpdate: MenuItem;
   @Input('is-updating') isUpdating: boolean;
@@ -49,7 +49,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     
     this.dishService.getAll()
       .subscribe(dishes => {
-        this.dishesFromService = dishes as Array<Dish>;
+        this.dishesFromService = dishes as Dish[];
         this.setDishValidators();
         this.setDishesGroup();
 
@@ -65,12 +65,6 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     }
   }
 
-  filterDishes() {
-    this.filteredDishesGroup = this.dishesGroup;
-    if (this.dish.value)
-      this.filteredDishesGroup = this.filterGroup(this.dish.value);
-  }
-
   get dish() {
     return this.form.get('dish');
   }
@@ -81,6 +75,12 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
 
   get available() {
     return this.form.get('available');
+  }
+
+  filterDishes() {
+    this.filteredDishesGroup = this.dishesGroup;
+    if (this.dish.value)
+      this.filteredDishesGroup = this.filterGroup(this.dish.value);
   }
 
   getDishErrorMessage() {
@@ -119,7 +119,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     this.filteredDishesGroup = this.dishesGroup;
   }
   
-  updateDishesToSave(dishes: Array<Dish>) {
+  updateDishesToSave(dishes: Dish[]) {
     this.dishesToSave = dishes;
     if (this.dishesToSave.length === 0)
       this.dish.setErrors({ dishesEmpty: true });
@@ -139,7 +139,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
   }
 
   private saveItem() {
-    let item: SaveMenuItem = {
+    const item: SaveMenuItem = {
       dishes: this.getIdsOfDishesToSave(),
       price: this.price.value,
       available: this.available.value,
@@ -147,20 +147,24 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     };
 
     this.menuService.create(item)
-      .subscribe(() => {
-        this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
-        this.router.navigate(['menu']);
-      }, (errorResponse: HttpErrorResponse) => {
-        if (errorResponse.error === 'Zestaw dnia już istnieje') {
-          this.toastr.error(errorResponse.error);
+      .subscribe(
+        () => {
+          this.toastr.success(SUCCESS_UPDATE_MENU_MESSAGE);
           this.router.navigate(['menu']);
-        } else
-          this.toastr.error(ERROR_SERVER_MESSAGE);
-      });
+        }, 
+        (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error === 'Zestaw dnia już istnieje') {
+            this.toastr.error(errorResponse.error);
+            this.router.navigate(['menu']);
+          } 
+          else
+            this.toastr.error(ERROR_SERVER_MESSAGE);
+        }
+      );
   }
 
   private updateItem() {
-    let item: UpdateMenuItem = {
+    const item: UpdateMenuItem = {
       dishes: this.getIdsOfDishesToSave(),
       price: this.price.value,
       available: this.available.value
@@ -188,7 +192,7 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
   };
 
   private setDishesGroup() {
-    let group = {};
+    const group = {};
 
     this.dishesFromService.forEach(dish => {
       group[dish.category.name] = group[dish.category.name] || [];
@@ -197,10 +201,10 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
     });
 
     for (let [key, value] of Object.entries(group)) {
-      let dishes = value as Array<Dish>;
+      const dishes = value as Dish[];
       dishes.sort((a, b) => a.name.localeCompare(b.name));
 
-      let data: InputAutocompleteData = {
+      const data: InputAutocompleteData = {
         categoryName: key,
         dishes: dishes
       };
@@ -210,7 +214,8 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
   }
 
   private getIdsOfDishesToSave() {
-    let ids: Array<number> = [];
+    const ids: number[] = [];
+
     if (this.routeParam === 'mainitem') 
       this.dishesToSave.forEach(d => ids.push(d.id));
 
@@ -218,9 +223,9 @@ export class AdminMenuFormComponent implements OnInit, OnChanges {
   }
 
   private setDishValidators() {
-    this.routeParam === 'item' ?
-      this.dish.setValidators([Validators.required, menuItemMatch(this.dishesFromService)]) : 
-      this.dish.setValidators(menuItemMatch(this.dishesFromService));
+    this.routeParam === 'item' 
+      ? this.dish.setValidators([Validators.required, menuItemMatch(this.dishesFromService)]) 
+      : this.dish.setValidators(menuItemMatch(this.dishesFromService));
   }
 
   private initForm() {

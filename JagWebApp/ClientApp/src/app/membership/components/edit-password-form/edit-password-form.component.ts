@@ -17,7 +17,7 @@ import { passwordsMatch } from '../../validators/password.validator';
 })
 export class EditPasswordFormComponent implements OnInit {
   form: FormGroup;
-  view: ChangePasswordView;
+  changePasswordView: ChangePasswordView;
   errorMessage: string;
   invalid: boolean = false;
   matcher = new CustomErrorStateMatcher();
@@ -34,26 +34,39 @@ export class EditPasswordFormComponent implements OnInit {
     this.form.setValidators(passwordsMatch(this.newPassword, this.confirmPassword));
   }
 
+  get currentPassword() {
+    return this.form.get('currentPassword');
+  }
+
+  get newPassword() {
+    return this.form.get('newPassword');
+  }
+
+  get confirmPassword() {
+    return this.form.get('confirmPassword');
+  }
+
   savePassword() {
     if (this.form.invalid)
       return;
 
     this.spinner.show();
-    this.view = Object.assign({}, this.form.value);
+    this.changePasswordView = Object.assign({}, this.form.value);
 
-    this.userService.updatePassword(this.view)
-      .subscribe(() => {
-        this.invalid = false;
-        this.spinner.hide();
-        this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
-      }, (error: HttpErrorResponse) => {
-        this.invalid = true;
-        this.spinner.hide();
+    this.userService.updatePassword(this.changePasswordView)
+      .subscribe(
+        () => {
+          this.invalid = false;
+          this.spinner.hide();
+          this.toastr.success(SUCCESS_SAVE_DATA_MESSAGE);
+        }, 
+        (error: HttpErrorResponse) => {
+          this.invalid = true;
+          this.spinner.hide();
 
-        error.status === 400 ?
-          this.errorMessage = ERROR_INVALID_USER_PASSWORD :
-          this.errorMessage = ERROR_SERVER_MESSAGE;
-      });
+          error.status === 400 ? this.errorMessage = ERROR_INVALID_USER_PASSWORD : this.errorMessage = ERROR_SERVER_MESSAGE;
+        }
+      );
 
     this.form.reset();
   }
@@ -74,18 +87,6 @@ export class EditPasswordFormComponent implements OnInit {
 
   getMismatchErrorMessage() {
     return ERROR_MISMATCH_PASSWORDS_MESSAGE;
-  }
-
-  get currentPassword() {
-    return this.form.get('currentPassword');
-  }
-
-  get newPassword() {
-    return this.form.get('newPassword');
-  }
-
-  get confirmPassword() {
-    return this.form.get('confirmPassword');
   }
 
   private initForm() {

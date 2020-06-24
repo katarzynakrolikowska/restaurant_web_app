@@ -27,13 +27,13 @@ describe('AuthGuard', () => {
   });
 
   it('should return true if user is logged in', inject([AuthGuard], (guard: AuthGuard) => {
-    spyOn(authService, 'loggedIn').and.returnValue(true);
+    spyOn(authService, 'isLoggedIn').and.returnValue(true);
 
     expect(guard.canActivateChild(next, state)).toBeTruthy();
   }));
 
   it('should navigate to login page if user is not logged in', inject([AuthGuard], (guard: AuthGuard) => {
-    spyOn(authService, 'loggedIn').and.returnValue(false);
+    spyOn(authService, 'isLoggedIn').and.returnValue(false);
     let spy = spyOn(router, 'navigate');
 
     expect(guard.canActivateChild(next, state)).toBeFalsy();

@@ -15,7 +15,7 @@ import { PhotoService } from '../../services/photo.service';
 })
 export class AdminPhotosViewComponent implements OnInit {
   id: number;
-  photos: Array<Photo> = [];
+  photos: Photo[] = [];
 
   @ViewChild('fileInput', { static: true }) fileInput: FileInputComponent;
 
@@ -32,21 +32,20 @@ export class AdminPhotosViewComponent implements OnInit {
   }
   
   uploadPhoto() {
-    var file = this.fileInput.value.files[0];
+    const file = this.fileInput.value.files[0];
     this.fileInput.clear();
 
     this.photoService.upload(this.id, file)
       .subscribe(
         photo => this.photos.push(photo),
-        (errorRespone: HttpErrorResponse) => 
-          errorRespone.status === 400 ? 
-          this.toastr.error(errorRespone.error) : this.toastr.error(ERROR_SERVER_MESSAGE));
+      (errorRespone: HttpErrorResponse) => 
+        errorRespone.status === 400 ? this.toastr.error(errorRespone.error) : this.toastr.error(ERROR_SERVER_MESSAGE));
   }
 
   deletePhoto(photoId) {
     this.photoService.delete(photoId, this.id)
       .subscribe(() => {
-        let index = this.photos.findIndex(p => p.id == photoId);
+        const index = this.photos.findIndex(p => p.id == photoId);
         this.photos.splice(index, 1);
       });
   }

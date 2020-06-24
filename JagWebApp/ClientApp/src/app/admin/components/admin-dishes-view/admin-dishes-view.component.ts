@@ -18,7 +18,7 @@ import { DishService } from '../../services/dish.service';
   styleUrls: ['./admin-dishes-view.component.css']
 })
 export class AdminDishesViewComponent implements OnInit {
-  dishes: Array<Dish> = [];
+  dishes: Dish[] = [];
   displayedColumns: string[] = ['no', 'name', 'category', 'amount', 'editing', 'deleting'];
   dataSource;
 
@@ -87,17 +87,19 @@ export class AdminDishesViewComponent implements OnInit {
 
   private removeDish(id) {
     this.dishService.delete(id)
-      .subscribe(() => {
+      .subscribe(
+        () => {
         this.updateDishesTableAfterRemoving(id);
         this.toastr.success(SUCCESS_REMOVE_DISH_MESSAGE);
-      }, (errorResponse: HttpErrorResponse) => 
-        errorResponse.status === 400 && errorResponse.error.includes('Menu') ?
-          this.toastr.error(errorResponse.error) : this.toastr.error(ERROR_SERVER_MESSAGE)
+        }, 
+        (errorResponse: HttpErrorResponse) => 
+          errorResponse.status === 400 && errorResponse.error.includes('Menu') ?
+            this.toastr.error(errorResponse.error) : this.toastr.error(ERROR_SERVER_MESSAGE)
       );
   }
 
   private updateDishesTableAfterRemoving(removedDishId: number) {
-    let index: number = this.dishes.findIndex(d => d.id === removedDishId);
+    const index: number = this.dishes.findIndex(d => d.id === removedDishId);
     this.dishes.splice(index, 1);
 
     this.dataSource = new MatTableDataSource<Dish>(this.dishes);
@@ -111,7 +113,8 @@ export class AdminDishesViewComponent implements OnInit {
         if (data[key][k] !== null) 
           search = this.nestedFilterCheck(search, data[key], k);
       }
-    } else 
+    } 
+    else 
       search += data[key];
     
     return search;

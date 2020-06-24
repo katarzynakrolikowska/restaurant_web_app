@@ -9,7 +9,7 @@ export class EmailValidators {
       if (control.value) {
         return authService.userExists(control.value)
           .pipe(map((isExist: boolean) => {
-            if (authService.loggedIn() && control.value === authService.userEmail)
+            if (authService.isLoggedIn() && control.value === authService.userEmail)
               return null;
 
             return isExist ? { shouldBeUnique: true } : null;

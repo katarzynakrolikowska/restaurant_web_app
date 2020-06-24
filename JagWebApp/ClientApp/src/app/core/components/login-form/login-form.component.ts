@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { ERROR_EMAIL_OR_PASSWORD_MESSAGE, ERROR_SERVER_MESSAGE, SUCCESS_LOG_IN_MESSAGE } from 'shared/consts/user-messages.consts';
 import { AuthService } from 'shared/services/auth.service';
-import { User } from '../../../membership/models/user';
+import { User } from 'src/app/membership/models/user';
 
 @Component({
   selector: 'app-login-form',
@@ -17,7 +17,7 @@ import { User } from '../../../membership/models/user';
 export class LoginFormComponent implements OnInit {
   form: FormGroup;
   user: User;
-  errorLogin = false;
+  isIncorrectLogin = false;
   errorMessage: string;
 
   constructor(
@@ -32,6 +32,14 @@ export class LoginFormComponent implements OnInit {
     this.initForm();
   }
 
+  get email() {
+    return this.form.get('email');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
+
   login() {
     if (this.form.valid) {
       this.spinner.show();
@@ -41,27 +49,19 @@ export class LoginFormComponent implements OnInit {
         .pipe(finalize(() => this.spinner.hide()))
         .subscribe(
           () => {
-            this.errorLogin = false;
+            this.isIncorrectLogin = false;
             this.toastr.success(SUCCESS_LOG_IN_MESSAGE);
             let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
             this.router.navigate([returnUrl || '/']);
           }, 
           (errorRespone: HttpErrorResponse) => {
-            this.errorLogin = true;
+            this.isIncorrectLogin = true;
             errorRespone.status == 401 ?
               this.errorMessage = ERROR_EMAIL_OR_PASSWORD_MESSAGE :
               this.errorMessage = ERROR_SERVER_MESSAGE;
           }
         );
     }
-  }
-
-  get email() {
-    return this.form.get('email');
-  }
-
-  get password() {
-    return this.form.get('password');
   }
 
   private initForm() {

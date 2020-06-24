@@ -12,7 +12,7 @@ export class PhotoService {
 
   getAll(dishId) {
     return this.http.get(this.baseUrl + 'api/dishes/' + dishId + '/photos')
-      .pipe(map((response: Array<Photo>) => response));
+      .pipe(map((response: Photo[]) => response));
   }
 
   upload(dishId, file) {

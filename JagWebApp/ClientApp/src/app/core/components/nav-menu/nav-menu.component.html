@@ -18,7 +18,7 @@
         </span>
       </div>
       <div>
-        <button *ngIf="!loggedIn(); else userProfileLink"
+        <button *ngIf="!isLoggedIn(); else userProfileLink"
                 mat-button
                 class="nav-mat-button"
                 [matMenuTriggerFor]="menu">
@@ -33,7 +33,7 @@
         <ng-template #userProfileLink>
           <button mat-button class="nav-mat-button" [matMenuTriggerFor]="menu">
             <mat-icon class="icon-person">person</mat-icon>
-            <mat-icon *ngIf="loggedIn()" class="icon-dot">fiber_manual_record</mat-icon>
+            <mat-icon *ngIf="isLoggedIn()" class="icon-dot">fiber_manual_record</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item [routerLink]="['/user/data']">Moje dane</button>

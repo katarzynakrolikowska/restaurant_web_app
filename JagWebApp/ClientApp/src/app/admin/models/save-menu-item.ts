@@ -1,5 +1,5 @@
 export interface SaveMenuItem {
-  dishes: Array<number>;
+  dishes: number[];
   price: number;
   available: number;
   isMain?: boolean;

@@ -33,6 +33,18 @@ export class RegisterFormComponent implements OnInit {
     this.form.setValidators(passwordsMatch(this.password, this.confirmPassword));
   }
 
+  get email() {
+    return this.form.get('email');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
+
+  get confirmPassword() {
+    return this.form.get('confirmPassword');
+  }
+
   register() {
     if (this.form.invalid)
       return;
@@ -69,18 +81,6 @@ export class RegisterFormComponent implements OnInit {
 
   getMismatchErrorMessage() {
     return ERROR_MISMATCH_PASSWORDS_MESSAGE;
-  }
-
-  get email() {
-    return this.form.get('email');
-  }
-
-  get password() {
-    return this.form.get('password');
-  }
-
-  get confirmPassword() {
-    return this.form.get('confirmPassword');
   }
 
   private initForm() {

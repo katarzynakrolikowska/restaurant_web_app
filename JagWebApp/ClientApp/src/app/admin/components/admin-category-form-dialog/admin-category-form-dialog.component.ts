@@ -31,7 +31,6 @@ export class AdminCategoryFormDialogComponent implements OnInit {
   }
 
   getCategoryErrorMessage() {
-    return this.category.hasError('required') || this.category.hasError('empty') ? ERROR_REQUIRED_MESSAGE :
-        '';
+    return this.category.hasError('required') || this.category.hasError('empty') ? ERROR_REQUIRED_MESSAGE : '';
   }
 }

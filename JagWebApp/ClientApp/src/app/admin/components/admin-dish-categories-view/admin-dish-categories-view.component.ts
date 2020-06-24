@@ -13,7 +13,7 @@ import { AdminCategoryFormDialogComponent } from '../admin-category-form-dialog/
   styleUrls: []
 })
 export class AdminDishCategoriesViewComponent implements OnInit {
-  categories: Array<Category> = [];
+  categories: Category[] = [];
 
   constructor(
     private categoryService: CategoryService,

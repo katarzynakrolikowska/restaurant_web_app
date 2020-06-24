@@ -19,7 +19,7 @@ describe('AdminDishesViewComponent', () => {
   let fixture: ComponentFixture<AdminDishesViewComponent>;
   let dishService: DishService;
   let dialog;
-  let dishes: Array<Dish> = [dishStub];
+  let dishes: Dish[] = [dishStub];
   let toastr: ToastrService;
 
   beforeEach(async(() => {

@@ -1,5 +1,5 @@
 export interface UpdateMenuItem {
-  dishes?: Array<number>;
+  dishes?: number[];
   price: number;
   available: number;
 }

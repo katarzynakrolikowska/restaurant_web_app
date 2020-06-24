@@ -5,14 +5,16 @@ export const cartStubWithOneMenuItem: Cart = {
     id: 1,
     items: [
         { menuItem: menuItemStubWithOneDish, amount: 1 }
-    ]
+    ],
+    sum: 1
 }
 
 export const cartStubWithTwoMenuItems: Cart = {
     id: 1,
     items: [
         { menuItem: menuItemStubWithOneDish, amount: 2 }
-    ]
+    ],
+    sum: 1
 }
 
 export const cartSubWithDifferentItems: Cart = {
@@ -20,5 +22,6 @@ export const cartSubWithDifferentItems: Cart = {
     items: [
         { menuItem: menuItemStubWithOneDish, amount: 1 },
         { menuItem: menuItemStubWithTwoDishes, amount: 1 },
-    ]
+    ],
+    sum: 2
 }

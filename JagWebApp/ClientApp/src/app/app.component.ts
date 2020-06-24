@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    if (!this.authService.loggedIn() && this.authService.token)
+    if (!this.authService.isLoggedIn() && this.authService.token)
       this.authService.removeToken();
 
     this.buttons = this.authService.isAdmin() ? this.menuButtonsForAdmin : this.menuButtonsForUser;

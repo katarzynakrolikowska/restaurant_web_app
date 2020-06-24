@@ -1,5 +1,6 @@
 ﻿using JagWebApp.Core.Models.Identity;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,9 +17,9 @@ namespace JagWebApp.Core.Models
         [Required]
         public User User { get; set; }
 
-        public Collection<OrderedItem> Items { get; set; }
+        public ICollection<OrderedItem> Items { get; set; }
 
-        public Collection<OrderMenuItem> MenuItems { get; set; }
+        public ICollection<OrderMenuItem> MenuItems { get; set; }
 
         public decimal Total { get; set; }
 

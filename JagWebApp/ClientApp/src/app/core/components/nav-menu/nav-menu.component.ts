@@ -25,14 +25,11 @@ export class NavMenuComponent implements OnInit {
     private domSanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.matIconRegistry.addSvgIcon(
-      'doll',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('doll.svg')
-    );
+    this.matIconRegistry.addSvgIcon('doll', this.domSanitizer.bypassSecurityTrustResourceUrl('doll.svg'));
   }
 
-  loggedIn() {
-    return this.authService.loggedIn();
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
   }
 
   logout() {
@@ -42,7 +39,7 @@ export class NavMenuComponent implements OnInit {
   }
 
   isAdmin() {
-    if (!this.loggedIn())
+    if (!this.isLoggedIn())
       return false;
 
     return this.authService.isAdmin();

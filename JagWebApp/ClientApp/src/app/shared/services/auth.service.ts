@@ -14,6 +14,26 @@ export class AuthService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
+  get token() {
+    return localStorage.getItem(TOKEN);
+  }
+
+  get userId() {
+    if (!this.isLoggedIn())
+      return;
+
+    this.decodeToken();
+    return this.decodedToken.nameid;
+  }
+
+  get userEmail() {
+    if (!this.isLoggedIn())
+      return;
+
+    this.decodeToken();
+    return this.decodedToken.email;
+  }
+
   login(model: any): Observable<any> {
     return this.http.post(this.baseUrl + 'api/auth/login', model)
       .pipe(map((response: any) => {
@@ -32,17 +52,17 @@ export class AuthService {
     return this.http.get(this.baseUrl + 'api/auth/' + email);
   }
 
-  loggedIn() {
+  isLoggedIn() {
     let token = this.token;
     return !this.jwtHelper.isTokenExpired(token);
   }
 
   isAdmin() {
-    if (!this.loggedIn())
+    if (!this.isLoggedIn())
       return false;
 
     this.decodeToken();
-    let roles = this.decodedToken.role as Array<string>;
+    let roles = this.decodedToken.role as string[];
 
     if (roles) 
       return roles.includes(ROLE_ADMIN);
@@ -50,28 +70,8 @@ export class AuthService {
     return false;
   }
 
-  get token() {
-    return localStorage.getItem(TOKEN);
-  }
-
   removeToken() {
     localStorage.removeItem(TOKEN);
-  }
-
-  get userId() {
-    if (!this.loggedIn())
-      return;
-
-    this.decodeToken();
-    return this.decodedToken.nameid;
-  }
-
-  get userEmail() {
-    if (!this.loggedIn())
-      return;
-
-    this.decodeToken();
-    return this.decodedToken.email;
   }
 
   decodeToken() {

@@ -1,7 +1,7 @@
 <div class="sticky-top">
   <mat-button-toggle-group #group="matButtonToggleGroup" vertical class="width-max">
     <mat-button-toggle *ngFor="let category of categories"
-                       [checked]="checked(category.id)"
+                       [checked]="isChecked(category.id)"
                        [value]="category.id"
                        (change)="toggle($event.value)">
       {{ category.name }}

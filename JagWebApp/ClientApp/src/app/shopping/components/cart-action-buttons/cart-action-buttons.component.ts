@@ -59,9 +59,9 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   removeItemFromCart(newMenuItemQuantity?: number) {
-    let menuItemQuantity = newMenuItemQuantity ? newMenuItemQuantity : this.menuItemQuantity - 1;
-    let index = this.cart.items.findIndex(ci => ci.menuItem.id === this.menuItemId);
-    let patchCart = menuItemQuantity === 0 
+    const menuItemQuantity = newMenuItemQuantity ? newMenuItemQuantity : this.menuItemQuantity - 1;
+    const index = this.cart.items.findIndex(ci => ci.menuItem.id === this.menuItemId);
+    const patchCart = menuItemQuantity === 0 
       ? [this.getPatchOperationTest(index), { op: 'remove', path: `/items/${index}` }]
       : [
           this.getPatchOperationTest(index), 
@@ -81,7 +81,7 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private createNewCart() {
-    let cart: SaveCart = { menuItemId: this.menuItemId };
+    const cart: SaveCart = { menuItemId: this.menuItemId };
 
     this.cartService.create(cart)
       .subscribe(cart => {
@@ -95,8 +95,8 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private addNewItemToCart() {
-    let index = this.cart.items.findIndex(ci => ci.menuItem.id === this.menuItemId);
-    let patchCart = index < 0 
+    const index = this.cart.items.findIndex(ci => ci.menuItem.id === this.menuItemId);
+    const patchCart = index < 0 
       ? [{ op: 'add', path: `/items/-`, value: { menuItemId: this.menuItemId, amount: 1 } }] 
       : [
           this.getPatchOperationTest(index),
@@ -112,15 +112,18 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
 
   private update(patchCart, itemAdded: boolean) {
     this.cartService.update(patchCart, this.cart.id)
-    .subscribe(cart => {
-      if (cart)
-        cart.items.sort((a, b) => a.id - b.id); 
-      this.cart = cart; 
-      this.shareCartItemAction(itemAdded);
+    .subscribe(
+      cart => {
+        if (cart)
+          cart.items.sort((a, b) => a.id - b.id); 
 
-      if (!cart && !this.userId)
-        this.cartService.removeCartId();  
-    }, (error:HttpErrorResponse) => { console.log(error) });
+        this.cart = cart; 
+        this.shareCartItemAction(itemAdded);
+
+        if (!cart && !this.userId)
+          this.cartService.removeCartId();  
+      }, 
+      () => {});
   }
 
   private shareCartItemAction(isAdded: boolean) {
@@ -136,7 +139,7 @@ export class CartActionButtonsComponent implements OnInit, OnChanges, OnDestroy 
       return;
     }
 
-    let item = this.cart.items.find(ci => ci.menuItem.id === this.menuItemId);
+    const item = this.cart.items.find(ci => ci.menuItem.id === this.menuItemId);
     if (item)
       this.menuItemQuantity = item.amount;
   }

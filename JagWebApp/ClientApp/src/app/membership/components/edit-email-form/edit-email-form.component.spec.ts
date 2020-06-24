@@ -30,7 +30,7 @@ describe('EditEmailFormComponent', () => {
     component = fixture.componentInstance;
     userService = TestBed.get(UserService);
     service = TestBed.get(AuthService);
-    spyOn(service, 'loggedIn').and.returnValue(true);
+    spyOn(service, 'isLoggedIn').and.returnValue(true);
     spyOnProperty(service, 'userEmail').and.returnValue('email@abc.com');
     spyOn(service, 'userExists').and.callFake(email => email === emailAddress ? of(true) : of(false));
     fixture.detectChanges();
