@@ -12,7 +12,7 @@ namespace JagWebApp.Core.Models
 
         public decimal Price { get; set; }
 
-        public Collection<OrderMenuItem> Orders { get; set; }
+        public ICollection<OrderMenuItem> Orders { get; set; }
 
         [Min(0)]
         public int Available { get; set; }
@@ -22,6 +22,7 @@ namespace JagWebApp.Core.Models
         public MenuItem()
         {
             Dishes = new Collection<MenuItemDish>();
+            Orders = new Collection<OrderMenuItem>();
         }
     }
 }

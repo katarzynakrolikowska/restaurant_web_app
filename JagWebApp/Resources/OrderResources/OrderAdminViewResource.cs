@@ -1,5 +1,6 @@
 ﻿using JagWebApp.Resources.UserResources;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace JagWebApp.Resources.OrderResources
@@ -12,7 +13,7 @@ namespace JagWebApp.Resources.OrderResources
 
         public DateTime Date { get; set; }
 
-        public Collection<OrderedItemResource> Items { get; set; }
+        public ICollection<OrderedItemResource> Items { get; set; }
 
         public decimal Total { get; set; }
 
