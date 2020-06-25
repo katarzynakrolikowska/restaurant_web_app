@@ -35,7 +35,7 @@ export class CartService implements OnInit {
 
   getUserCart() {
     return this.http.get(this.baseUrl + 'api/carts/user')
-      .pipe(map((result: Cart) => new Cart(result.id, result.items, result.userId)));
+      .pipe(map((result: Cart) => result));
   }
 
   create(cart: SaveCart) {

@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Cart } from 'shared/models/cart';
+import { Cart, getCartSum } from 'shared/models/cart';
 import { Dish } from 'shared/models/dish';
 import { CartItemsSharedService } from 'shared/services/cart-items-shared.service';
 import { CartService } from 'shared/services/cart.service';
+import { getCartItemSum, CartItem } from 'shared/models/cart-item';
 
 @Component({
   selector: 'app-cart-view',
@@ -29,6 +30,14 @@ export class CartViewComponent implements OnInit, OnDestroy {
 
   getPhotoName(dish: Dish) {
     return dish.mainPhoto ? 'uploads/' + dish.mainPhoto.thumbnailName : 'defaults/default-4.png';
+  }
+
+  getCartItemSum(item: CartItem) {
+    return getCartItemSum(item);
+  }
+
+  getCartSum() {
+    return getCartSum(this.cart);
   }
 
   clearCart() {

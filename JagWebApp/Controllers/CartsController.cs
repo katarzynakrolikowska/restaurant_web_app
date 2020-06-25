@@ -59,7 +59,7 @@ namespace JagWebApp.Controllers
                 return BadRequest();
 
             var cart = await _cartRepository.GetUserCartAsync(userId);
-            
+
             return Ok(_mapper.Map<CartResource>(cart));
         }
 

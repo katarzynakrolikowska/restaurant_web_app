@@ -14,7 +14,7 @@ export class AppErrorHandler implements ErrorHandler {
     private spinner: NgxSpinnerService
   ) { }
 
-  handleError(): void {
+  handleError(error: any): void {
     this.ngZone.run(() => {
       this.spinner.hide();
       this.toastr = this.injector.get(ToastrService);

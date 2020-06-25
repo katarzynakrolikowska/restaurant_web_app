@@ -21,7 +21,7 @@
                                [available]="cartItem.menuItem.available">
       </app-cart-action-buttons>
       <div class="col-12 col-md-2 mt-2 my-1 my-md-auto text-center text-md-right">
-        {{ cartItem.menuItem.price * cartItem.amount | currency : '' : '' }} zł
+        {{ getCartItemSum(cartItem) | currency : '' : '' }} zł
       </div>
     </div>
     <div class="row my-3 mx-0">
@@ -30,7 +30,7 @@
   </div>
   <div class="row mb-5">
     <div class="col col-md-3 offset-md-9 text-center text-md-right font-weight-bolder font-size-lg no-wrap">
-      Razem: {{ cart.sum | currency : '' : '' }} zł
+      Razem: {{ getCartSum() | currency : '' : '' }} zł
     </div>
   </div>
   <div class="row mb-5">
