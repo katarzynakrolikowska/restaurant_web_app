@@ -1,11 +1,12 @@
 import { CartItem } from "./cart-item";
 
-export class Cart {
+export interface Cart {
+  id: number,
+  items: CartItem[],
+  userId?: number
+}
 
-  constructor(public id: number, public items: CartItem[], public userId?: number) {}
-
-  get sum() {
-    return this.items.reduce((previousValue, currentValue) => 
-      previousValue += currentValue.menuItem.price * currentValue.amount, 0);
-  }
+export function getCartSum(cart: Cart) {
+  return cart.items.reduce((previousValue, currentValue) => 
+    previousValue += currentValue.menuItem.price * currentValue.amount, 0);
 }

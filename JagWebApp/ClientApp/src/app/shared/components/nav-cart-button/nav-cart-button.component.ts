@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Cart } from 'shared/models/cart';
@@ -53,11 +54,16 @@ export class NavCartButtonComponent implements OnInit, OnDestroy, OnChanges {
     } 
     else if (this.userId && this.cartItemsQuantity === 0) {
       this.cartService.getUserCart()
-        .subscribe(cart => {
-          this.cart = cart;
-          this.setCartItemsQuantity();
-          this.shareCart();
-        });
+        .subscribe(
+          cart => {
+            this.cart = cart;
+            this.setCartItemsQuantity();
+            this.shareCart();
+          },
+          (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.status !== 404)
+              throw new Error();
+          });
     } 
     else {
       this.cart = null;

@@ -5,3 +5,7 @@ export interface CartItem {
   menuItem: MenuItem;
   amount: number;
 }
+
+export function getCartItemSum(cartItem: CartItem) {
+  return cartItem.menuItem.price * cartItem.amount;
+}

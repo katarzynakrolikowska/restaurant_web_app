@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ERROR_SERVER_MESSAGE } from 'shared/consts/user-messages.consts';
-import { Cart } from 'shared/models/cart';
-import { CartItem } from 'shared/models/cart-item';
+import { Cart, getCartSum } from 'shared/models/cart';
+import { CartItem, getCartItemSum } from 'shared/models/cart-item';
 import { Customer } from 'shared/models/customer';
 import { Order } from 'shared/models/order';
 import { CartItemsSharedService } from 'shared/services/cart-items-shared.service';
@@ -65,8 +65,12 @@ export class OrderStepperComponent implements OnInit, OnDestroy {
     return cartItem.menuItem.dishes.length > 1 ? 'Zestaw dnia' : cartItem.menuItem.dishes[0].name;
   }
 
-  getCartItemSum(cartItem: CartItem) {
-    return cartItem.amount * cartItem.menuItem.price;
+  getCartItemSum(item: CartItem) {
+    return getCartItemSum(item);
+  }
+
+  getCartSum() {
+    return getCartSum(this.cart);
   }
 
   orderMenu() {
